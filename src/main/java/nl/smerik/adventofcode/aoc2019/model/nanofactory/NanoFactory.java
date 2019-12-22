@@ -22,15 +22,15 @@ public class NanoFactory {
         }
     }
 
-    public Map<String, Integer> getHowMuchChemicalUnitsIsNeededToProduce(final ChemicalUnits producedChemicalUnits) {
-        final Map<String, Integer> result = new HashMap<>();
-        final Map<String, Integer> stock = new HashMap<>();
+    public Map<String, Long> getHowMuchChemicalUnitsIsNeededToProduce(final ChemicalUnits producedChemicalUnits) {
+        final Map<String, Long> result = new HashMap<>();
+        final Map<String, Long> stock = new HashMap<>();
         return produceRequiredChemicalUnits(producedChemicalUnits, result, stock);
     }
 
-    private Map<String, Integer> produceRequiredChemicalUnits(final ChemicalUnits chemicalUnitsToProduce,
-                                                              final Map<String, Integer> result,
-                                                              final Map<String, Integer> stock) {
+    private Map<String, Long> produceRequiredChemicalUnits(final ChemicalUnits chemicalUnitsToProduce,
+                                                           final Map<String, Long> result,
+                                                           final Map<String, Long> stock) {
 
         //TODO: make constant
         if ("ORE".equals(chemicalUnitsToProduce.getChemical())) {
@@ -39,13 +39,13 @@ public class NanoFactory {
         }
 
         final Reaction reaction = reactionRules.get(chemicalUnitsToProduce.getChemical());
-        final int timesToRunReaction = chemicalUnitsToProduce.getUnits() / reaction.getProducesChemicalUnits().getUnits()
+        final long timesToRunReaction = chemicalUnitsToProduce.getUnits() / reaction.getProducesChemicalUnits().getUnits()
                 + (chemicalUnitsToProduce.getUnits() % reaction.getProducesChemicalUnits().getUnits() == 0 ? 0 : 1);
         for (int i = 0; i < timesToRunReaction; i++) {
 
             for (final ChemicalUnits requiredChemicalUnit : reaction.getConsumesChemicalUnits()) {
-                final int requiredUnits = requiredChemicalUnit.getUnits();
-                final int unitsInStock = stock.computeIfAbsent(requiredChemicalUnit.getChemical(), k -> 0);
+                final long requiredUnits = requiredChemicalUnit.getUnits();
+                final long unitsInStock = stock.computeIfAbsent(requiredChemicalUnit.getChemical(), k -> 0L);
                 if (requiredUnits > unitsInStock) {
                     // TODO: improve variable name
                     final ChemicalUnits chemicalUnits = new ChemicalUnits(requiredChemicalUnit.getChemical(), requiredUnits - unitsInStock);
@@ -60,18 +60,18 @@ public class NanoFactory {
     }
 
     private void addToStock(final ChemicalUnits chemicalUnits,
-                            final Map<String, Integer> stock,
-                            final Map<String, Integer> result) {
+                            final Map<String, Long> stock,
+                            final Map<String, Long> result) {
 
-        stock.merge(chemicalUnits.getChemical(), chemicalUnits.getUnits(), Integer::sum);
-        result.merge(chemicalUnits.getChemical(), chemicalUnits.getUnits(), Integer::sum);
+        stock.merge(chemicalUnits.getChemical(), chemicalUnits.getUnits(), Long::sum);
+        result.merge(chemicalUnits.getChemical(), chemicalUnits.getUnits(), Long::sum);
     }
 
-    private void removeFromStock(final Map<String, Integer> stock, final ChemicalUnits chemicalUnits) {
-        stock.merge(chemicalUnits.getChemical(), -chemicalUnits.getUnits(), Integer::sum);
+    private void removeFromStock(final Map<String, Long> stock, final ChemicalUnits chemicalUnits) {
+        stock.merge(chemicalUnits.getChemical(), -1 * chemicalUnits.getUnits(), Long::sum);
     }
 
-    public int getHowMuchFuelCanBeProduced(final int oreUnits) {
-        return 0;
+    public Long getHowMuchFuelCanBeProduced(final Long oreUnits) {
+        return 0L;
     }
 }

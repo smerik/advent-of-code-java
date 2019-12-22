@@ -6,5 +6,5 @@ import lombok.Data;
 public class ChemicalUnits {
 
     private final String chemical;
-    private final int units;
+    private final long units;
 }

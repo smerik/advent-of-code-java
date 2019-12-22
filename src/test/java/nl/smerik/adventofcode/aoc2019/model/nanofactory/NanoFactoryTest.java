@@ -58,11 +58,11 @@ class NanoFactoryTest {
     @ParameterizedTest
     @MethodSource("provideSourceForHowMuchChemicalUnitsIsNeededToProduce")
     void getHowMuchChemicalUnitsIsNeededToProduce(final NanoFactory nanoFactory,
-                                                  final int expectedUnits, final String expectedChemical,
-                                                  final int produceUnits, final String produceChemical) {
+                                                  final long expectedUnits, final String expectedChemical,
+                                                  final long produceUnits, final String produceChemical) {
 
         final ChemicalUnits chemicalUnitsToProduce = new ChemicalUnits(produceChemical, produceUnits);
-        final Map<String, Integer> result = nanoFactory.getHowMuchChemicalUnitsIsNeededToProduce(chemicalUnitsToProduce);
+        final Map<String, Long> result = nanoFactory.getHowMuchChemicalUnitsIsNeededToProduce(chemicalUnitsToProduce);
         assertEquals(expectedUnits, result.get(expectedChemical));
     }
 
@@ -72,14 +72,28 @@ class NanoFactoryTest {
         final NanoFactory nanoFactory = ReactionListParser.parse(pathExample);
 
         final ChemicalUnits chemicalUnitsToProduce = new ChemicalUnits("FUEL", 1);
-        final Map<String, Integer> result = nanoFactory.getHowMuchChemicalUnitsIsNeededToProduce(chemicalUnitsToProduce);
+        final Map<String, Long> result = nanoFactory.getHowMuchChemicalUnitsIsNeededToProduce(chemicalUnitsToProduce);
 
         assertEquals(612880, result.get("ORE"));
     }
 
-    @Test
-    void getHowMuchFuelCanBeProduced() {
+    private static Stream<Arguments> provideSourceForHowMuchFuelCanBeProduced() {
+        return Stream.of(
+                Arguments.of(nanoFactoryExample03, 1_000_000_000_000L, 82892753),
+                Arguments.of(nanoFactoryExample04, 1_000_000_000_000L, 5586022),
+                Arguments.of(nanoFactoryExample05, 1_000_000_000_000L, 460664)
+        );
+    }
 
-        82892753
+    @ParameterizedTest
+    @MethodSource("provideSourceForHowMuchFuelCanBeProduced")
+    void getHowMuchFuelCanBeProduced(final NanoFactory nanoFactory,
+                                     final Long oreInCargo, final int expectedAmountOfFuel) {
+        int low = 0, mid = -1, high = (int) 1E12;
+//        while (low <= high) {
+        mid = (low + high) >>> 1;
+//        }
+        System.out.print("mid:" + mid);
+//        assertEquals(expectedAmountOfFuel, nanoFactory.getHowMuchFuelCanBeProduced(oreInCargo));
     }
 }
