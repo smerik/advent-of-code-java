@@ -42,7 +42,7 @@ class NanoFactoryTest {
     @ParameterizedTest
     @MethodSource("provideSourceForHowMuchChemicalUnitsIsNeededToProduce")
     void getHowMuchChemicalUnitsIsNeededToProduce(final int expectedUnits, final String expectedChemical,
-                                                  final int produceUnits, final String produceChemical) throws IOException {
+                                                  final int produceUnits, final String produceChemical) {
 
         final ChemicalUnits chemicalUnitsToProduce = new ChemicalUnits(produceChemical, produceUnits);
         final Map<String, Integer> result = nanoFactoryExample01.getHowMuchChemicalUnitsIsNeededToProduce(chemicalUnitsToProduce);
@@ -94,8 +94,6 @@ class NanoFactoryTest {
         assertEquals(2210736, result.get("ORE"));
     }
 
-
-    @Disabled
     @Test
     void getSolutionDay14Part01() throws IOException {
         final Path pathExample = Paths.get("src", "test", "resources", "input", "day-14.txt");
@@ -104,6 +102,12 @@ class NanoFactoryTest {
         final ChemicalUnits chemicalUnitsToProduce = new ChemicalUnits("FUEL", 1);
         final Map<String, Integer> result = nanoFactory.getHowMuchChemicalUnitsIsNeededToProduce(chemicalUnitsToProduce);
 
-        assertEquals(0, result.get("ORE"));
+        assertEquals(612880, result.get("ORE"));
+    }
+
+    @Test
+    void getHowMuchFuelCanBeProduced() {
+
+        82892753
     }
 }

@@ -36,25 +36,24 @@ public class NanoFactory {
                                                               final Map<String, Integer> result,
                                                               final Map<String, Integer> stock) {
 
-        //TODO: constant
+        //TODO: make constant
         if ("ORE".equals(chemicalUnitsToProduce.getChemical())) {
             addToStock(chemicalUnitsToProduce, stock, result);
             return result;
         }
 
         final Reaction reaction = reactionRules.get(chemicalUnitsToProduce.getChemical());
-
-        // TODO: chemical units to produce - stock ?
         final int timesToRunReaction = chemicalUnitsToProduce.getUnits() / reaction.getProducesChemicalUnits().getUnits()
                 + (chemicalUnitsToProduce.getUnits() % reaction.getProducesChemicalUnits().getUnits() == 0 ? 0 : 1);
-
-
         for (int i = 0; i < timesToRunReaction; i++) {
 
             for (final ChemicalUnits requiredChemicalUnit : reaction.getConsumesChemicalUnits()) {
                 final int requiredUnits = requiredChemicalUnit.getUnits();
-                if (requiredUnits > stock.computeIfAbsent(requiredChemicalUnit.getChemical(), k -> 0)) {
-                    produceRequiredChemicalUnits(requiredChemicalUnit, result, stock);
+                final int unitsInStock = stock.computeIfAbsent(requiredChemicalUnit.getChemical(), k -> 0);
+                if (requiredUnits > unitsInStock) {
+                    // TODO: improve variable name
+                    final ChemicalUnits chemicalUnits = new ChemicalUnits(requiredChemicalUnit.getChemical(), requiredUnits - unitsInStock);
+                    produceRequiredChemicalUnits(chemicalUnits, result, stock);
                 }
                 removeFromStock(stock, requiredChemicalUnit);
             }
@@ -76,5 +75,9 @@ public class NanoFactory {
     private void removeFromStock(final Map<String, Integer> stock, final ChemicalUnits chemicalUnits) {
         LOGGER.debug("remove: {}", chemicalUnits);
         stock.merge(chemicalUnits.getChemical(), -chemicalUnits.getUnits(), Integer::sum);
+    }
+
+    public int getHowMuchFuelCanBeProduced(final int oreUnits) {
+        return 0;
     }
 }
