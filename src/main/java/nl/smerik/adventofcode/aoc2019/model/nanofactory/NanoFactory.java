@@ -25,11 +25,7 @@ public class NanoFactory {
     public Map<String, Integer> getHowMuchChemicalUnitsIsNeededToProduce(final ChemicalUnits producedChemicalUnits) {
         final Map<String, Integer> result = new HashMap<>();
         final Map<String, Integer> stock = new HashMap<>();
-        final Map<String, Integer> foo = produceRequiredChemicalUnits(producedChemicalUnits, result, stock);
-        LOGGER.info("stock:{}", stock);
-        LOGGER.info("result:{}", result);
-        LOGGER.info("foo:{}", foo);
-        return foo;
+        return produceRequiredChemicalUnits(producedChemicalUnits, result, stock);
     }
 
     private Map<String, Integer> produceRequiredChemicalUnits(final ChemicalUnits chemicalUnitsToProduce,
@@ -67,13 +63,11 @@ public class NanoFactory {
                             final Map<String, Integer> stock,
                             final Map<String, Integer> result) {
 
-        LOGGER.debug("Add: {}", chemicalUnits);
         stock.merge(chemicalUnits.getChemical(), chemicalUnits.getUnits(), Integer::sum);
         result.merge(chemicalUnits.getChemical(), chemicalUnits.getUnits(), Integer::sum);
     }
 
     private void removeFromStock(final Map<String, Integer> stock, final ChemicalUnits chemicalUnits) {
-        LOGGER.debug("remove: {}", chemicalUnits);
         stock.merge(chemicalUnits.getChemical(), -chemicalUnits.getUnits(), Integer::sum);
     }
 
