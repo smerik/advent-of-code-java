@@ -47,4 +47,25 @@ class IntcodeComputerTest {
         int[] resolution = day02.solvePart1(program);
         Assertions.assertArrayEquals(new int[]{30, 1, 1, 4, 2, 5, 6, 0, 99}, resolution);
     }
+
+    @Test
+    void solveDay5Test01() {
+        int[] program = new int[]{3, 0, 4, 0, 99};
+        int[] resolution = day02.solveWithInput(program, 456);
+        Assertions.assertArrayEquals(new int[]{456, 0, 4, 0, 99}, resolution);
+    }
+
+    @Test
+    void solveDay5Test02() {
+        int[] program = new int[]{1002, 4, 3, 4, 33};
+        int[] resolution = day02.solvePart1(program);
+        Assertions.assertArrayEquals(new int[]{1002, 4, 3, 4, 99}, resolution);
+    }
+
+    @Test
+    void solveDay5Test03() {
+        int[] program = new int[]{1101, 100, -1, 4, 0};
+        int[] resolution = day02.solvePart1(program);
+        Assertions.assertArrayEquals(new int[]{1101, 100, -1, 4, 99}, resolution);
+    }
 }
