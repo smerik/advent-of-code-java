@@ -42,6 +42,35 @@ public class IntcodeComputerService {
          */
         OUTPUT(4),
 
+        /**
+         * If the first parameter is non-zero, it sets the instruction pointer to the value from the second parameter.
+         * Otherwise, it does nothing
+         */
+        JUMP_IF_TRUE(5),
+
+        /**
+         * If the first parameter is zero, it sets the instruction pointer to the value from the second parameter.
+         * Otherwise, it does nothing.
+         */
+        JUMP_IF_FALSE(6),
+
+        /**
+         * If the first parameter is less than the second parameter,
+         * it stores 1 in the position given by the third parameter.
+         * Otherwise, it stores 0.
+         */
+        LESS_THAN(7),
+
+        /**
+         * If the first parameter is equal to the second parameter,
+         * it stores 1 in the position given by the third parameter.
+         * Otherwise, it stores 0.
+         */
+        EQUALS(8),
+
+        /**
+         * Halts the program.
+         */
         HALT(99);
 
         private static final Map<Integer, Opcode> BY_OPCODE;
@@ -97,8 +126,7 @@ public class IntcodeComputerService {
     public int[] solvePart1(int[] codes) {
         int instructionPointer = 0;
         while (instructionPointer <= codes.length && codes[instructionPointer] != Opcode.HALT.code) {
-            final int numberOfInstructionValues = runInstruction(instructionPointer, codes);
-            instructionPointer += numberOfInstructionValues;
+            instructionPointer = runInstruction(instructionPointer, codes);
         }
         return codes;
     }
@@ -121,8 +149,7 @@ public class IntcodeComputerService {
     public int[] solveWithInput(int[] codes, int input) {
         int instructionPointer = 0;
         while (instructionPointer <= codes.length && codes[instructionPointer] != Opcode.HALT.code) {
-            final int numberOfInstructionValues = runInstruction(instructionPointer, codes, input);
-            instructionPointer += numberOfInstructionValues;
+            instructionPointer = runInstruction(instructionPointer, codes, input);
         }
         return codes;
     }
@@ -133,7 +160,7 @@ public class IntcodeComputerService {
 
     private int runInstruction(final int instructionPointer, final int[] memory, final int input) {
         final Opcode instruction = Opcode.valueOfOpcode(memory[instructionPointer]);
-        LOGGER.info("Instruction:{}", instruction);
+        LOGGER.debug("Instruction:{}", instruction);
 
         switch (instruction) {
             case ADD:
@@ -144,6 +171,14 @@ public class IntcodeComputerService {
                 return input(instructionPointer, memory, input);
             case OUTPUT:
                 return output(instructionPointer, memory);
+            case JUMP_IF_TRUE:
+                return jumpIfTrue(instructionPointer, memory);
+            case JUMP_IF_FALSE:
+                return jumpIfFalse(instructionPointer, memory);
+            case LESS_THAN:
+                return lessThan(instructionPointer, memory);
+            case EQUALS:
+                return equals(instructionPointer, memory);
             case HALT:
                 return 1;
             default:
@@ -154,27 +189,57 @@ public class IntcodeComputerService {
     private int add(final int instructionPointer, final int[] memory) {
         final int inputAddress1 = getParameterValue(instructionPointer, 1, memory);
         final int inputAddress2 = getParameterValue(instructionPointer, 2, memory);
-        int storeAddress = memory[instructionPointer + 3];
+        final int storeAddress = memory[instructionPointer + 3];
         memory[storeAddress] = inputAddress1 + inputAddress2;
-        return 4;
+        return instructionPointer + 4;
     }
 
     private int multiply(final int instructionPointer, final int[] memory) {
         final int inputAddress1 = getParameterValue(instructionPointer, 1, memory);
         final int inputAddress2 = getParameterValue(instructionPointer, 2, memory);
-        int storeAddress = memory[instructionPointer + 3];
+        final int storeAddress = memory[instructionPointer + 3];
         memory[storeAddress] = inputAddress1 * inputAddress2;
-        return 4;
+        return instructionPointer + 4;
     }
 
     private int input(final int instructionPointer, final int[] memory, final int input) {
         memory[memory[instructionPointer + 1]] = input;
-        return 2;
+        return instructionPointer + 2;
     }
 
     private int output(final int instructionPointer, final int[] memory) {
-        LOGGER.info("Output:{}", memory[memory[instructionPointer + 1]]);
-        return 2;
+        LOGGER.info("Output:{}", getParameterValue(instructionPointer, 1, memory));
+        return instructionPointer + 2;
+    }
+
+    private int jumpIfTrue(final int instructionPointer, final int[] memory) {
+        if (getParameterValue(instructionPointer, 1, memory) == 0) {
+            return instructionPointer + 3;
+        }
+        return getParameterValue(instructionPointer, 2, memory);
+    }
+
+    private int jumpIfFalse(final int instructionPointer, final int[] memory) {
+        if (getParameterValue(instructionPointer, 1, memory) == 0) {
+            return getParameterValue(instructionPointer, 2, memory);
+        }
+        return instructionPointer + 3;
+    }
+
+    private int lessThan(final int instructionPointer, final int[] memory) {
+        final int parameterOne = getParameterValue(instructionPointer, 1, memory);
+        final int parameterTwo = getParameterValue(instructionPointer, 2, memory);
+        final int storeAddress = memory[instructionPointer + 3];
+        memory[storeAddress] = parameterOne < parameterTwo ? 1 : 0;
+        return instructionPointer + 4;
+    }
+
+    private int equals(final int instructionPointer, final int[] memory) {
+        final int parameterOne = getParameterValue(instructionPointer, 1, memory);
+        final int parameterTwo = getParameterValue(instructionPointer, 2, memory);
+        final int storeAddress = memory[instructionPointer + 3];
+        memory[storeAddress] = parameterOne == parameterTwo ? 1 : 0;
+        return instructionPointer + 4;
     }
 
     private int getParameterValue(final int instructionPointer, final int nthParameter, final int[] memory) {
