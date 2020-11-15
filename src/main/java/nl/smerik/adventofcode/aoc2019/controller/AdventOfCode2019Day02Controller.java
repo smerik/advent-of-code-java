@@ -18,17 +18,12 @@ public class AdventOfCode2019Day02Controller {
     }
 
     @GetMapping("/part-01")
-    public ResponseEntity<int[]> getSolutionPart01() {
+    public ResponseEntity<Integer> getSolutionPart01() {
         return ResponseEntity.ok(day02Service.getSolutionPart1());
     }
 
     @GetMapping("/part-02")
     public ResponseEntity<String> getSolutionPart02(@RequestParam final int requiredOutput) {
-//        Path path = Paths.get("c:\\Users\\smerik\\IdeaProjects\\advent-of-code-2019\\src\\main\\resources\\day-02.txt");
-//        String[] strings = Files.readString(path).replaceAll("\n", "").split(",");
-//        int[] integers = Stream.of(strings).mapToInt(Integer::parseInt).toArray();
-
-//        return ResponseEntity.ok(day02Service.solvePartTwo(integers, requiredOutput));
         return ResponseEntity.ok(day02Service.getSolutionPart2(requiredOutput));
     }
 }

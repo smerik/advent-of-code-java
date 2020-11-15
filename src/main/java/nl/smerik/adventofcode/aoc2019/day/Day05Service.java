@@ -1,6 +1,6 @@
 package nl.smerik.adventofcode.aoc2019.day;
 
-import nl.smerik.adventofcode.aoc2019.service.IntcodeComputerService;
+import nl.smerik.adventofcode.aoc2019.model.IntcodeComputer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,24 +18,20 @@ public class Day05Service {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Day05Service.class);
 
-    private final IntcodeComputerService intcodeComputerService;
-
     @Value("classpath:input/day-05.txt")
     private Resource resource;
 
-    public Day05Service(final IntcodeComputerService intcodeComputerService) {
-        this.intcodeComputerService = intcodeComputerService;
-    }
-
-    public int[] getSolutionPart1(final int instruction) {
+    public int getSolutionPart1(final int instruction) {
         try {
-            Path path = Paths.get(resource.getURI());
-            String[] strings = Files.readString(path).replace("\r\n", "").split(",");
-            int[] integers = Stream.of(strings).mapToInt(Integer::parseInt).toArray();
-            return intcodeComputerService.solveWithInput(integers, instruction);
+            final Path path = Paths.get(resource.getURI());
+            final String[] strings = Files.readString(path).replace("\r\n", "").split(",");
+            final int[] integers = Stream.of(strings).mapToInt(Integer::parseInt).toArray();
+            final IntcodeComputer computer = new IntcodeComputer(integers);
+            computer.runWithInput(instruction);
+            return computer.getOutput();
         } catch (IOException e) {
             LOGGER.error("Houston: {}", e.getMessage(), e);
-            return null;
+            return -1;
         }
     }
 

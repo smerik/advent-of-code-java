@@ -1,8 +1,8 @@
-package nl.smerik.adventofcode.aoc2019.service;
+package nl.smerik.adventofcode.aoc2019.model;
 
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -11,11 +11,15 @@ import java.util.stream.Collectors;
 /**
  * INTCODE interpreter.
  */
-@Service
-public class IntcodeComputerService {
+public class IntcodeComputer {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(IntcodeComputerService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(IntcodeComputer.class);
 
+    @Getter
+    private final int[] memory;
+
+    @Getter
+    private int output = -1;
 
     /**
      * Opcodes mark the beginning of an instruction.
@@ -109,13 +113,13 @@ public class IntcodeComputerService {
         private static final Map<Integer, ParameterMode> BY_PARAMETER_MODE;
 
         static {
-            BY_PARAMETER_MODE = Arrays.stream(ParameterMode.values()).collect(Collectors.toMap(mode -> mode.parameterMode, mode -> mode));
+            BY_PARAMETER_MODE = Arrays.stream(ParameterMode.values()).collect(Collectors.toMap(mode -> mode.mode, mode -> mode));
         }
 
-        private final int parameterMode;
+        private final int mode;
 
-        ParameterMode(final int parameterMode) {
-            this.parameterMode = parameterMode;
+        ParameterMode(final int mode) {
+            this.mode = mode;
         }
 
         public static ParameterMode valueOfParameterMode(final int opcode, final int digit) {
@@ -123,35 +127,24 @@ public class IntcodeComputerService {
         }
     }
 
-    public int[] solvePart1(int[] codes) {
-        int instructionPointer = 0;
-        while (instructionPointer <= codes.length && codes[instructionPointer] != Opcode.HALT.code) {
-            instructionPointer = runInstruction(instructionPointer, codes);
-        }
-        return codes;
+    public IntcodeComputer(int[] program) {
+        this.memory = Arrays.copyOf(program, program.length);
     }
 
-    public String solvePart2(int[] memory, int requiredOutput) {
-        for (int noun = 0; noun <= 99; noun++) {
-            for (int verb = 0; verb <= 99; verb++) {
-                int[] memoryCopy = Arrays.copyOf(memory, memory.length);
-                memoryCopy[1] = noun;
-                memoryCopy[2] = verb;
-                solvePart1(memoryCopy);
-                if (memoryCopy[0] == requiredOutput) {
-                    return answer(noun, verb);
-                }
-            }
+    public int[] run() {
+        int instructionPointer = 0;
+        while (instructionPointer <= memory.length && memory[instructionPointer] != Opcode.HALT.code) {
+            instructionPointer = runInstruction(instructionPointer, memory);
         }
-        return "???";
+        return memory;
     }
 
-    public int[] solveWithInput(int[] codes, int input) {
+    public int[] runWithInput(final int input) {
         int instructionPointer = 0;
-        while (instructionPointer <= codes.length && codes[instructionPointer] != Opcode.HALT.code) {
-            instructionPointer = runInstruction(instructionPointer, codes, input);
+        while (instructionPointer <= memory.length && memory[instructionPointer] != Opcode.HALT.code) {
+            instructionPointer = runInstruction(instructionPointer, memory, input);
         }
-        return codes;
+        return memory;
     }
 
     private int runInstruction(final int instructionPointer, final int[] memory) {
@@ -208,7 +201,8 @@ public class IntcodeComputerService {
     }
 
     private int output(final int instructionPointer, final int[] memory) {
-        LOGGER.info("Output:{}", getParameterValue(instructionPointer, 1, memory));
+        output = getParameterValue(instructionPointer, 1, memory);
+        LOGGER.debug("Output:{}", output);
         return instructionPointer + 2;
     }
 
@@ -252,9 +246,5 @@ public class IntcodeComputerService {
             default:
                 return memory[memory[instructionPointer + nthParameter]];
         }
-    }
-
-    private String answer(final int noun, final int verb) {
-        return String.format("%02d%02d", noun, verb);
     }
 }

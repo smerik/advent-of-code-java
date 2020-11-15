@@ -39,7 +39,7 @@ public class Day08Service {
 
     private Image getImage(final int width, final int height) throws IOException {
         final Path path = Paths.get(resource.getURI());
-        final String imageData = Files.readString(path).replaceAll("\n", "").replaceAll("\r", "");;
+        final String imageData = Files.readString(path).replaceAll("\n", "").replaceAll("\r", "");
         return new Image(imageData, width, height);
     }
 }
