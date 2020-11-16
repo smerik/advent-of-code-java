@@ -4,7 +4,6 @@ import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.Map;
@@ -22,6 +21,11 @@ public class IntcodeComputer {
 
     @Getter
     private final int[] memory;
+
+    private int instructionPointer;
+
+    @Getter
+    private boolean pausedExecution;
 
     @Getter
     private int output = -1;
@@ -132,41 +136,50 @@ public class IntcodeComputer {
         }
     }
 
-    public IntcodeComputer(final int[] program, final Integer... input) {
-        this.memory = Arrays.copyOf(program, program.length);
-        this.input = new LinkedList<>(new ArrayList<>(Arrays.asList(input)));
+    public IntcodeComputer(final int[] program) {
+        this(program, null);
     }
 
-    public int run() {
-        LOGGER.debug("Running program:{}", memory);
-        int instructionPointer = 0;
-        while (instructionPointer <= memory.length && memory[instructionPointer] != Opcode.HALT.code) {
-            instructionPointer = runInstruction(instructionPointer, memory);
+    public IntcodeComputer(final int[] program, final Integer phase) {
+        this.memory = Arrays.copyOf(program, program.length);
+        this.instructionPointer = 0;
+        this.input = new LinkedList<>();
+        if (phase != null) {
+            this.input.add(phase);
+        }
+    }
+
+    public int run(final Integer... input) {
+        this.pausedExecution = false;
+        this.input.addAll(Arrays.asList(input));
+        LOGGER.trace("Running input {} on program:{}", input, memory);
+        while (instructionPointer <= memory.length && memory[instructionPointer] != Opcode.HALT.code && !this.pausedExecution) {
+            instructionPointer = runInstruction();
         }
         return output;
     }
 
-    private int runInstruction(final int instructionPointer, final int[] memory) {
+    private int runInstruction() {
         final Opcode instruction = Opcode.valueOfOpcode(memory[instructionPointer]);
-        LOGGER.debug("Instruction:{}", instruction);
+        LOGGER.trace("Instruction:{}", instruction);
 
         switch (instruction) {
             case ADD:
-                return add(instructionPointer, memory);
+                return add();
             case MULTIPLY:
-                return multiply(instructionPointer, memory);
+                return multiply();
             case INPUT:
-                return input(instructionPointer, memory);
+                return input();
             case OUTPUT:
-                return output(instructionPointer, memory);
+                return output();
             case JUMP_IF_TRUE:
-                return jumpIfTrue(instructionPointer, memory);
+                return jumpIfTrue();
             case JUMP_IF_FALSE:
-                return jumpIfFalse(instructionPointer, memory);
+                return jumpIfFalse();
             case LESS_THAN:
-                return lessThan(instructionPointer, memory);
+                return lessThan();
             case EQUALS:
-                return equals(instructionPointer, memory);
+                return equals();
             case HALT:
                 return 1;
             default:
@@ -174,67 +187,72 @@ public class IntcodeComputer {
         }
     }
 
-    private int add(final int instructionPointer, final int[] memory) {
-        final int inputAddress1 = getParameterValue(instructionPointer, 1, memory);
-        final int inputAddress2 = getParameterValue(instructionPointer, 2, memory);
+    private int add() {
+        final int inputAddress1 = getParameterValue(1);
+        final int inputAddress2 = getParameterValue(2);
         final int storeAddress = memory[instructionPointer + 3];
         memory[storeAddress] = inputAddress1 + inputAddress2;
         return instructionPointer + 4;
     }
 
-    private int multiply(final int instructionPointer, final int[] memory) {
-        final int inputAddress1 = getParameterValue(instructionPointer, 1, memory);
-        final int inputAddress2 = getParameterValue(instructionPointer, 2, memory);
+    private int multiply() {
+        final int inputAddress1 = getParameterValue(1);
+        final int inputAddress2 = getParameterValue(2);
         final int storeAddress = memory[instructionPointer + 3];
         memory[storeAddress] = inputAddress1 * inputAddress2;
         return instructionPointer + 4;
     }
 
-    private int input(final int instructionPointer, final int[] memory) {
-        LOGGER.debug("Input:{}", input.peek());
+    private int input() {
+        LOGGER.trace("Input:{}", input.peek());
+        if (input.peek() == null) {
+            LOGGER.debug("Pausing computer. Output will be:{}", output);
+            this.pausedExecution = true;
+            return instructionPointer;
+        }
         memory[memory[instructionPointer + 1]] = input.remove();
         return instructionPointer + 2;
     }
 
-    private int output(final int instructionPointer, final int[] memory) {
-        output = getParameterValue(instructionPointer, 1, memory);
-        LOGGER.debug("Output:{}", output);
+    private int output() {
+        output = getParameterValue(1);
+        LOGGER.trace("Output:{}", output);
         return instructionPointer + 2;
     }
 
-    private int jumpIfTrue(final int instructionPointer, final int[] memory) {
-        if (getParameterValue(instructionPointer, 1, memory) == 0) {
+    private int jumpIfTrue() {
+        if (getParameterValue(1) == 0) {
             return instructionPointer + 3;
         }
-        return getParameterValue(instructionPointer, 2, memory);
+        return getParameterValue(2);
     }
 
-    private int jumpIfFalse(final int instructionPointer, final int[] memory) {
-        if (getParameterValue(instructionPointer, 1, memory) == 0) {
-            return getParameterValue(instructionPointer, 2, memory);
+    private int jumpIfFalse() {
+        if (getParameterValue(1) == 0) {
+            return getParameterValue(2);
         }
         return instructionPointer + 3;
     }
 
-    private int lessThan(final int instructionPointer, final int[] memory) {
-        final int parameterOne = getParameterValue(instructionPointer, 1, memory);
-        final int parameterTwo = getParameterValue(instructionPointer, 2, memory);
+    private int lessThan() {
+        final int parameterOne = getParameterValue(1);
+        final int parameterTwo = getParameterValue(2);
         final int storeAddress = memory[instructionPointer + 3];
         memory[storeAddress] = parameterOne < parameterTwo ? 1 : 0;
         return instructionPointer + 4;
     }
 
-    private int equals(final int instructionPointer, final int[] memory) {
-        final int parameterOne = getParameterValue(instructionPointer, 1, memory);
-        final int parameterTwo = getParameterValue(instructionPointer, 2, memory);
+    private int equals() {
+        final int parameterOne = getParameterValue(1);
+        final int parameterTwo = getParameterValue(2);
         final int storeAddress = memory[instructionPointer + 3];
         memory[storeAddress] = parameterOne == parameterTwo ? 1 : 0;
         return instructionPointer + 4;
     }
 
-    private int getParameterValue(final int instructionPointer, final int nthParameter, final int[] memory) {
+    private int getParameterValue(final int nthParameter) {
         final ParameterMode mode = ParameterMode.valueOfParameterMode(memory[instructionPointer], nthParameter);
-        LOGGER.debug("Mode:{}", mode);
+        LOGGER.trace("Mode:{}", mode);
         switch (mode) {
             case IMMEDIATE:
                 return memory[instructionPointer + nthParameter];

@@ -8,17 +8,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Service
 public class AmplificationCircuitService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AmplificationCircuitService.class);
 
-    public int determineLargestOutputSignal(final int[] program) {
+    public int determineLargestOutputSignal(final int[] program, final List<Integer> phases) {
         final List<Integer> thrusterSignals = new ArrayList<>();
-        final List<Integer> phases = IntStream.range(0, 5).boxed().collect(Collectors.toList());
         final PermutationIterator<Integer> integerPermutationIterator = new PermutationIterator<>(phases);
         integerPermutationIterator.forEachRemaining(phaseSequence -> thrusterSignals.add(amplify(program, phaseSequence)));
         return thrusterSignals.stream().max(Integer::compareTo).orElseThrow();
@@ -27,6 +24,6 @@ public class AmplificationCircuitService {
     private int amplify(final int[] program, final List<Integer> phaseSequence) {
         LOGGER.debug("Run:{}", phaseSequence);
         final AmplificationCircuit circuit = new AmplificationCircuit(program, phaseSequence);
-        return circuit.runCircuit();
+        return circuit.run(0);
     }
 }

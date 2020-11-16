@@ -11,6 +11,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 @Service
@@ -18,7 +21,7 @@ public class Day07Service {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Day07Service.class);
 
-    private final  AmplificationCircuitService amplificationCircuitService;
+    private final AmplificationCircuitService amplificationCircuitService;
 
     @Value("classpath:input/day-07.txt")
     private Resource resource;
@@ -28,14 +31,25 @@ public class Day07Service {
     }
 
     public int getSolutionPart1() {
+        final int[] program = getProgram();
+        final List<Integer> phases = IntStream.range(0, 5).boxed().collect(Collectors.toList());
+        return amplificationCircuitService.determineLargestOutputSignal(program, phases);
+    }
+
+    public int getSolutionPart2() {
+        final int[] program = getProgram();
+        final List<Integer> phases = IntStream.range(5, 10).boxed().collect(Collectors.toList());
+        return amplificationCircuitService.determineLargestOutputSignal(program, phases);
+    }
+
+    private int[] getProgram() {
         try {
             final Path path = Paths.get(resource.getURI());
             final String[] strings = Files.readString(path).replace("\n", "").split(",");
-            final int[] integers = Stream.of(strings).mapToInt(Integer::parseInt).toArray();
-            return amplificationCircuitService.determineLargestOutputSignal(integers);
+            return Stream.of(strings).mapToInt(Integer::parseInt).toArray();
         } catch (IOException e) {
             LOGGER.error("Houston: {}", e.getMessage(), e);
-            return -1;
         }
+        return new int[0];
     }
 }
