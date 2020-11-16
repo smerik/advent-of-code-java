@@ -26,8 +26,8 @@ public class Day05Service {
             final Path path = Paths.get(resource.getURI());
             final String[] strings = Files.readString(path).replace("\r\n", "").split(",");
             final int[] integers = Stream.of(strings).mapToInt(Integer::parseInt).toArray();
-            final IntcodeComputer computer = new IntcodeComputer(integers);
-            computer.runWithInput(instruction);
+            final IntcodeComputer computer = new IntcodeComputer(integers, instruction);
+            computer.run();
             return computer.getOutput();
         } catch (IOException e) {
             LOGGER.error("Houston: {}", e.getMessage(), e);

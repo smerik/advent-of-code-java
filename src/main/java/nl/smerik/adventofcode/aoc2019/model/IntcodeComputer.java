@@ -4,8 +4,11 @@ import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
 import java.util.stream.Collectors;
 
 /**
@@ -14,6 +17,8 @@ import java.util.stream.Collectors;
 public class IntcodeComputer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IntcodeComputer.class);
+
+    private final Queue<Integer> input;
 
     @Getter
     private final int[] memory;
@@ -127,31 +132,21 @@ public class IntcodeComputer {
         }
     }
 
-    public IntcodeComputer(int[] program) {
+    public IntcodeComputer(final int[] program, final Integer... input) {
         this.memory = Arrays.copyOf(program, program.length);
+        this.input = new LinkedList<>(new ArrayList<>(Arrays.asList(input)));
     }
 
-    public int[] run() {
+    public int run() {
+        LOGGER.debug("Running program:{}", memory);
         int instructionPointer = 0;
         while (instructionPointer <= memory.length && memory[instructionPointer] != Opcode.HALT.code) {
             instructionPointer = runInstruction(instructionPointer, memory);
         }
-        return memory;
-    }
-
-    public int[] runWithInput(final int input) {
-        int instructionPointer = 0;
-        while (instructionPointer <= memory.length && memory[instructionPointer] != Opcode.HALT.code) {
-            instructionPointer = runInstruction(instructionPointer, memory, input);
-        }
-        return memory;
+        return output;
     }
 
     private int runInstruction(final int instructionPointer, final int[] memory) {
-        return runInstruction(instructionPointer, memory, 0);
-    }
-
-    private int runInstruction(final int instructionPointer, final int[] memory, final int input) {
         final Opcode instruction = Opcode.valueOfOpcode(memory[instructionPointer]);
         LOGGER.debug("Instruction:{}", instruction);
 
@@ -161,7 +156,7 @@ public class IntcodeComputer {
             case MULTIPLY:
                 return multiply(instructionPointer, memory);
             case INPUT:
-                return input(instructionPointer, memory, input);
+                return input(instructionPointer, memory);
             case OUTPUT:
                 return output(instructionPointer, memory);
             case JUMP_IF_TRUE:
@@ -195,8 +190,9 @@ public class IntcodeComputer {
         return instructionPointer + 4;
     }
 
-    private int input(final int instructionPointer, final int[] memory, final int input) {
-        memory[memory[instructionPointer + 1]] = input;
+    private int input(final int instructionPointer, final int[] memory) {
+        LOGGER.debug("Input:{}", input.peek());
+        memory[memory[instructionPointer + 1]] = input.remove();
         return instructionPointer + 2;
     }
 
