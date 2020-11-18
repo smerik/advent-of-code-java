@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.stream.Stream;
 
 @Service
@@ -21,14 +22,14 @@ public class Day05Service {
     @Value("classpath:input/day-05.txt")
     private Resource resource;
 
-    public int getSolutionPart1(final int instruction) {
+    public long getSolutionPart1(final long instruction) {
         try {
             final Path path = Paths.get(resource.getURI());
             final String[] strings = Files.readString(path).replace("\r\n", "").split(",");
-            final int[] integers = Stream.of(strings).mapToInt(Integer::parseInt).toArray();
-            final IntcodeComputer computer = new IntcodeComputer(integers);
-            computer.run(instruction);
-            return computer.getOutput();
+            final long[] program = Stream.of(strings).mapToLong(Long::parseLong).toArray();
+            final IntcodeComputer computer = new IntcodeComputer(program);
+            final List<Long> output = computer.run(instruction);
+            return output.get(output.size() - 1);
         } catch (IOException e) {
             LOGGER.error("Houston: {}", e.getMessage(), e);
             return -1;

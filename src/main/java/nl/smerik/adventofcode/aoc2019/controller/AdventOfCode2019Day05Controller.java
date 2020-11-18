@@ -22,9 +22,9 @@ public class AdventOfCode2019Day05Controller {
     }
 
     @GetMapping("/part-01")
-    public ResponseEntity<Integer> getSolutionPart01(@RequestParam final int instruction) {
+    public ResponseEntity<Long> getSolutionPart01(@RequestParam final long instruction) {
         LOGGER.info("instruction:{}", instruction);
-        final int solutionPart1 = day05Service.getSolutionPart1(instruction);
+        final long solutionPart1 = day05Service.getSolutionPart1(instruction);
         LOGGER.info("result:{}", solutionPart1);
         return ResponseEntity.ok(solutionPart1);
     }

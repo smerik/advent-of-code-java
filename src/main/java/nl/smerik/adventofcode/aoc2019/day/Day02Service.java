@@ -21,9 +21,9 @@ public class Day02Service {
     @Value("classpath:input/day-02.txt")
     private Resource resource;
 
-    public int getSolutionPart1() {
+    public long getSolutionPart1() {
         LOGGER.info("getSolutionPart1");
-        final int[] program = getProgram();
+        final long[] program = getProgram();
         program[1] = 12;
         program[2] = 2;
         final IntcodeComputer computer = new IntcodeComputer(program);
@@ -32,7 +32,7 @@ public class Day02Service {
     }
 
     public String getSolutionPart2(final int requiredOutput) {
-        final int[] program = getProgram();
+        final long[] program = getProgram();
         for (int noun = 0; noun <= 99; noun++) {
             for (int verb = 0; verb <= 99; verb++) {
                 program[1] = noun;
@@ -48,14 +48,14 @@ public class Day02Service {
         return "???";
     }
 
-    private int[] getProgram() {
+    private long[] getProgram() {
         try {
             final Path path = Paths.get(resource.getURI());
             final String[] strings = Files.readString(path).replace("\r\n", "").split(",");
-            return Stream.of(strings).mapToInt(Integer::parseInt).toArray();
+            return Stream.of(strings).mapToLong(Long::parseLong).toArray();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return new int[0];
+        return new long[0];
     }
 }

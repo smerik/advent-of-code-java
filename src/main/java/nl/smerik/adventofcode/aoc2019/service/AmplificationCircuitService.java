@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -14,16 +15,18 @@ public class AmplificationCircuitService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AmplificationCircuitService.class);
 
-    public int determineLargestOutputSignal(final int[] program, final List<Integer> phases) {
-        final List<Integer> thrusterSignals = new ArrayList<>();
+    public long determineLargestOutputSignal(final long[] program, final List<Integer> phases) {
+        final List<Long> thrusterSignals = new ArrayList<>();
         final PermutationIterator<Integer> integerPermutationIterator = new PermutationIterator<>(phases);
         integerPermutationIterator.forEachRemaining(phaseSequence -> thrusterSignals.add(amplify(program, phaseSequence)));
-        return thrusterSignals.stream().max(Integer::compareTo).orElseThrow();
+        return thrusterSignals.stream().max(Long::compareTo).orElseThrow();
     }
 
-    private int amplify(final int[] program, final List<Integer> phaseSequence) {
-        LOGGER.debug("Run:{}", phaseSequence);
+    private long amplify(final long[] program, final List<Integer> phaseSequence) {
+        LOGGER.debug("Run phase sequence {}...", phaseSequence);
         final AmplificationCircuit circuit = new AmplificationCircuit(program, phaseSequence);
-        return circuit.run(0);
+        final List<Long> result = circuit.run(Collections.singletonList(0L));
+        LOGGER.debug("Run result: {}", result.get(0));
+        return result.get(0);
     }
 }

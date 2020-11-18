@@ -17,12 +17,12 @@ public class AdventOfCode2019Day07Controller {
     }
 
     @GetMapping("/part-01")
-    public ResponseEntity<Integer> getSolutionPart01() {
+    public ResponseEntity<Long> getSolutionPart01() {
         return ResponseEntity.ok(day07Service.getSolutionPart1());
     }
 
     @GetMapping("/part-02")
-    public ResponseEntity<Integer> getSolutionPart02() {
+    public ResponseEntity<Long> getSolutionPart02() {
         return ResponseEntity.ok(day07Service.getSolutionPart2());
     }
 }

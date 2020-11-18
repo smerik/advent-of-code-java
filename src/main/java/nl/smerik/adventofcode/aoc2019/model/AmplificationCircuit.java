@@ -7,14 +7,14 @@ public class AmplificationCircuit {
 
     final List<IntcodeComputer> amplifiers;
 
-    public AmplificationCircuit(final int[] program, final List<Integer> phaseSequence) {
+    public AmplificationCircuit(final long[] program, final List<Integer> phaseSequence) {
         this.amplifiers = phaseSequence.stream()
                 .map(phase -> new IntcodeComputer(program, phase))
                 .collect(Collectors.toList());
     }
 
-    public int run(final int input) {
-        int signal = input;
+    public List<Long> run(final List<Long> input) {
+        List<Long> signal = input;
         for (final IntcodeComputer computer : amplifiers) {
             signal = computer.run(signal);
         }

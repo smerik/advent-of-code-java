@@ -30,26 +30,26 @@ public class Day07Service {
         this.amplificationCircuitService = amplificationCircuitService;
     }
 
-    public int getSolutionPart1() {
-        final int[] program = getProgram();
+    public long getSolutionPart1() {
+        final long[] program = getProgram();
         final List<Integer> phases = IntStream.range(0, 5).boxed().collect(Collectors.toList());
         return amplificationCircuitService.determineLargestOutputSignal(program, phases);
     }
 
-    public int getSolutionPart2() {
-        final int[] program = getProgram();
+    public long getSolutionPart2() {
+        final long[] program = getProgram();
         final List<Integer> phases = IntStream.range(5, 10).boxed().collect(Collectors.toList());
         return amplificationCircuitService.determineLargestOutputSignal(program, phases);
     }
 
-    private int[] getProgram() {
+    private long[] getProgram() {
         try {
             final Path path = Paths.get(resource.getURI());
             final String[] strings = Files.readString(path).replace("\n", "").split(",");
-            return Stream.of(strings).mapToInt(Integer::parseInt).toArray();
+            return Stream.of(strings).mapToLong(Long::parseLong).toArray();
         } catch (IOException e) {
             LOGGER.error("Houston: {}", e.getMessage(), e);
         }
-        return new int[0];
+        return new long[0];
     }
 }

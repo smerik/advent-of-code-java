@@ -4,8 +4,11 @@ import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.stream.Collectors;
@@ -17,18 +20,18 @@ public class IntcodeComputer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IntcodeComputer.class);
 
-    private final Queue<Integer> input;
+    private final Queue<Long> input;
 
-    @Getter
-    private final int[] memory;
+    private final Memory memory;
+
+    private final List<Long> output;
 
     private int instructionPointer;
 
     @Getter
     private boolean pausedExecution;
 
-    @Getter
-    private int output = -1;
+    private int relativeBase = 0;
 
     /**
      * Opcodes mark the beginning of an instruction.
@@ -82,6 +85,11 @@ public class IntcodeComputer {
         EQUALS(8),
 
         /**
+         * Adjusts the relative base by the value of its only parameter.
+         */
+        ADJUST_RELATIVE_BASE(9),
+
+        /**
          * Halts the program.
          */
         HALT(99);
@@ -116,8 +124,21 @@ public class IntcodeComputer {
         /**
          * The parameter should be interpreted as a value.
          */
-        IMMEDIATE(1);
+        IMMEDIATE(1),
 
+        /**
+         * Behaves very similarly to parameters in position mode: the parameter is interpreted as a position.
+         * Like position mode, parameters in relative mode can be read from or written to.
+         * <p>
+         * The important difference is that relative mode parameters don't count from address 0.
+         * Instead, they count from a value called the relative base.
+         * The relative base starts at 0.
+         * <p>
+         * The address a relative mode parameter refers to is itself plus the current relative base.
+         * When the relative base is 0,
+         * relative mode parameters and position mode parameters with the same value refer to the same address.
+         */
+        RELATIVE(2);
 
         private static final Map<Integer, ParameterMode> BY_PARAMETER_MODE;
 
@@ -136,31 +157,86 @@ public class IntcodeComputer {
         }
     }
 
-    public IntcodeComputer(final int[] program) {
+    private class Memory {
+
+        private long[] program;
+
+        public Memory(final long[] program) {
+            this.program = Arrays.copyOf(program, program.length);
+        }
+
+        public long[] get() {
+            return program;
+        }
+
+        public long get(final int i) {
+            allocate(i);
+            return program[i];
+        }
+
+        public void set(final int i, final Long value) {
+            allocate(i);
+            program[i] = value;
+        }
+
+        private void allocate(final int i) {
+            if (i + 1 > program.length) {
+                LOGGER.debug("Index {} exceeds total allocated memory size of {}; Allocating extra memory...",
+                        i, program.length);
+                this.program = Arrays.copyOf(program, i + 1);
+                LOGGER.debug("New allocated memory size: {}", program.length);
+            }
+        }
+
+        @Override
+        public String toString() {
+            return "Memory{" +
+                    "program=" + Arrays.toString(program) +
+                    '}';
+        }
+    }
+
+    public long[] getMemory() {
+        return memory.get();
+    }
+
+    public IntcodeComputer(final long[] program) {
         this(program, null);
     }
 
-    public IntcodeComputer(final int[] program, final Integer phase) {
-        this.memory = Arrays.copyOf(program, program.length);
+    public IntcodeComputer(final long[] program, final Integer phase) {
+        this.memory = new Memory(program);
         this.instructionPointer = 0;
         this.input = new LinkedList<>();
         if (phase != null) {
-            this.input.add(phase);
+            this.input.add(Long.valueOf(phase));
         }
+        this.output = new ArrayList<>();
     }
 
-    public int run(final Integer... input) {
+    public List<Long> run() {
+        return run(Collections.emptyList());
+    }
+
+    public List<Long> run(final Long input) {
+        return run(Collections.singletonList(input));
+    }
+
+    public List<Long> run(final List<Long> input) {
         this.pausedExecution = false;
-        this.input.addAll(Arrays.asList(input));
-        LOGGER.trace("Running input {} on program:{}", input, memory);
-        while (instructionPointer <= memory.length && memory[instructionPointer] != Opcode.HALT.code && !this.pausedExecution) {
+        this.input.addAll(input);
+        LOGGER.trace("Running input {} on {}", input, memory);
+        while (instructionPointer <= memory.get().length && memory.get(instructionPointer) != Opcode.HALT.code && !this.pausedExecution) {
             instructionPointer = runInstruction();
+            LOGGER.trace("New instruction pointer location: {}", instructionPointer);
         }
-        return output;
+        final List<Long> result = new ArrayList<>(this.output);
+        this.output.clear();
+        return result;
     }
 
     private int runInstruction() {
-        final Opcode instruction = Opcode.valueOfOpcode(memory[instructionPointer]);
+        final Opcode instruction = Opcode.valueOfOpcode((int) memory.get(instructionPointer));
         LOGGER.trace("Instruction:{}", instruction);
 
         switch (instruction) {
@@ -180,6 +256,8 @@ public class IntcodeComputer {
                 return lessThan();
             case EQUALS:
                 return equals();
+            case ADJUST_RELATIVE_BASE:
+                return adjustRelativeBase();
             case HALT:
                 return 1;
             default:
@@ -188,34 +266,35 @@ public class IntcodeComputer {
     }
 
     private int add() {
-        final int inputAddress1 = getParameterValue(1);
-        final int inputAddress2 = getParameterValue(2);
-        final int storeAddress = memory[instructionPointer + 3];
-        memory[storeAddress] = inputAddress1 + inputAddress2;
+        final long parameterOne = getParameterValue(1);
+        final long parameterTwo = getParameterValue(2);
+        final int storeAddress = getParameterPointer(3);
+        memory.set(storeAddress, parameterOne + parameterTwo);
         return instructionPointer + 4;
     }
 
     private int multiply() {
-        final int inputAddress1 = getParameterValue(1);
-        final int inputAddress2 = getParameterValue(2);
-        final int storeAddress = memory[instructionPointer + 3];
-        memory[storeAddress] = inputAddress1 * inputAddress2;
+        final long parameterOne = getParameterValue(1);
+        final long parameterTwo = getParameterValue(2);
+        final int storeAddress = getParameterPointer(3);
+        memory.set(storeAddress, parameterOne * parameterTwo);
         return instructionPointer + 4;
     }
 
     private int input() {
-        LOGGER.trace("Input:{}", input.peek());
+        LOGGER.trace("Input:{}", input);
         if (input.peek() == null) {
-            LOGGER.debug("Pausing computer. Output will be:{}", output);
+            LOGGER.trace("Pausing computer. Output will be:{}", output);
             this.pausedExecution = true;
             return instructionPointer;
         }
-        memory[memory[instructionPointer + 1]] = input.remove();
+        final int storeAddress = getParameterPointer(1);
+        memory.set(storeAddress, input.remove());
         return instructionPointer + 2;
     }
 
     private int output() {
-        output = getParameterValue(1);
+        output.add(getParameterValue(1));
         LOGGER.trace("Output:{}", output);
         return instructionPointer + 2;
     }
@@ -224,41 +303,55 @@ public class IntcodeComputer {
         if (getParameterValue(1) == 0) {
             return instructionPointer + 3;
         }
-        return getParameterValue(2);
+        return (int) getParameterValue(2);
     }
 
     private int jumpIfFalse() {
         if (getParameterValue(1) == 0) {
-            return getParameterValue(2);
+            return (int) getParameterValue(2);
         }
         return instructionPointer + 3;
     }
 
     private int lessThan() {
-        final int parameterOne = getParameterValue(1);
-        final int parameterTwo = getParameterValue(2);
-        final int storeAddress = memory[instructionPointer + 3];
-        memory[storeAddress] = parameterOne < parameterTwo ? 1 : 0;
+        final long parameterOne = getParameterValue(1);
+        final long parameterTwo = getParameterValue(2);
+        final int storeAddress = getParameterPointer(3);
+        memory.set(storeAddress, parameterOne < parameterTwo ? 1L : 0);
         return instructionPointer + 4;
     }
 
     private int equals() {
-        final int parameterOne = getParameterValue(1);
-        final int parameterTwo = getParameterValue(2);
-        final int storeAddress = memory[instructionPointer + 3];
-        memory[storeAddress] = parameterOne == parameterTwo ? 1 : 0;
+        final long parameterOne = getParameterValue(1);
+        final long parameterTwo = getParameterValue(2);
+        final int storeAddress = getParameterPointer(3);
+        memory.set(storeAddress, parameterOne == parameterTwo ? 1L : 0);
         return instructionPointer + 4;
     }
 
-    private int getParameterValue(final int nthParameter) {
-        final ParameterMode mode = ParameterMode.valueOfParameterMode(memory[instructionPointer], nthParameter);
+    private int adjustRelativeBase() {
+        relativeBase += getParameterValue(1);
+        LOGGER.trace("Modified relativeBase:{}", relativeBase);
+        return instructionPointer + 2;
+    }
+
+    private long getParameterValue(final int nthParameter) {
+        return memory.get(getParameterPointer(nthParameter));
+    }
+
+    private int getParameterPointer(final int nthParameter) {
+        final ParameterMode mode = ParameterMode.valueOfParameterMode((int) memory.get(instructionPointer), nthParameter);
         LOGGER.trace("Mode:{}", mode);
         switch (mode) {
+            // Parameters that an instruction writes to will never be in immediate mode.
             case IMMEDIATE:
-                return memory[instructionPointer + nthParameter];
+                return instructionPointer + nthParameter;
+            case RELATIVE:
+                return relativeBase + (int) memory.get(instructionPointer + nthParameter);
             case POSITION:
+                return (int) memory.get(instructionPointer + nthParameter);
             default:
-                return memory[memory[instructionPointer + nthParameter]];
+                throw new IllegalArgumentException("Unknown mode:" + mode);
         }
     }
 }
