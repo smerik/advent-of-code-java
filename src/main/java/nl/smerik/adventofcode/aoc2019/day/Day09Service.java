@@ -27,6 +27,12 @@ public class Day09Service {
         return computer.run(1L).get(0);
     }
 
+    public Long getSolutionPart2() {
+        final long[] program = getProgram();
+        final IntcodeComputer computer = new IntcodeComputer(program);
+        return computer.run(2L).get(0);
+    }
+
     private long[] getProgram() {
         try {
             final Path path = Paths.get(resource.getURI());
