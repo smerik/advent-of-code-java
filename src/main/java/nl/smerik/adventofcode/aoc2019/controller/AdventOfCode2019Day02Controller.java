@@ -4,7 +4,6 @@ import nl.smerik.adventofcode.aoc2019.day.Day02Service;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -23,7 +22,7 @@ public class AdventOfCode2019Day02Controller {
     }
 
     @GetMapping("/part-02")
-    public ResponseEntity<String> getSolutionPart02(@RequestParam final int requiredOutput) {
-        return ResponseEntity.ok(day02Service.getSolutionPart2(requiredOutput));
+    public ResponseEntity<String> getSolutionPart02() {
+        return ResponseEntity.ok(day02Service.getSolutionPart2());
     }
 }
