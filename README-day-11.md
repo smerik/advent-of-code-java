@@ -98,6 +98,22 @@ Build a new emergency hull painting robot and run the Intcode program on it.
 To begin, [get your puzzle input][5].
 
 
+### Part Two
+You're not sure what it's trying to paint, but it's definitely not a **registration identifier**.
+The Space Police are getting impatient.
+
+Checking your external ship cameras again, you notice a white panel marked
+"emergency hull painting robot starting panel".
+The rest of the panels are **still black**, but it looks like the robot was expecting to **start on a white panel**,
+not a black one.
+
+Based on the Space Law Space Brochure that the Space Police attached to one of your windows,
+a valid registration identifier is always **eight capital letters**.
+After starting the robot on a single **white panel** instead,
+**what registration identifier does it paint** on your hull?
+
+Although it hasn't changed, you can still [get your puzzle input][5].
+
 [1]: https://www.youtube.com/watch?v=KwY28rpyKDE "The Sound of the Space Police"
 [2]: https://www.youtube.com/watch?v=BVn1oQL9sWg&t=5 "All quotes from Portal 2's \"Space\" sphere"
 [3]: https://adventofcode.com/2019/day/9 "Day 9 - Advent of Code 2019"

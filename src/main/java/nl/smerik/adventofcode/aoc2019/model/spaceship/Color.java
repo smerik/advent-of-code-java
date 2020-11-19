@@ -5,13 +5,15 @@ import lombok.Getter;
 @Getter
 public enum Color {
 
-    BLACK(0),
-    WHITE(1);
+    BLACK(0, '.'),
+    WHITE(1, '#');
 
-    private int code;
+    private final int code;
+    private final char renderToken;
 
-    Color(final int code) {
+    Color(final int code, final char renderToken) {
         this.code = code;
+        this.renderToken = renderToken;
     }
 
     public static Color valueOfColorCode(final int code) {
