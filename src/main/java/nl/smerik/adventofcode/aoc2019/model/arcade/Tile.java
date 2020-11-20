@@ -20,17 +20,20 @@ public class Tile {
         this.type = type;
     }
 
+    @Getter
     public enum Type {
-        EMPTY(0),
-        WALL(1),
-        BLOCK(2),
-        HORIZONTAL_PADDLE(3),
-        BALL(4);
+        EMPTY(0, ' '),
+        WALL(1, '#'),
+        BLOCK(2, '-'),
+        HORIZONTAL_PADDLE(3, '='),
+        BALL(4, 'o');
 
         private final int id;
+        private final char renderToken;
 
-        Type(final int id) {
+        Type(final int id, final char renderToken) {
             this.id = id;
+            this.renderToken = renderToken;
         }
 
         public static Type valueOfTileTypeId(final int id) {

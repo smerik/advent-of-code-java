@@ -24,7 +24,17 @@ public class Day13Service {
         final long[] program = puzzleInputService.readIntcodeProgram(resource);
         final IntcodeComputer intcodeComputer = new IntcodeComputer(program);
         final ArcadeCabinet arcadeCabinet = new ArcadeCabinet(intcodeComputer);
-        arcadeCabinet.draw();
+        arcadeCabinet.start();
         return arcadeCabinet.getScreen().countTilesByType(Tile.Type.BLOCK);
+    }
+
+    public Long getSolutionPart2() {
+        final long[] program = puzzleInputService.readIntcodeProgram(resource);
+        // Memory address 0 represents the number of quarters that have been inserted; set it to 2 to play for free.
+        program[0] = 2L;
+        final IntcodeComputer intcodeComputer = new IntcodeComputer(program);
+        final ArcadeCabinet arcadeCabinet = new ArcadeCabinet(intcodeComputer);
+        arcadeCabinet.start();
+        return arcadeCabinet.getScore();
     }
 }

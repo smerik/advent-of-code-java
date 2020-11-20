@@ -20,4 +20,9 @@ public class AdventOfCode2019Day13Controller {
     public ResponseEntity<Long> getSolutionPart01() {
         return ResponseEntity.ok(dayService.getSolutionPart1());
     }
+
+    @GetMapping("/part-02")
+    public ResponseEntity<Long> getSolutionPart02() {
+        return ResponseEntity.ok(dayService.getSolutionPart2());
+    }
 }
