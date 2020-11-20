@@ -25,7 +25,7 @@ public class Hull {
     }
 
     public String render() {
-        StringBuilder builder = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
         final int minX = this.panels.keySet().stream().min(Comparator.comparing(Point::getX)).orElseThrow().x;
         final int maxX = this.panels.keySet().stream().max(Comparator.comparing(Point::getX)).orElseThrow().x;
         final int minY = this.panels.keySet().stream().min(Comparator.comparing(Point::getY)).orElseThrow().y;
