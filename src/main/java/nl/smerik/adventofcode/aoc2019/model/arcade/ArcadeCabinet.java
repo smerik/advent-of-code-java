@@ -39,11 +39,14 @@ public class ArcadeCabinet {
         this.score = 0;
     }
 
-    public void start() {
+    public void start(final boolean playGame) {
         final List<Long> output = this.computer.run();
         updateScreen(output);
-        while(computer.isPausedExecution() || screen.countTilesByType(Tile.Type.BLOCK) > 0L) {
-            playGame();
+        if (playGame) {
+            while (computer.isPausedExecution() || screen.countTilesByType(Tile.Type.BLOCK) > 0L) {
+                playGame();
+                screen.render();
+            }
         }
     }
 
@@ -77,6 +80,5 @@ public class ArcadeCabinet {
             final Tile.Type type = Tile.Type.valueOfTileTypeId(Math.toIntExact(value));
             screen.draw(point, type);
         }
-        screen.render();
     }
 }

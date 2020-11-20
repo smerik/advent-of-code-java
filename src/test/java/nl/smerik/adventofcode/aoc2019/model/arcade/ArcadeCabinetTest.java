@@ -24,7 +24,7 @@ class ArcadeCabinetTest {
         final ArcadeCabinet arcadeCabinet = new ArcadeCabinet(intcodeComputer);
         Mockito.when(intcodeComputer.run()).thenReturn(List.of(1L, 2L, 3L, 6L, 5L, 4L));
 
-        arcadeCabinet.start();
+        arcadeCabinet.start(false);
 
         final Map<Point, Tile> tiles = arcadeCabinet.getScreen().getTiles();
         assertEquals(2, tiles.size());

@@ -24,7 +24,7 @@ public class Day13Service {
         final long[] program = puzzleInputService.readIntcodeProgram(resource);
         final IntcodeComputer intcodeComputer = new IntcodeComputer(program);
         final ArcadeCabinet arcadeCabinet = new ArcadeCabinet(intcodeComputer);
-        arcadeCabinet.start();
+        arcadeCabinet.start(false);
         return arcadeCabinet.getScreen().countTilesByType(Tile.Type.BLOCK);
     }
 
@@ -34,7 +34,7 @@ public class Day13Service {
         program[0] = 2L;
         final IntcodeComputer intcodeComputer = new IntcodeComputer(program);
         final ArcadeCabinet arcadeCabinet = new ArcadeCabinet(intcodeComputer);
-        arcadeCabinet.start();
+        arcadeCabinet.start(true);
         return arcadeCabinet.getScore();
     }
 }
