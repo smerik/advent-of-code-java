@@ -103,46 +103,6 @@ public class RepairDroid {
         this.facingDirection = Direction.NORTH;
     }
 
-    public void exploreArea() {
-        final Map<Point, Cell> exploredArea = new HashMap<>();
-        boolean explored = false;
-        while (!explored) {
-            final Cell cell = moveForward();
-            exploredArea.put(cell.getPoint(), cell);
-
-            if (cell.getType() == Cell.Type.WALL) {
-                rotateRight();
-            } else {
-                rotateLeft();
-            }
-            if (cell.getPoint().equals(new Point())) {
-                explored = true;
-            }
-        }
-        drawArea(exploredArea);
-    }
-
-    private void drawArea(final Map<Point, Cell> exploredArea) {
-        final StringBuilder builder = new StringBuilder(System.lineSeparator());
-        final int minX = exploredArea.keySet().stream().min(Comparator.comparing(Point::getX)).orElseThrow().x;
-        final int maxX = exploredArea.keySet().stream().max(Comparator.comparing(Point::getX)).orElseThrow().x;
-        final int minY = exploredArea.keySet().stream().min(Comparator.comparing(Point::getY)).orElseThrow().y;
-        final int maxY = exploredArea.keySet().stream().max(Comparator.comparing(Point::getY)).orElseThrow().y;
-
-        for (int y = maxY; y >= minY; y--) {
-            for (int x = minX; x <= maxX; x++) {
-                final Cell cell = exploredArea.get(new Point(x, y));
-                if (cell == null) {
-                    builder.append('?');
-                } else {
-                    builder.append(cell.getType().getRenderToken());
-                }
-            }
-            builder.append(System.lineSeparator());
-        }
-        LOGGER.info("Area:{}", builder);
-    }
-
     public void rotateLeft() {
         setFacingDirection(facingDirection.getLeft());
     }
