@@ -10,11 +10,11 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("api/v1/solutions/days/08")
-public class AdventOfCode2019Day08Controller {
+public class Day08Controller {
 
     private final Day08Service day08Service;
 
-    public AdventOfCode2019Day08Controller(final Day08Service day08Service) {
+    public Day08Controller(final Day08Service day08Service) {
         this.day08Service = day08Service;
     }
 

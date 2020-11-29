@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("api/v1/solutions/days/04")
-public class AdventOfCode2019Day04Controller {
+public class Day04Controller {
 
     private final Day04Service day04Service;
 
-    public AdventOfCode2019Day04Controller(final Day04Service day04Service) {
+    public Day04Controller(final Day04Service day04Service) {
         this.day04Service = day04Service;
     }
 
