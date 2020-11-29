@@ -1,5 +1,9 @@
 package nl.smerik.adventofcode.aoc2019.model.repairdroid;
 
+import lombok.Getter;
+import org.jgrapht.Graph;
+import org.jgrapht.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultUndirectedGraph;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,21 +12,25 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
+@Getter
 public class Section {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Section.class);
 
     private final RepairDroid droid;
     private final Map<Point, Cell> area;
+    private final Graph<Cell, DefaultEdge> hallway;
 
     public Section(final RepairDroid droid) {
         this.droid = droid;
         this.area = new HashMap<>();
+        this.hallway = new DefaultUndirectedGraph<>(DefaultEdge.class);
         exploreArea();
         drawArea();
     }
 
     private void exploreArea() {
+        Cell previousCell = null;
         boolean explored = false;
         while (!explored) {
             final Cell cell = droid.moveForward();
@@ -32,6 +40,11 @@ public class Section {
                 droid.rotateRight();
             } else {
                 droid.rotateLeft();
+                hallway.addVertex(cell);
+                if (previousCell != null) {
+                    hallway.addEdge(previousCell, cell);
+                }
+                previousCell = cell;
             }
             if (cell.getPoint().equals(new Point())) {
                 explored = true;

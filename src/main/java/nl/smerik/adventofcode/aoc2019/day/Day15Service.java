@@ -22,7 +22,7 @@ public class Day15Service {
         this.repairDroidService = repairDroidService;
     }
 
-    public Long getSolutionPart1() {
+    public int getSolutionPart1() {
         final long[] program = puzzleInputService.readIntcodeProgram(resource);
         return repairDroidService.determineFewestNumberOfCommandsToMoveToOxygenSystem(program);
     }

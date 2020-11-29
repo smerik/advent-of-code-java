@@ -17,7 +17,7 @@ public class Day15Controller {
     }
 
     @GetMapping("/part-01")
-    public ResponseEntity<Long> getSolutionPart01() {
+    public ResponseEntity<Integer> getSolutionPart01() {
         return ResponseEntity.ok(dayService.getSolutionPart1());
     }
 }
