@@ -26,4 +26,9 @@ public class Day15Service {
         final long[] program = puzzleInputService.readIntcodeProgram(resource);
         return repairDroidService.determineFewestNumberOfCommandsToMoveToOxygenSystem(program);
     }
+
+    public double getSolutionPart2() {
+        final long[] program = puzzleInputService.readIntcodeProgram(resource);
+        return repairDroidService.determineTimeToFillAreaWithOxygen(program);
+    }
 }
