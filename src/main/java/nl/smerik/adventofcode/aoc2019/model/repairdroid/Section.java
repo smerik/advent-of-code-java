@@ -72,4 +72,12 @@ public class Section {
         }
         LOGGER.info("Area:{}", builder);
     }
+
+    public Cell getOxygenCell() {
+        return area.values()
+                   .stream()
+                   .filter(cell -> cell.getType() == Cell.Type.OXYGEN)
+                   .findAny()
+                   .orElseThrow();
+    }
 }

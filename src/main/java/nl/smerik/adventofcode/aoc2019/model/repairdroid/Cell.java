@@ -13,7 +13,7 @@ import java.awt.Point;
 public class Cell {
 
     @Getter
-    public enum Type {
+    enum Type {
         SPACE(' '),
         WALL('#'),
         OXYGEN('O');

@@ -21,7 +21,7 @@ public class RepairDroidService {
         final Point startPosition = new Point(repairDroid.getCurrentPosition());
         final Section section = new Section(repairDroid);
         final Cell startCell = section.getArea().get(startPosition);
-        final Cell oxygenCell = section.getArea().values().stream().filter(cell -> cell.getType() == Cell.Type.OXYGEN).findAny().orElseThrow();
+        final Cell oxygenCell = section.getOxygenCell();
 
         final BFSShortestPath<Cell, DefaultEdge> shortestPath = new BFSShortestPath<>(section.getHallway());
         final GraphPath<Cell, DefaultEdge> path = shortestPath.getPath(startCell, oxygenCell);
