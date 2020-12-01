@@ -41,4 +41,18 @@ public class Day01Service {
             return null;
         }
     }
+
+    @SneakyThrows
+    public Long getSolutionPart2() {
+        final Path path = Paths.get(resource.getURI());
+        try (Stream<String> stringStream = Files.lines(path)) {
+            final List<Integer> report = stringStream.mapToInt(Integer::valueOf)
+                                                     .boxed()
+                                                     .collect(Collectors.toList());
+            return expenseReportService.calculateExpenseReportForThreeNumbers(report);
+        } catch (IOException e) {
+            LOG.error("Houston: {}", e.getMessage(), e);
+            return null;
+        }
+    }
 }

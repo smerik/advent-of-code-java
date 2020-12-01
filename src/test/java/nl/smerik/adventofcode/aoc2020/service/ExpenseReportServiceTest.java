@@ -16,4 +16,13 @@ class ExpenseReportServiceTest {
 
         assertEquals(514579, service.calculateExpenseReport(input));
     }
+
+    @Test
+    void calculateExpenseReportForThreeNumbers() {
+        final List<Integer> input = List.of(1721, 979, 366, 299, 675, 1456);
+
+        final ExpenseReportService service = new ExpenseReportService();
+
+        assertEquals(241861950, service.calculateExpenseReportForThreeNumbers(input));
+    }
 }
