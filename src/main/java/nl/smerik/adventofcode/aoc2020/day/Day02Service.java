@@ -33,7 +33,19 @@ public class Day02Service {
         final Path path = Paths.get(resource.getURI());
         try (Stream<String> stringStream = Files.lines(path)) {
             final List<String> passwordPolicies = stringStream.collect(Collectors.toList());
-            return passwordService.validatePasswordPolicies(passwordPolicies);
+            return passwordService.validatePasswordPoliciesForSledRentalPlace(passwordPolicies);
+        } catch (IOException e) {
+            LOG.error("Houston: {}", e.getMessage(), e);
+            return null;
+        }
+    }
+
+    @SneakyThrows
+    public Long getSolutionPart2() {
+        final Path path = Paths.get(resource.getURI());
+        try (Stream<String> stringStream = Files.lines(path)) {
+            final List<String> passwordPolicies = stringStream.collect(Collectors.toList());
+            return passwordService.validatePasswordPoliciesForToboggan(passwordPolicies);
         } catch (IOException e) {
             LOG.error("Houston: {}", e.getMessage(), e);
             return null;
