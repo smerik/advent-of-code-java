@@ -3,16 +3,42 @@ package nl.smerik.adventofcode.aoc2020.model.passport;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.validation.constraints.*;
+
 @Data
 public class Passport {
 
+    @NotNull
+    @Min(1920)
+    @Max(2002)
     private Integer birthYear;
+
+    @NotNull
+    @Min(2010)
+    @Max(2020)
     private Integer issueYear;
+
+    @NotNull
+    @Min(2020)
+    @Max(2030)
     private Integer expirationYear;
+
+    @NotBlank
+    @Pattern(regexp = "((1[5-8][0-9]|19[0-3])cm)|((59|6[0-9]|7[0-6])in)")
     private String height;
+
+    @NotBlank
+    @Pattern(regexp = "#([0-9]|[a-f]){6}")
     private String hairColor;
+
+    @NotBlank
+    @Pattern(regexp = "amb|blu|brn|gry|grn|hzl|oth")
     private String eyeColor;
+
+    @NotBlank
+    @Pattern(regexp = "\\d{9}")
     private String passportId;
+
     private Integer countryId;
 
     /**

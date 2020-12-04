@@ -5,6 +5,7 @@ import nl.smerik.adventofcode.aoc2020.model.passport.PassportFieldType;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import javax.validation.Validator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -12,6 +13,12 @@ import java.util.stream.Collectors;
 
 @Service
 public class PassportService {
+
+    private final Validator validator;
+
+    public PassportService(final Validator validator) {
+        this.validator = validator;
+    }
 
     public Set<Passport> parseBatch(final List<String> input) {
         final Set<Passport> result = new HashSet<>();
@@ -50,5 +57,13 @@ public class PassportService {
 
     public Set<Passport> getValidPassports(final Set<Passport> passports) {
         return passports.stream().filter(Passport::isValid).collect(Collectors.toSet());
+    }
+
+    public Set<Passport> getValidatedPassports(final Set<Passport> passports) {
+        return passports.stream().filter(this::isValid).collect(Collectors.toSet());
+    }
+
+    private boolean isValid(final Passport passport) {
+        return validator.validate(passport).isEmpty();
     }
 }
