@@ -42,4 +42,17 @@ public class Day05Service {
             return null;
         }
     }
+
+    @SneakyThrows
+    public Long getSolutionPart2() {
+        final Path path = Paths.get(resource.getURI());
+        try (Stream<String> stringStream = Files.lines(path)) {
+            final List<String> input = stringStream.collect(Collectors.toList());
+            final Set<BoardingPass> boardingPasses = boardingService.parseBoardingPasses(input);
+            return boardingService.findEmptySeat(boardingPasses);
+        } catch (IOException e) {
+            LOG.error("Houston: {}", e.getMessage(), e);
+            return null;
+        }
+    }
 }
