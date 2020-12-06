@@ -1,4 +1,4 @@
-package nl.smerik.adventofcode.aoc2020.service;
+package nl.smerik.adventofcode.aoc2020.service.boarding;
 
 import nl.smerik.adventofcode.aoc2020.model.boarding.BoardingPass;
 import org.springframework.stereotype.Service;

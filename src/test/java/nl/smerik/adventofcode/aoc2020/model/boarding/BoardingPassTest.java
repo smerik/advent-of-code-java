@@ -1,6 +1,5 @@
-package nl.smerik.adventofcode.aoc2020.model;
+package nl.smerik.adventofcode.aoc2020.model.boarding;
 
-import nl.smerik.adventofcode.aoc2020.model.boarding.BoardingPass;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;

@@ -1,6 +1,7 @@
-package nl.smerik.adventofcode.aoc2020.service;
+package nl.smerik.adventofcode.aoc2020.service.boarding;
 
 import nl.smerik.adventofcode.aoc2020.model.boarding.BoardingPass;
+import nl.smerik.adventofcode.aoc2020.service.boarding.BoardingService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

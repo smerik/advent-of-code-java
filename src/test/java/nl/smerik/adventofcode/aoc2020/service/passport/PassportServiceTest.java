@@ -1,14 +1,13 @@
-package nl.smerik.adventofcode.aoc2020.service;
+package nl.smerik.adventofcode.aoc2020.service.passport;
 
 import nl.smerik.adventofcode.aoc2020.model.passport.Passport;
-import org.junit.jupiter.api.Assertions;
+import nl.smerik.adventofcode.aoc2020.service.passport.PassportService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.Resource;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;

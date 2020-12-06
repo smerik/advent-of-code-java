@@ -1,4 +1,4 @@
-package nl.smerik.adventofcode.aoc2020.service;
+package nl.smerik.adventofcode.aoc2020.service.security;
 
 
 import org.apache.commons.lang3.StringUtils;

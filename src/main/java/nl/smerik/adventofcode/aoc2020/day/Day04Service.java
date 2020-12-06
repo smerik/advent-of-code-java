@@ -2,10 +2,8 @@ package nl.smerik.adventofcode.aoc2020.day;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import nl.smerik.adventofcode.aoc2020.model.AreaMap;
-import nl.smerik.adventofcode.aoc2020.model.Toboggan;
 import nl.smerik.adventofcode.aoc2020.model.passport.Passport;
-import nl.smerik.adventofcode.aoc2020.service.PassportService;
+import nl.smerik.adventofcode.aoc2020.service.passport.PassportService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;

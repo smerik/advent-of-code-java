@@ -1,4 +1,4 @@
-package nl.smerik.adventofcode.aoc2020.service;
+package nl.smerik.adventofcode.aoc2020.service.passport;
 
 import nl.smerik.adventofcode.aoc2020.model.passport.Passport;
 import nl.smerik.adventofcode.aoc2020.model.passport.PassportFieldType;
