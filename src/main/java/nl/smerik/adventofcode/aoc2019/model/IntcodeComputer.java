@@ -181,10 +181,10 @@ public class IntcodeComputer {
 
         private void allocate(final int i) {
             if (i + 1 > program.length) {
-                LOGGER.debug("Index {} exceeds total allocated memory size of {}; Allocating extra memory...",
+                LOGGER.trace("Index {} exceeds total allocated memory size of {}; Allocating extra memory...",
                         i, program.length);
                 this.program = Arrays.copyOf(program, i + 1);
-                LOGGER.debug("New allocated memory size: {}", program.length);
+                LOGGER.trace("New allocated memory size: {}", program.length);
             }
         }
 
