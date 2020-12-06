@@ -39,4 +39,24 @@ class GroupAnswersTest {
 
         assertEquals(6, groupAnswers.countUnionOfAnswers());
     }
+
+    @Test
+    void getIntersectionOfAnswers() {
+        final GroupAnswers groupAnswers = new GroupAnswers();
+        groupAnswers.addAnswers(new PersonAnswers("abcx"));
+        groupAnswers.addAnswers(new PersonAnswers("abcy"));
+        groupAnswers.addAnswers(new PersonAnswers("abcz"));
+
+        assertEquals(Set.of('a', 'b', 'c'), groupAnswers.getIntersectionOfAnswers());
+    }
+
+    @Test
+    void countIntersectionOfAnswers() {
+        final GroupAnswers groupAnswers = new GroupAnswers();
+        groupAnswers.addAnswers(new PersonAnswers("abcx"));
+        groupAnswers.addAnswers(new PersonAnswers("abcy"));
+        groupAnswers.addAnswers(new PersonAnswers("abcz"));
+
+        assertEquals(3, groupAnswers.countIntersectionOfAnswers());
+    }
 }

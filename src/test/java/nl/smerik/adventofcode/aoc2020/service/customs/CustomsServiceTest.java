@@ -49,4 +49,10 @@ class CustomsServiceTest {
         final List<GroupAnswers> groupAnswers = customsService.parseAnswers(example01Part01);
         assertEquals(11, customsService.sumCountUnionOfAnswers(groupAnswers));
     }
+
+    @Test
+    void sumCountIntersectionOfAnswers() {
+        final List<GroupAnswers> groupAnswers = customsService.parseAnswers(example01Part01);
+        assertEquals(6, customsService.sumCountIntersectionOfAnswers(groupAnswers));
+    }
 }

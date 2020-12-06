@@ -41,4 +41,17 @@ public class Day06Service {
             return null;
         }
     }
+
+    @SneakyThrows
+    public Integer getSolutionPart2() {
+        final Path path = Paths.get(resource.getURI());
+        try (Stream<String> stringStream = Files.lines(path)) {
+            final List<String> input = stringStream.collect(Collectors.toList());
+            final List<GroupAnswers> answers = customsService.parseAnswers(input);
+            return customsService.sumCountIntersectionOfAnswers(answers);
+        } catch (IOException e) {
+            LOG.error("Houston: {}", e.getMessage(), e);
+            return null;
+        }
+    }
 }

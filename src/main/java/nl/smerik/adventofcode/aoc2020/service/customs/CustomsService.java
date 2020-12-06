@@ -20,6 +20,7 @@ public class CustomsService {
             if (StringUtils.isBlank(line)) {
                 groupAnswers = new GroupAnswers();
                 result.add(groupAnswers);
+                continue;
             }
             final PersonAnswers personAnswers = new PersonAnswers(line);
             groupAnswers.addAnswers(personAnswers);
@@ -30,6 +31,12 @@ public class CustomsService {
     public int sumCountUnionOfAnswers(final List<GroupAnswers> groupAnswers) {
         return groupAnswers.stream()
                            .mapToInt(GroupAnswers::countUnionOfAnswers)
+                           .sum();
+    }
+
+    public int sumCountIntersectionOfAnswers(final List<GroupAnswers> groupAnswers) {
+        return groupAnswers.stream()
+                           .mapToInt(GroupAnswers::countIntersectionOfAnswers)
                            .sum();
     }
 }
