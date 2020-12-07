@@ -34,4 +34,17 @@ public class Day07Service {
             return null;
         }
     }
+
+    @SneakyThrows
+    public Integer getSolutionPart2() {
+        final Path path = Paths.get(resource.getURI());
+        try (Stream<String> stringStream = Files.lines(path)) {
+            final List<String> input = stringStream.collect(Collectors.toList());
+            final LuggageRules luggageRules = new LuggageRules(input);
+            return luggageRules.countTotalNumberOfBagsInside("shiny gold");
+        } catch (IOException e) {
+            LOG.error("Houston: {}", e.getMessage(), e);
+            return null;
+        }
+    }
 }

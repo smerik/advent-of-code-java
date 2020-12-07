@@ -59,4 +59,18 @@ public class LuggageRules {
                             .filter(bag -> bag.containsBag(bagToFind))
                             .collect(Collectors.toSet());
     }
+
+    /**
+     * Counts the total number of bags inside given bag type.
+     * Bags inside other bags included.
+     *
+     * @param bagType the bag type to count the total for
+     * @return the total number of bags inside
+     */
+    public int countTotalNumberOfBagsInside(final String bagType) {
+        if (!bags.containsKey(bagType)) {
+            return 0;
+        }
+        return bags.get(bagType).countTotalNumberOfBags() - 1;
+    }
 }

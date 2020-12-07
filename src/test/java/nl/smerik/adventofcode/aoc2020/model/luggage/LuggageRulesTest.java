@@ -2,6 +2,9 @@ package nl.smerik.adventofcode.aoc2020.model.luggage;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
 import java.util.Set;
@@ -13,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class LuggageRulesTest {
 
     private static List<String> rulesPart01Example01;
+    private static List<String> rulesPart02Example01;
 
     @BeforeAll
     public static void initAll() {
@@ -26,6 +30,25 @@ class LuggageRulesTest {
                 "vibrant plum bags contain 5 faded blue bags, 6 dotted black bags.",
                 "faded blue bags contain no other bags.",
                 "dotted black bags contain no other bags."
+        );
+
+        rulesPart02Example01 = List.of(
+                "shiny gold bags contain 2 dark red bags.",
+                "dark red bags contain 2 dark orange bags.",
+                "dark orange bags contain 2 dark yellow bags.",
+                "dark yellow bags contain 2 dark green bags.",
+                "dark green bags contain 2 dark blue bags.",
+                "dark blue bags contain 2 dark violet bags.",
+                "dark violet bags contain no other bags."
+        );
+    }
+
+    private static Stream<Arguments> provideSourceForCountTotalNumberOfBagsInside() {
+        return Stream.of(
+                // @formatter:off
+                Arguments.of(rulesPart01Example01, "shiny gold",  32),
+                Arguments.of(rulesPart02Example01, "shiny gold", 126)
+                // @formatter:on
         );
     }
 
@@ -61,6 +84,17 @@ class LuggageRulesTest {
         // In the above rules, the following options would be available to you
         // A bright white bag, which can hold your shiny gold bag directly.
         final Set<Bag> expectedResult = createBags("bright white", "muted yellow", "dark orange", "light red");
+        assertEquals(expectedResult, result);
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideSourceForCountTotalNumberOfBagsInside")
+    void getTotalNumberOfBags(final List<String> rules, final String bagType, final int expectedResult) {
+        final LuggageRules luggageRules = new LuggageRules(rules);
+
+        final int result = luggageRules.countTotalNumberOfBagsInside(bagType);
+
+        // So, in this example, the number of bag colors that can eventually contain at least one shiny gold bag is 4
         assertEquals(expectedResult, result);
     }
 

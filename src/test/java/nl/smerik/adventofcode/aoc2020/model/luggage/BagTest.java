@@ -53,6 +53,27 @@ class BagTest {
     }
 
     @Test
+    void countTotalNumberOfBags() {
+        final Bag emptyBag1 = new Bag("empty bag 01");
+        final Bag emptyBag2 = new Bag("empty bag 02");
+
+        final Bag foo = new Bag("foo");
+        foo.addContent(Map.of(emptyBag1, 1, emptyBag2, 2));
+
+        final Bag bar = new Bag("bar");
+        bar.addContent(Map.of(emptyBag1, 1));
+
+        final Bag bag = new Bag("bag");
+        bag.addContent(Map.of(foo, 3, bar, 4));
+
+        // 1x bag                                          =  1
+        // 3x foo + 3x (1x empty bag 01 + 2x empty bag 01) = 12
+        // 4x bar + 4x (1x empty bag 01                  ) =  8
+        // TOTAL                                           = 21
+        assertEquals(21, bag.countTotalNumberOfBags());
+    }
+
+    @Test
     void containsBag() {
         final Bag emptyBag1 = new Bag("empty bag 01");
         final Bag emptyBag2 = new Bag("empty bag 02");

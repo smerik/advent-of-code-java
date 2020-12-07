@@ -30,6 +30,20 @@ public class Bag {
         return content.values().stream().mapToInt(Integer::valueOf).sum();
     }
 
+    /**
+     * Counts the total number of bags.
+     * This includes this bag + all bags inside this bag and bags inside those bags, et cetera.
+     *
+     * @return the total number of bags
+     */
+    public int countTotalNumberOfBags() {
+        int result = 1;
+        for (final Map.Entry<Bag, Integer> entry : content.entrySet()) {
+            result += entry.getValue() * entry.getKey().countTotalNumberOfBags();
+        }
+        return result;
+    }
+
     public boolean containsBag(final Bag bag) {
         if (content.isEmpty()) {
             return false;
