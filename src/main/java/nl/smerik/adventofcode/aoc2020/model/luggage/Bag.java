@@ -26,7 +26,13 @@ public class Bag {
         this.content.putAll(content);
     }
 
-    public int getNumberOfBags() {
+    /**
+     * Counts the number of bags inside this bag.
+     * All bags inside those bags are excluded.
+     *
+     * @return the number of bags inside this bag
+     */
+    public int countNumberOfBags() {
         return content.values().stream().mapToInt(Integer::valueOf).sum();
     }
 

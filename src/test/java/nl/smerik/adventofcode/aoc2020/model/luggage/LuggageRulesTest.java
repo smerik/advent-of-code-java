@@ -59,17 +59,17 @@ class LuggageRulesTest {
         // These rules specify the required contents for 9 bag types.
         assertEquals(9, luggageRules.getBags().size());
         // In this example, every faded blue bag is empty
-        assertEquals(0, luggageRules.getBags().get("faded blue").getNumberOfBags());
+        assertEquals(0, luggageRules.getBags().get("faded blue").countNumberOfBags());
         // Every vibrant plum bag contains 11 bags (5 faded blue and 6 dotted black)
-        assertEquals(11, luggageRules.getBags().get("vibrant plum").getNumberOfBags());
+        assertEquals(11, luggageRules.getBags().get("vibrant plum").countNumberOfBags());
         // and so on
-        assertEquals(3, luggageRules.getBags().get("light red").getNumberOfBags());
-        assertEquals(7, luggageRules.getBags().get("dark orange").getNumberOfBags());
-        assertEquals(1, luggageRules.getBags().get("bright white").getNumberOfBags());
-        assertEquals(11, luggageRules.getBags().get("muted yellow").getNumberOfBags());
-        assertEquals(3, luggageRules.getBags().get("shiny gold").getNumberOfBags());
-        assertEquals(7, luggageRules.getBags().get("dark olive").getNumberOfBags());
-        assertEquals(0, luggageRules.getBags().get("dotted black").getNumberOfBags());
+        assertEquals(3, luggageRules.getBags().get("light red").countNumberOfBags());
+        assertEquals(7, luggageRules.getBags().get("dark orange").countNumberOfBags());
+        assertEquals(1, luggageRules.getBags().get("bright white").countNumberOfBags());
+        assertEquals(11, luggageRules.getBags().get("muted yellow").countNumberOfBags());
+        assertEquals(3, luggageRules.getBags().get("shiny gold").countNumberOfBags());
+        assertEquals(7, luggageRules.getBags().get("dark olive").countNumberOfBags());
+        assertEquals(0, luggageRules.getBags().get("dotted black").countNumberOfBags());
     }
 
     @Test

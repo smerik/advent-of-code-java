@@ -18,24 +18,24 @@ class BagTest {
     }
 
     @Test
-    void getNumberOfBagsWhenEmpty() {
+    void countNumberOfBagsWhenEmpty() {
         final Bag bag = new Bag("empty bag");
-        assertEquals(0, bag.getNumberOfBags());
+        assertEquals(0, bag.countNumberOfBags());
     }
 
     @Test
-    void getNumberOfBagsWhenFilledWithEmptyBags() {
+    void countNumberOfBagsWhenFilledWithEmptyBags() {
         final Bag emptyBag1 = new Bag("empty bag 01");
         final Bag emptyBag2 = new Bag("empty bag 02");
 
         final Bag bag = new Bag("bag");
         bag.addContent(Map.of(emptyBag1, 1, emptyBag2, 2));
 
-        assertEquals(3, bag.getNumberOfBags());
+        assertEquals(3, bag.countNumberOfBags());
     }
 
     @Test
-    void getNumberOfBagsWhenFilledWithBagsContainingOtherBags() {
+    void countNumberOfBagsWhenFilledWithBagsContainingOtherBags() {
         final Bag emptyBag1 = new Bag("empty bag 01");
         final Bag emptyBag2 = new Bag("empty bag 02");
         final Map<Bag, Integer> emptyBags = Map.of(emptyBag1, 1, emptyBag2, 2);
@@ -49,7 +49,7 @@ class BagTest {
         final Bag bag = new Bag("bag");
         bag.addContent(Map.of(foo, 3, bar, 4));
 
-        assertEquals(7, bag.getNumberOfBags());
+        assertEquals(7, bag.countNumberOfBags());
     }
 
     @Test
