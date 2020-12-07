@@ -16,7 +16,7 @@ public class AdventOfCode2020Application implements CommandLineRunner {
     }
 
     @Override
-    public void run(final String... args) throws Exception {
+    public void run(final String... args) {
         LOG.info("Executing CommandLineRunner...");
 
         for (int i = 0; i < args.length; ++i) {
