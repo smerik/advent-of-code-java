@@ -3,7 +3,7 @@ package nl.smerik.adventofcode.aoc2020.day;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import nl.smerik.adventofcode.aoc2020.model.cpu.HandheldGameConsole;
-import nl.smerik.adventofcode.aoc2020.model.luggage.LuggageRules;
+import nl.smerik.adventofcode.aoc2020.service.cpu.ProcessorService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -20,8 +20,14 @@ import java.util.stream.Stream;
 @Service
 public class Day08Service {
 
+    private final ProcessorService processorService;
+
     @Value("classpath:input/day-08.txt")
     private Resource resource;
+
+    public Day08Service(final ProcessorService processorService) {
+        this.processorService = processorService;
+    }
 
     @SneakyThrows
     public Integer getSolutionPart1() {
@@ -29,8 +35,7 @@ public class Day08Service {
         try (Stream<String> stringStream = Files.lines(path)) {
             final List<String> input = stringStream.collect(Collectors.toList());
             final HandheldGameConsole console = new HandheldGameConsole(input);
-            console.run();
-            return console.getAccumulator();
+            return processorService.getAccumulatorValueOnInfiniteLoop(console);
         } catch (IOException e) {
             LOG.error("Houston: {}", e.getMessage(), e);
             return null;

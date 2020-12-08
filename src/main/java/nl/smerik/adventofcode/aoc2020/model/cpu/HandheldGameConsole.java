@@ -9,7 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Getter
-public class HandheldGameConsole {
+public class HandheldGameConsole implements Processor {
 
     private static final Pattern INSTRUCTION_PATTERN
             = Pattern.compile("(?<operation>[a-z]{3})\\s(?<argument>(\\+|-)\\d+)");
@@ -27,14 +27,21 @@ public class HandheldGameConsole {
         this.accumulator = 0;
     }
 
+    @Override
     public void run() {
-        while (!processedInstructionIndexes.contains(instructionIndex)) {
+        while (instructionIndex < instructions.size()) {
+            final String instruction = instructions.get(instructionIndex);
+            if (processedInstructionIndexes.contains(instructionIndex)) {
+                throw new IllegalStateException("Infinite loop detected: instruction '" + instruction
+                                                        + "' at line " + instructionIndex + 1
+                                                        + " has been processed before");
+            }
             processedInstructionIndexes.add(instructionIndex);
 
-            final String instruction = instructions.get(instructionIndex);
             final Matcher matcher = INSTRUCTION_PATTERN.matcher(instruction);
             if (!matcher.find()) {
-                throw new IllegalArgumentException("Unknown instruction '" + instruction + "'");
+                throw new IllegalArgumentException("Unknown instruction '" + instruction + "' at line "
+                                                           + instructionIndex + 1);
             }
 
             final InstructionSet operation = InstructionSet.valueOfOperation(matcher.group("operation"));

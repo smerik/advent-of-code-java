@@ -2,11 +2,18 @@ package nl.smerik.adventofcode.aoc2020.model.cpu;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import nl.smerik.adventofcode.aoc2020.service.cpu.ProcessorService;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
-class HandheldGameConsoleTest {
+@SpringBootTest
+class ProcessorServiceTest {
+
+    @Autowired
+    private ProcessorService processorService;
 
     @Test
     void run() {
@@ -23,8 +30,6 @@ class HandheldGameConsoleTest {
         );
         final HandheldGameConsole console = new HandheldGameConsole(instructions);
 
-        console.run();
-
-        assertEquals(5, console.getAccumulator());
+        assertEquals(5, processorService.getAccumulatorValueOnInfiniteLoop(console));
     }
 }
