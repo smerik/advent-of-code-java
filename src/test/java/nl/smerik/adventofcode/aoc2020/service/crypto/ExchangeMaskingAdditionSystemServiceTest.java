@@ -35,6 +35,29 @@ class ExchangeMaskingAdditionSystemServiceTest {
         );
     }
 
+    private final List<Long> example01Part01 = List.of(
+            35L,
+            20L,
+            15L,
+            25L,
+            47L,
+            40L,
+            62L,
+            55L,
+            65L,
+            95L,
+            102L,
+            117L,
+            150L,
+            182L,
+            127L,
+            219L,
+            299L,
+            277L,
+            309L,
+            576L
+    );
+
     @ParameterizedTest
     @MethodSource("provideSourceForValidatePart01Example01")
     void validatePart01Example01(final long nextNumber, final boolean isValid) {
@@ -46,29 +69,18 @@ class ExchangeMaskingAdditionSystemServiceTest {
 
     @Test
     void validatePart01Example02() {
-        final List<Long> example01Part01 = List.of(
-                35L,
-                20L,
-                15L,
-                25L,
-                47L,
-                40L,
-                62L,
-                55L,
-                65L,
-                95L,
-                102L,
-                117L,
-                150L,
-                182L,
-                127L,
-                219L,
-                299L,
-                277L,
-                309L,
-                576L
-        );
         assertEquals(127L, xmasService.validate(example01Part01, 5));
     }
 
+    @Test
+    void findContiguousRange() {
+        final List<Long> expectedResult = List.of(15L, 25L, 47L, 40L);
+        assertEquals(expectedResult, xmasService.findContiguousRange(example01Part01, 127L));
+    }
+
+    @Test
+    void findEncryptionWeakness() {
+        final List<Long> contiguousRange = List.of(15L, 25L, 47L, 40L);
+        assertEquals(62L, xmasService.findEncryptionWeakness(contiguousRange));
+    }
 }

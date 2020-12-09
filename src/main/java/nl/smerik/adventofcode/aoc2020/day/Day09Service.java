@@ -39,4 +39,18 @@ public class Day09Service {
             return null;
         }
     }
+
+    @SneakyThrows
+    public Long getSolutionPart2() {
+        final Path path = Paths.get(resource.getURI());
+        try (Stream<String> stringStream = Files.lines(path)) {
+            final List<Long> input = stringStream.mapToLong(Long::valueOf).boxed().collect(Collectors.toList());
+            final Long invalidSum = xmasService.validate(input, 25);
+            final List<Long> contiguousRange = xmasService.findContiguousRange(input, invalidSum);
+            return xmasService.findEncryptionWeakness(contiguousRange);
+        } catch (IOException e) {
+            LOG.error("Houston: {}", e.getMessage(), e);
+            return null;
+        }
+    }
 }
