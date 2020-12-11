@@ -34,4 +34,16 @@ public class Day10Service {
             return null;
         }
     }
+
+    @SneakyThrows
+    public Integer getSolutionPart2() {
+        final Path path = Paths.get(resource.getURI());
+        try (Stream<String> stringStream = Files.lines(path)) {
+            final List<Integer> input = stringStream.mapToInt(Integer::valueOf).boxed().collect(Collectors.toList());
+            return -1;
+        } catch (IOException e) {
+            LOG.error("Houston: {}", e.getMessage(), e);
+            return null;
+        }
+    }
 }

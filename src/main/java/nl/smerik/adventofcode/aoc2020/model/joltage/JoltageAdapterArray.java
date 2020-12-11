@@ -30,4 +30,8 @@ public class JoltageAdapterArray {
         }
         return count;
     }
+
+    public int countTotalNumberOfArrangements() {
+        return 0;
+    }
 }
