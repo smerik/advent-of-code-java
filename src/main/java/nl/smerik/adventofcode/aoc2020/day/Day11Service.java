@@ -28,7 +28,21 @@ public class Day11Service {
         try (Stream<String> stringStream = Files.lines(path)) {
             final List<String> seatLayout = stringStream.collect(Collectors.toList());
             final WaitingArea waitingArea = new WaitingArea(seatLayout);
-            waitingArea.simulate();
+            waitingArea.simulatePart01();
+            return waitingArea.getOccupiedSeats().size();
+        } catch (IOException e) {
+            LOG.error("Houston: {}", e.getMessage(), e);
+            return null;
+        }
+    }
+
+    @SneakyThrows
+    public Integer getSolutionPart2() {
+        final Path path = Paths.get(resource.getURI());
+        try (Stream<String> stringStream = Files.lines(path)) {
+            final List<String> seatLayout = stringStream.collect(Collectors.toList());
+            final WaitingArea waitingArea = new WaitingArea(seatLayout);
+            waitingArea.simulatePart02();
             return waitingArea.getOccupiedSeats().size();
         } catch (IOException e) {
             LOG.error("Houston: {}", e.getMessage(), e);
