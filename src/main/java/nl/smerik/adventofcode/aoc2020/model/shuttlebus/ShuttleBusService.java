@@ -18,17 +18,44 @@ public class ShuttleBusService {
     }
 
     private void parseBusIDsInService(final String busIDsInService) {
-        for (String busID : busIDsInService.split(",")) {
-            if (busID.equals(OUT_OF_SERVICE)) {
+        final String[] busIDs = busIDsInService.split(",");
+        for (int i = 0; i < busIDs.length; i++) {
+            if (busIDs[i].equals(OUT_OF_SERVICE)) {
                 continue;
             }
-            buses.add(new ShuttleBus(Integer.parseInt(busID)));
+            buses.add(new ShuttleBus(Integer.parseInt(busIDs[i]), i));
         }
     }
 
-    public ShuttleBus findEarliestBusToTake(final int timestamp) {
+    public ShuttleBus findEarliestBusToTake(final long timestamp) {
         return buses.stream()
                     .min(Comparator.comparing(shuttleBus -> shuttleBus.findEarliestDeparture(timestamp)))
                     .orElseThrow();
+    }
+
+    public long findSubsequentBusDeparturesTimestamp(long initialTimestamp) {
+        // TODO: reimplement to get to the correct answer on the puzzle input itself
+        final List<ShuttleBus> busesSortedByDepartureSequence
+                = buses.stream()
+                       .sorted(Comparator.comparing(ShuttleBus::getSubsequentTimestamp))
+                       .collect(Collectors.toList());
+
+        boolean found = false;
+        long timestamp = initialTimestamp;
+        while (!found) {
+            timestamp = busesSortedByDepartureSequence.get(0).findEarliestDeparture(timestamp);
+
+            for (final ShuttleBus bus : busesSortedByDepartureSequence) {
+                final int subsequent = bus.getSubsequentTimestamp();
+                if (bus.findEarliestDeparture(timestamp) != timestamp + subsequent) {
+                    found = false;
+                    timestamp++;
+                    break;
+                } else {
+                    found = true;
+                }
+            }
+        }
+        return timestamp;
     }
 }

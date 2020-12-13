@@ -6,20 +6,22 @@ import lombok.Data;
 public class ShuttleBus {
 
     private final int id;
+    private final int subsequentTimestamp;
 
-    public ShuttleBus(final int id) {
+    public ShuttleBus(final int id, final int subsequentTimestamp) {
         this.id = id;
+        this.subsequentTimestamp = subsequentTimestamp;
     }
 
-    public int calculateSolutionPart01(final int timestamp) {
+    public long calculateSolutionPart01(final long timestamp) {
         return id * calculateWaitingTimeForEarliestDeparture(timestamp);
     }
 
-    public int calculateWaitingTimeForEarliestDeparture(final int timestamp) {
+    public long calculateWaitingTimeForEarliestDeparture(final long timestamp) {
         return findEarliestDeparture(timestamp) - timestamp;
     }
 
-    public int findEarliestDeparture(final int timestamp) {
-        return id * (int) Math.ceil(timestamp / (double) id);
+    public long findEarliestDeparture(final long timestamp) {
+        return id * (long) Math.ceil(timestamp / (double) id);
     }
 }

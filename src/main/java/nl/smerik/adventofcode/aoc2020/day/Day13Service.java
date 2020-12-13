@@ -23,13 +23,26 @@ public class Day13Service {
     private Resource resource;
 
     @SneakyThrows
-    public Integer getSolutionPart1() {
+    public Long getSolutionPart1() {
         final Path path = Paths.get(resource.getURI());
         try (Stream<String> stringStream = Files.lines(path)) {
             final List<String> notes = stringStream.collect(Collectors.toList());
-            final int timestamp = Integer.parseInt(notes.get(0));
+            final long timestamp = Long.parseLong(notes.get(0));
             final ShuttleBusService busService = new ShuttleBusService(notes.get(1));
             return busService.findEarliestBusToTake(timestamp).calculateSolutionPart01(timestamp);
+        } catch (IOException e) {
+            LOG.error("Houston: {}", e.getMessage(), e);
+            return null;
+        }
+    }
+
+    @SneakyThrows
+    public Long getSolutionPart2() {
+        final Path path = Paths.get(resource.getURI());
+        try (Stream<String> stringStream = Files.lines(path)) {
+            final List<String> notes = stringStream.collect(Collectors.toList());
+            final ShuttleBusService busService = new ShuttleBusService(notes.get(1));
+            return busService.findSubsequentBusDeparturesTimestamp(327300950120000L);
         } catch (IOException e) {
             LOG.error("Houston: {}", e.getMessage(), e);
             return null;

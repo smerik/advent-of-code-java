@@ -46,20 +46,20 @@ class ShuttleBusTest {
 
     @ParameterizedTest
     @MethodSource("provideSourceForFindEarliestDeparture")
-    void findNextDeparture(final int busID, final int timestamp, final int expectedDeparture) {
-        final ShuttleBus bus = new ShuttleBus(busID);
+    void findEarliestDeparture(final int busID, final int timestamp, final int expectedDeparture) {
+        final ShuttleBus bus = new ShuttleBus(busID, 0);
         assertEquals(expectedDeparture, bus.findEarliestDeparture(timestamp));
     }
 
     @Test
     void calculateWaitingTimeForEarliestDeparture() {
-        final ShuttleBus bus = new ShuttleBus(59);
+        final ShuttleBus bus = new ShuttleBus(59, 0);
         assertEquals(5, bus.calculateWaitingTimeForEarliestDeparture(939));
     }
 
     @Test
     void calculateSolutionPart01() {
-        final ShuttleBus bus = new ShuttleBus(59);
+        final ShuttleBus bus = new ShuttleBus(59, 0);
         assertEquals(295, bus.calculateSolutionPart01(939));
     }
 }
