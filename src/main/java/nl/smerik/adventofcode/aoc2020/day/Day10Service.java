@@ -36,11 +36,12 @@ public class Day10Service {
     }
 
     @SneakyThrows
-    public Integer getSolutionPart2() {
+    public Long getSolutionPart2() {
         final Path path = Paths.get(resource.getURI());
         try (Stream<String> stringStream = Files.lines(path)) {
             final List<Integer> input = stringStream.mapToInt(Integer::valueOf).boxed().collect(Collectors.toList());
-            return -1;
+            final JoltageAdapterArray joltageAdapterArray = new JoltageAdapterArray(input);
+            return joltageAdapterArray.countTotalNumberOfArrangements();
         } catch (IOException e) {
             LOG.error("Houston: {}", e.getMessage(), e);
             return null;
