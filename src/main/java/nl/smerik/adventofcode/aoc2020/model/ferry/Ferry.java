@@ -57,6 +57,10 @@ public class Ferry {
         this.currentDirection = Direction.EAST;
     }
 
+    public int calculateManhattanDistance(final Point location) {
+        return Math.abs(this.location.x - location.x) + Math.abs(this.location.y - location.y);
+    }
+
     public void navigate(final List<String> navigationInstructions) {
         for (final String navigationInstruction : navigationInstructions) {
             followNavigationInstruction(navigationInstruction);
