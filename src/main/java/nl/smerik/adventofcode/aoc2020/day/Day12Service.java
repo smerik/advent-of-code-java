@@ -37,6 +37,17 @@ public class Day12Service {
             return null;
         }
     }
+
+    @SneakyThrows
+    public Integer getSolutionPart2() {
+        final Path path = Paths.get(resource.getURI());
+        try (Stream<String> stringStream = Files.lines(path)) {
+            final List<String> navigationInstructions = stringStream.collect(Collectors.toList());
+            final Point startPosition = new Point();
+            final Point waypoint = new Point(10, 1);
+            final Ferry ferry = new Ferry(startPosition, waypoint);
+            ferry.navigateWithWaypoint(navigationInstructions);
+            return ferry.calculateManhattanDistance(startPosition);
         } catch (IOException e) {
             LOG.error("Houston: {}", e.getMessage(), e);
             return null;

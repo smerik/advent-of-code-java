@@ -40,8 +40,50 @@ class FerryTest {
                 "R90",
                 "F11"
         );
-        final Ferry ferry = new Ferry(new Point());
+        final Point startPosition = new Point();
+        final Ferry ferry = new Ferry(startPosition);
         ferry.navigate(instructions);
-        assertEquals(new Point(17, -8), ferry.getLocation());
+
+        final Point ferryLocation = ferry.getLocation();
+        assertEquals(new Point(17, -8), ferryLocation);
+        assertEquals(25, ferry.calculateManhattanDistance(startPosition));
+    }
+
+    @Test
+    void navigateWithWaypoint() {
+        final List<String> instructions = List.of(
+                "F10",
+                "N3",
+                "F7",
+                "R90",
+                "F11"
+        );
+        final Point startPosition = new Point();
+        final Point waypoint = new Point(10, 1);
+        final Ferry ferry = new Ferry(startPosition, waypoint);
+        ferry.navigateWithWaypoint(instructions);
+        assertEquals(new Point(214, -72), ferry.getLocation());
+        assertEquals(286, ferry.calculateManhattanDistance(startPosition));
+    }
+
+    private static Stream<Arguments> provideSourceForWaypointRotation() {
+        return Stream.of(
+                Arguments.of(List.of("L90"), new Point(10, 10)),
+                Arguments.of(List.of("R270"), new Point(10, 10)),
+                Arguments.of(List.of("L180"), new Point(-8, 10)),
+                Arguments.of(List.of("R180"), new Point(-8, 10)),
+                Arguments.of(List.of("L270"), new Point(-8, -8)),
+                Arguments.of(List.of("R90"), new Point(-8, -8))
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideSourceForWaypointRotation")
+    void waypointRotation(final List<String> instructions, final Point expectedWaypointLocation) {
+        final Point startPosition = new Point(1, 1);
+        final Point waypoint = new Point(10, -8);
+        final Ferry ferry = new Ferry(startPosition, waypoint);
+        ferry.navigateWithWaypoint(instructions);
+        assertEquals(expectedWaypointLocation, ferry.getWayPoint());
     }
 }
