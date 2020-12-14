@@ -17,16 +17,16 @@ class DockingProgramTest {
     private static Stream<Arguments> provideSourceForWriteToMemory() {
         return Stream.of(
                 // @formatter:off
-                Arguments.of(8,  11,  73),
-                Arguments.of(7, 101, 101),
-                Arguments.of(8,   0,  64)
+                Arguments.of(8L,  11,  73),
+                Arguments.of(7L, 101, 101),
+                Arguments.of(8L,   0,  64)
                 // @formatter:on
         );
     }
 
     @ParameterizedTest
     @MethodSource("provideSourceForWriteToMemory")
-    void writeToMemory(final int address, final int value, final int expectedValue) {
+    void writeToMemory(final long address, final int value, final int expectedValue) {
         final DockingProgram program = new DockingProgram();
         program.updateBitmask("XXXXXXXXXXXXXXXXXXXXXXXXXXXXX1XXXX0X");
         program.writeToMemory(address, value);
