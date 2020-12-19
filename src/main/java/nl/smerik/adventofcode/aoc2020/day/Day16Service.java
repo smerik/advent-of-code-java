@@ -41,4 +41,18 @@ public class Day16Service {
             return null;
         }
     }
+
+    @SneakyThrows
+    public Long getSolutionPart2() {
+        final Path path = Paths.get(resource.getURI());
+        try (Stream<String> stringStream = Files.lines(path)) {
+            final List<String> documentLines = stringStream.collect(Collectors.toList());
+            final TicketDocument ticketDocument = ticketParser.parse(documentLines);
+            ticketDocument.determineTicketRuleIndexes();
+            return ticketDocument.multiplyFieldsContaining("departure");
+        } catch (IOException e) {
+            LOG.error("Houston: {}", e.getMessage(), e);
+            return null;
+        }
+    }
 }
