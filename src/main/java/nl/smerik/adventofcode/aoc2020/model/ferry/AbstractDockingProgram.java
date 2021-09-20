@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 public abstract class AbstractDockingProgram {
 
     private static final Pattern MASK_PATTERN = Pattern.compile("mask = (?<mask>[X01]{36})");
-    private static final Pattern MEMORY_PATTERN = Pattern.compile("mem\\[(?<address>\\d+)\\] = (?<value>\\d+)");
+    private static final Pattern MEMORY_PATTERN = Pattern.compile("mem\\[(?<address>\\d+)] = (?<value>\\d+)");
 
     @Getter
     protected final Map<Long, Long> memory;
