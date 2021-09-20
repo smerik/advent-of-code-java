@@ -3,7 +3,6 @@ package nl.smerik.adventofcode.aoc2020.service.train;
 import nl.smerik.adventofcode.aoc2020.model.train.Ticket;
 import nl.smerik.adventofcode.aoc2020.model.train.TicketDocument;
 import nl.smerik.adventofcode.aoc2020.model.train.TicketRule;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
