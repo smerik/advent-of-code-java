@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 public class HandheldGameConsole implements Processor {
 
     private static final Pattern INSTRUCTION_PATTERN
-            = Pattern.compile("(?<operation>[a-z]{3})\\s(?<argument>(\\+|-)\\d+)");
+            = Pattern.compile("(?<operation>[a-z]{3})\\s(?<argument>([+\\-])\\d+)");
 
     private final List<String> instructions;
     private final Set<Integer> processedInstructionIndexes;
