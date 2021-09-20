@@ -41,7 +41,7 @@ public class Day13Service {
         try (Stream<String> stringStream = Files.lines(path)) {
             final List<String> notes = stringStream.toList();
             final ShuttleBusService busService = new ShuttleBusService(notes.get(1));
-            return busService.findSubsequentBusDeparturesTimestamp(327300950120000L);
+            return busService.findSubsequentBusDeparturesTimestamp(0);
         } catch (IOException e) {
             LOG.error("Houston: {}", e.getMessage(), e);
             return null;
