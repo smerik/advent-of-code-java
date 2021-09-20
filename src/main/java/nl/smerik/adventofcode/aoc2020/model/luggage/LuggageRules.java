@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class LuggageRules {
 
     private static final Pattern CONTENT_PATTERN
-            = Pattern.compile("((?<amount>\\d+) (?<bagType>(\\w+) (\\w+)) (?! bag(s,|s.|,)))");
+            = Pattern.compile("((?<amount>\\d+) (?<bagType>(\\w+) (\\w+)) (?! bag))");
 
     private final Map<String, Bag> bags;
 
