@@ -53,7 +53,7 @@ public class ShuttleBusService {
                        .toList();
 
         long timestamp = initialTimestamp;
-        long lcm = 1;
+        long lcm = 1; // least common multiple
         final ListIterator<ShuttleBus> iter = busesSortedByDepartureSequence.listIterator();
         while (iter.hasNext()) {
             final ShuttleBus bus = iter.next();
