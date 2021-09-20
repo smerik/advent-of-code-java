@@ -134,7 +134,7 @@ public class WaitingArea {
         final Point location = new Point(seat.getLocation());
         while (true) {
             location.translate(directionX, directionY);
-            if (location.x < minX || location.x > maxX || location.y < minY || location.y > maxX) {
+            if (location.x < minX || location.x > maxX || location.y < minY || location.y > maxY) {
                 return Optional.empty();
             }
             if (seats.containsKey(location)) {
