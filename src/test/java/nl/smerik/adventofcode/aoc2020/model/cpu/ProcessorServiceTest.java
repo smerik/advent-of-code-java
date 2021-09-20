@@ -41,6 +41,6 @@ class ProcessorServiceTest {
 
     @Test
     void getAccumulatorWhenInstructionsFixed() {
-        assertEquals(8, processorService.getAccumulatorWhenInstructionsFixed(rulesPart01Example01));;
+        assertEquals(8, processorService.getAccumulatorWhenInstructionsFixed(rulesPart01Example01));
     }
 }
