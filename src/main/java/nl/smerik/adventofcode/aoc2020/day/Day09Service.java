@@ -12,7 +12,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Slf4j
@@ -32,7 +31,7 @@ public class Day09Service {
     public Long getSolutionPart1() {
         final Path path = Paths.get(resource.getURI());
         try (Stream<String> stringStream = Files.lines(path)) {
-            final List<Long> input = stringStream.mapToLong(Long::valueOf).boxed().collect(Collectors.toList());
+            final List<Long> input = stringStream.mapToLong(Long::valueOf).boxed().toList();
             return xmasService.validate(input, 25);
         } catch (IOException e) {
             LOG.error("Houston: {}", e.getMessage(), e);
@@ -44,7 +43,7 @@ public class Day09Service {
     public Long getSolutionPart2() {
         final Path path = Paths.get(resource.getURI());
         try (Stream<String> stringStream = Files.lines(path)) {
-            final List<Long> input = stringStream.mapToLong(Long::valueOf).boxed().collect(Collectors.toList());
+            final List<Long> input = stringStream.mapToLong(Long::valueOf).boxed().toList();
             final Long invalidSum = xmasService.validate(input, 25);
             final List<Long> contiguousRange = xmasService.findContiguousRange(input, invalidSum);
             return xmasService.findEncryptionWeakness(contiguousRange);

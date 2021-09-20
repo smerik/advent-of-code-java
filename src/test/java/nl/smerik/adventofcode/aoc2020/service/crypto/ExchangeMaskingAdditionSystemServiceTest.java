@@ -9,7 +9,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
@@ -22,7 +21,7 @@ class ExchangeMaskingAdditionSystemServiceTest {
     private ExchangeMaskingAdditionSystemService xmasService;
 
     private final List<Long> preamblePart01Example01
-            = LongStream.rangeClosed(1, 25).boxed().collect(Collectors.toList());
+            = LongStream.rangeClosed(1, 25).boxed().toList();
 
     private static Stream<Arguments> provideSourceForValidatePart01Example01() {
         return Stream.of(

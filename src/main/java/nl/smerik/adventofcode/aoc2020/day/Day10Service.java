@@ -12,7 +12,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Slf4j
@@ -26,7 +25,7 @@ public class Day10Service {
     public Integer getSolutionPart1() {
         final Path path = Paths.get(resource.getURI());
         try (Stream<String> stringStream = Files.lines(path)) {
-            final List<Integer> input = stringStream.mapToInt(Integer::valueOf).boxed().collect(Collectors.toList());
+            final List<Integer> input = stringStream.mapToInt(Integer::valueOf).boxed().toList();
             final JoltageAdapterArray joltageAdapterArray = new JoltageAdapterArray(input);
             return joltageAdapterArray.countDifferencesForJolt(1) * joltageAdapterArray.countDifferencesForJolt(3);
         } catch (IOException e) {
@@ -39,7 +38,7 @@ public class Day10Service {
     public Long getSolutionPart2() {
         final Path path = Paths.get(resource.getURI());
         try (Stream<String> stringStream = Files.lines(path)) {
-            final List<Integer> input = stringStream.mapToInt(Integer::valueOf).boxed().collect(Collectors.toList());
+            final List<Integer> input = stringStream.mapToInt(Integer::valueOf).boxed().toList();
             final JoltageAdapterArray joltageAdapterArray = new JoltageAdapterArray(input);
             return joltageAdapterArray.countTotalNumberOfArrangements();
         } catch (IOException e) {

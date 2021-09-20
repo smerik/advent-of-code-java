@@ -13,7 +13,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Slf4j
@@ -27,7 +26,7 @@ public class Day03Service {
     public Integer getSolutionPart1() {
         final Path path = Paths.get(resource.getURI());
         try (Stream<String> stringStream = Files.lines(path)) {
-            final List<String> input = stringStream.collect(Collectors.toList());
+            final List<String> input = stringStream.toList();
             final AreaMap areaMap = new AreaMap(input);
             final Toboggan toboggan = new Toboggan(areaMap);
             return toboggan.countTreesUsingSlope(3, 1);
@@ -41,7 +40,7 @@ public class Day03Service {
     public Long getSolutionPart2() {
         final Path path = Paths.get(resource.getURI());
         try (Stream<String> stringStream = Files.lines(path)) {
-            final List<String> input = stringStream.collect(Collectors.toList());
+            final List<String> input = stringStream.toList();
             final AreaMap areaMap = new AreaMap(input);
             final Toboggan toboggan = new Toboggan(areaMap);
             int result1 = toboggan.countTreesUsingSlope(1, 1);

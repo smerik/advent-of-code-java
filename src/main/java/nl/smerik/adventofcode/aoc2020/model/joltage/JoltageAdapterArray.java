@@ -2,7 +2,6 @@ package nl.smerik.adventofcode.aoc2020.model.joltage;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class JoltageAdapterArray {
 
@@ -15,7 +14,7 @@ public class JoltageAdapterArray {
     }
 
     private List<Integer> buildAdapterChain(final List<Integer> adapters) {
-        return adapters.stream().sorted().collect(Collectors.toList());
+        return adapters.stream().sorted().toList();
     }
 
     public int countDifferencesForJolt(final int jolt) {

@@ -13,7 +13,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Slf4j
@@ -33,7 +32,7 @@ public class Day06Service {
     public Integer getSolutionPart1() {
         final Path path = Paths.get(resource.getURI());
         try (Stream<String> stringStream = Files.lines(path)) {
-            final List<String> input = stringStream.collect(Collectors.toList());
+            final List<String> input = stringStream.toList();
             final List<GroupAnswers> answers = customsService.parseAnswers(input);
             return customsService.sumCountUnionOfAnswers(answers);
         } catch (IOException e) {
@@ -46,7 +45,7 @@ public class Day06Service {
     public Integer getSolutionPart2() {
         final Path path = Paths.get(resource.getURI());
         try (Stream<String> stringStream = Files.lines(path)) {
-            final List<String> input = stringStream.collect(Collectors.toList());
+            final List<String> input = stringStream.toList();
             final List<GroupAnswers> answers = customsService.parseAnswers(input);
             return customsService.sumCountIntersectionOfAnswers(answers);
         } catch (IOException e) {

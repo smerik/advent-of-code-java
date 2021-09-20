@@ -12,7 +12,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Slf4j
@@ -26,7 +25,7 @@ public class Day07Service {
     public Integer getSolutionPart1() {
         final Path path = Paths.get(resource.getURI());
         try (Stream<String> stringStream = Files.lines(path)) {
-            final List<String> input = stringStream.collect(Collectors.toList());
+            final List<String> input = stringStream.toList();
             final LuggageRules luggageRules = new LuggageRules(input);
             return luggageRules.getBagsEventuallyContaining("shiny gold").size();
         } catch (IOException e) {
@@ -39,7 +38,7 @@ public class Day07Service {
     public Integer getSolutionPart2() {
         final Path path = Paths.get(resource.getURI());
         try (Stream<String> stringStream = Files.lines(path)) {
-            final List<String> input = stringStream.collect(Collectors.toList());
+            final List<String> input = stringStream.toList();
             final LuggageRules luggageRules = new LuggageRules(input);
             return luggageRules.countTotalNumberOfBagsInside("shiny gold");
         } catch (IOException e) {

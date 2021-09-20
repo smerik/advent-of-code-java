@@ -12,7 +12,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Slf4j
@@ -26,7 +25,7 @@ public class Day11Service {
     public Integer getSolutionPart1() {
         final Path path = Paths.get(resource.getURI());
         try (Stream<String> stringStream = Files.lines(path)) {
-            final List<String> seatLayout = stringStream.collect(Collectors.toList());
+            final List<String> seatLayout = stringStream.toList();
             final WaitingArea waitingArea = new WaitingArea(seatLayout);
             waitingArea.simulatePart01();
             return waitingArea.getOccupiedSeats().size();
@@ -40,7 +39,7 @@ public class Day11Service {
     public Integer getSolutionPart2() {
         final Path path = Paths.get(resource.getURI());
         try (Stream<String> stringStream = Files.lines(path)) {
-            final List<String> seatLayout = stringStream.collect(Collectors.toList());
+            final List<String> seatLayout = stringStream.toList();
             final WaitingArea waitingArea = new WaitingArea(seatLayout);
             waitingArea.simulatePart02();
             return waitingArea.getOccupiedSeats().size();

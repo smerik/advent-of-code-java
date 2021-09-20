@@ -14,7 +14,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Slf4j
@@ -34,7 +33,7 @@ public class Day05Service {
     public Long getSolutionPart1() {
         final Path path = Paths.get(resource.getURI());
         try (Stream<String> stringStream = Files.lines(path)) {
-            final List<String> input = stringStream.collect(Collectors.toList());
+            final List<String> input = stringStream.toList();
             final Set<BoardingPass> boardingPasses = boardingService.parseBoardingPasses(input);
             return boardingService.findHighestSeatID(boardingPasses);
         } catch (IOException e) {
@@ -47,7 +46,7 @@ public class Day05Service {
     public Long getSolutionPart2() {
         final Path path = Paths.get(resource.getURI());
         try (Stream<String> stringStream = Files.lines(path)) {
-            final List<String> input = stringStream.collect(Collectors.toList());
+            final List<String> input = stringStream.toList();
             final Set<BoardingPass> boardingPasses = boardingService.parseBoardingPasses(input);
             return boardingService.findEmptySeat(boardingPasses);
         } catch (IOException e) {

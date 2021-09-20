@@ -13,7 +13,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -31,7 +30,7 @@ class PassportServiceTest {
     void parseBatch() throws Exception {
         final Path path = Paths.get(resource.getURI());
         try (Stream<String> stringStream = Files.lines(path)) {
-            final List<String> input = stringStream.collect(Collectors.toList());
+            final List<String> input = stringStream.toList();
             final Set<Passport> passports = passportService.parseBatch(input);
 
             assertEquals(4, passports.size());

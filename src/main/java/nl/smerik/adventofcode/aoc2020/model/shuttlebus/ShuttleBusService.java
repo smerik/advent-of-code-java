@@ -3,7 +3,6 @@ package nl.smerik.adventofcode.aoc2020.model.shuttlebus;
 import lombok.Getter;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Getter
 public class ShuttleBusService {
@@ -35,10 +34,12 @@ public class ShuttleBusService {
 
     public long findSubsequentBusDeparturesTimestamp(long initialTimestamp) {
         // TODO: reimplement to get to the correct answer on the puzzle input itself
+        // https://www.reddit.com/r/adventofcode/comments/kc4njx/2020_day_13_solutions/ggv5a0s/?utm_source=reddit&utm_medium=web2x&context=3
+        //
         final List<ShuttleBus> busesSortedByDepartureSequence
                 = buses.stream()
                        .sorted(Comparator.comparing(ShuttleBus::getSubsequentTimestamp))
-                       .collect(Collectors.toList());
+                       .toList();
 
         boolean found = false;
         long timestamp = initialTimestamp;

@@ -12,7 +12,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Slf4j
@@ -34,7 +33,7 @@ public class Day01Service {
         try (Stream<String> stringStream = Files.lines(path)) {
             final List<Integer> report = stringStream.mapToInt(Integer::valueOf)
                                                      .boxed()
-                                                     .collect(Collectors.toList());
+                                                     .toList();
             return expenseReportService.calculateExpenseReport(report);
         } catch (IOException e) {
             LOG.error("Houston: {}", e.getMessage(), e);
@@ -48,7 +47,7 @@ public class Day01Service {
         try (Stream<String> stringStream = Files.lines(path)) {
             final List<Integer> report = stringStream.mapToInt(Integer::valueOf)
                                                      .boxed()
-                                                     .collect(Collectors.toList());
+                                                     .toList();
             return expenseReportService.calculateExpenseReportForThreeNumbers(report);
         } catch (IOException e) {
             LOG.error("Houston: {}", e.getMessage(), e);

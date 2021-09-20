@@ -13,7 +13,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Slf4j
@@ -27,7 +26,7 @@ public class Day12Service {
     public Integer getSolutionPart1() {
         final Path path = Paths.get(resource.getURI());
         try (Stream<String> stringStream = Files.lines(path)) {
-            final List<String> navigationInstructions = stringStream.collect(Collectors.toList());
+            final List<String> navigationInstructions = stringStream.toList();
             final Point startPosition = new Point();
             final Ferry ferry = new Ferry(startPosition);
             ferry.navigate(navigationInstructions);
@@ -42,7 +41,7 @@ public class Day12Service {
     public Integer getSolutionPart2() {
         final Path path = Paths.get(resource.getURI());
         try (Stream<String> stringStream = Files.lines(path)) {
-            final List<String> navigationInstructions = stringStream.collect(Collectors.toList());
+            final List<String> navigationInstructions = stringStream.toList();
             final Point startPosition = new Point();
             final Point waypoint = new Point(10, 1);
             final Ferry ferry = new Ferry(startPosition, waypoint);

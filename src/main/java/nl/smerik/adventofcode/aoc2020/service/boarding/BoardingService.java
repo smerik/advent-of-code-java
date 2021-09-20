@@ -23,7 +23,7 @@ public class BoardingService {
                                                        .mapToLong(BoardingPass::getSeatID)
                                                        .sorted()
                                                        .boxed()
-                                                       .collect(Collectors.toList());
+                                                       .toList();
         for (int i = 1; i < sortedSeatIDs.size() - 1; i++) {
             if (sortedSeatIDs.get(i - 1) == sortedSeatIDs.get(i) - 2) {
                 return sortedSeatIDs.get(i) - 1;

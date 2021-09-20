@@ -12,7 +12,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Slf4j
@@ -26,7 +25,7 @@ public class Day13Service {
     public Long getSolutionPart1() {
         final Path path = Paths.get(resource.getURI());
         try (Stream<String> stringStream = Files.lines(path)) {
-            final List<String> notes = stringStream.collect(Collectors.toList());
+            final List<String> notes = stringStream.toList();
             final long timestamp = Long.parseLong(notes.get(0));
             final ShuttleBusService busService = new ShuttleBusService(notes.get(1));
             return busService.findEarliestBusToTake(timestamp).calculateSolutionPart01(timestamp);
@@ -40,7 +39,7 @@ public class Day13Service {
     public Long getSolutionPart2() {
         final Path path = Paths.get(resource.getURI());
         try (Stream<String> stringStream = Files.lines(path)) {
-            final List<String> notes = stringStream.collect(Collectors.toList());
+            final List<String> notes = stringStream.toList();
             final ShuttleBusService busService = new ShuttleBusService(notes.get(1));
             return busService.findSubsequentBusDeparturesTimestamp(327300950120000L);
         } catch (IOException e) {

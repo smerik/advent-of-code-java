@@ -12,7 +12,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Slf4j
@@ -32,7 +31,7 @@ public class Day02Service {
     public Long getSolutionPart1() {
         final Path path = Paths.get(resource.getURI());
         try (Stream<String> stringStream = Files.lines(path)) {
-            final List<String> passwordPolicies = stringStream.collect(Collectors.toList());
+            final List<String> passwordPolicies = stringStream.toList();
             return passwordService.validatePasswordPoliciesForSledRentalPlace(passwordPolicies);
         } catch (IOException e) {
             LOG.error("Houston: {}", e.getMessage(), e);
@@ -44,7 +43,7 @@ public class Day02Service {
     public Long getSolutionPart2() {
         final Path path = Paths.get(resource.getURI());
         try (Stream<String> stringStream = Files.lines(path)) {
-            final List<String> passwordPolicies = stringStream.collect(Collectors.toList());
+            final List<String> passwordPolicies = stringStream.toList();
             return passwordService.validatePasswordPoliciesForToboggan(passwordPolicies);
         } catch (IOException e) {
             LOG.error("Houston: {}", e.getMessage(), e);

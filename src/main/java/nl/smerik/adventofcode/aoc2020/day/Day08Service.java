@@ -13,7 +13,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Slf4j
@@ -33,7 +32,7 @@ public class Day08Service {
     public Integer getSolutionPart1() {
         final Path path = Paths.get(resource.getURI());
         try (Stream<String> stringStream = Files.lines(path)) {
-            final List<String> input = stringStream.collect(Collectors.toList());
+            final List<String> input = stringStream.toList();
             final HandheldGameConsole console = new HandheldGameConsole(input);
             return processorService.getAccumulatorValueOnInfiniteLoop(console);
         } catch (IOException e) {
@@ -46,7 +45,7 @@ public class Day08Service {
     public Integer getSolutionPart2() {
         final Path path = Paths.get(resource.getURI());
         try (Stream<String> stringStream = Files.lines(path)) {
-            final List<String> input = stringStream.collect(Collectors.toList());
+            final List<String> input = stringStream.toList();
             return processorService.getAccumulatorWhenInstructionsFixed(input);
         } catch (IOException e) {
             LOG.error("Houston: {}", e.getMessage(), e);
