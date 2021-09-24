@@ -32,7 +32,19 @@ public class Day18Service {
         final Path path = Paths.get(resource.getURI());
         try (Stream<String> stringStream = Files.lines(path)) {
             final List<String> expressions = stringStream.toList();
-            return mathService.sumEvaluation(expressions);
+            return mathService.sumEvaluation(expressions, false);
+        } catch (IOException e) {
+            LOG.error("Houston: {}", e.getMessage(), e);
+            return null;
+        }
+    }
+
+    @SneakyThrows
+    public Long getSolutionPart2() {
+        final Path path = Paths.get(resource.getURI());
+        try (Stream<String> stringStream = Files.lines(path)) {
+            final List<String> expressions = stringStream.toList();
+            return mathService.sumEvaluation(expressions, true);
         } catch (IOException e) {
             LOG.error("Houston: {}", e.getMessage(), e);
             return null;

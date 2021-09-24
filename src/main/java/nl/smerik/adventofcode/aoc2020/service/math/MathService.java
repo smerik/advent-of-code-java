@@ -36,23 +36,44 @@ public class MathService {
 
         /**
          * Checks if this operator has a greater precedence than given operator.
+         * <p>
+         * Use the <code>useAdvancedPrecedence</code> to when evaluating on <b>advanced</b> math level.
+         * When <code>true</code> <em>addition</em> is evaluated <b>before</b> <em>multiplication</em>;
+         * When <code>false</code> the operators have the <b>same precedence</b>
+         * and are evaluated left-to-right regardless of the order in which they appear.<br>
+         * Parentheses <code>(...)</code> <b>always</b> have the highest precedence
+         * independent of the <code>useAdvancedPrecedence</code> value.
          *
-         * @param operator the operator to compare to
+         * @param operator              the operator to compare to
+         * @param useAdvancedPrecedence indicator to use the advanced version of precedence
          * @return <code>true</code> on greater precedence; <code>false</code> otherwise
          */
-        public boolean hasGreaterPrecedence(final Operator operator) {
-            return operator != GROUP_START;
+        public boolean hasGreaterPrecedence(final Operator operator, final boolean useAdvancedPrecedence) {
+            if (operator == GROUP_START) {
+                return false;
+            }
+            if (!useAdvancedPrecedence) {
+                return true;
+            }
+            if (this == operator) {
+                return false;
+            }
+            if (this == MULTIPLICATION && operator == ADDITION) {
+                return false;
+            }
+            return true;
         }
     }
 
     /**
      * Evaluates given infix expression and returns the output of the evaluation.
      *
-     * @param expression the infix expression
+     * @param expression            the infix expression
+     * @param useAdvancedPrecedence indicator to use the advanced version of precedence
      * @return the evaluation result
      */
-    public Long evaluate(final String expression) {
-        final Queue<Object> rpn = parseInfixToReversePolishNotation(expression);
+    public Long evaluate(final String expression, final boolean useAdvancedPrecedence) {
+        final Queue<Object> rpn = parseInfixToReversePolishNotation(expression, useAdvancedPrecedence);
         return evaluateReversePolishNotation(rpn);
     }
 
@@ -64,10 +85,11 @@ public class MathService {
      * <a href="https://en.wikipedia.org/wiki/Shunting-yard_algorithm">Sunting-yard algorithm</a>
      * for more detail.
      *
-     * @param infix the infix expression
+     * @param infix                 the infix expression
+     * @param useAdvancedPrecedence indicator to use the advanced version of precedence
      * @return the output as Reverse Polish notation represented on a queue
      */
-    private Queue<Object> parseInfixToReversePolishNotation(final String infix) {
+    private Queue<Object> parseInfixToReversePolishNotation(final String infix, final boolean useAdvancedPrecedence) {
         final Queue<Object> output = new ArrayDeque<>();
         final Deque<Operator> operators = new ArrayDeque<>();
 
@@ -89,7 +111,7 @@ public class MathService {
                 } else {
                     while (!operators.isEmpty()
                             && operators.peekLast() != Operator.GROUP_START
-                            && operators.peekLast().hasGreaterPrecedence(operator)) {
+                            && operators.peekLast().hasGreaterPrecedence(operator, useAdvancedPrecedence)) {
                         output.add(operators.pollLast());
                     }
                     operators.add(operator);
@@ -129,12 +151,13 @@ public class MathService {
     /**
      * Sums all the results of the evaluated infix expressions
      *
-     * @param expressions the infix expressions
+     * @param expressions           the infix expressions
+     * @param useAdvancedPrecedence indicator to use the advanced version of precedence
      * @return the sum of all evaluated expressions
      */
-    public Long sumEvaluation(final List<String> expressions) {
+    public Long sumEvaluation(final List<String> expressions, final boolean useAdvancedPrecedence) {
         return expressions.stream()
-                .map(this::evaluate)
+                .map(expression -> evaluate(expression, useAdvancedPrecedence))
                 .mapToLong(Long::valueOf)
                 .sum();
     }
