@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Data
@@ -69,13 +70,13 @@ public class SatelliteMessageDocument {
     }
 
     /**
-     * Counts the number of messages that completely match given rule.
+     * Finds the messages that completely match given rule.
      *
      * @param ruleId the rule to match
-     * @return the number of matched messages
+     * @return the matched messages
      */
-    public long countMessagesMatchingRule(final int ruleId) {
+    public Set<String> findMessagesMatchingRule(final int ruleId) {
         final SatelliteMessageRule rule = this.messageRulesByRuleId.get(ruleId);
-        return messages.stream().filter(rule::matches).count();
+        return messages.stream().filter(rule::matches).collect(Collectors.toSet());
     }
 }

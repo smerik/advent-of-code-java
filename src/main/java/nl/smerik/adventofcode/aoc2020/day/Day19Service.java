@@ -21,11 +21,11 @@ public class Day19Service {
     private Resource resource;
 
     @SneakyThrows
-    public Long getSolutionPart1() {
+    public Integer getSolutionPart1() {
         final Path path = Paths.get(resource.getURI());
         try (Stream<String> stringStream = Files.lines(path)) {
             final SatelliteMessageDocument satelliteMessageDocument = new SatelliteMessageDocument(stringStream.toList());
-            return satelliteMessageDocument.countMessagesMatchingRule(0);
+            return satelliteMessageDocument.findMessagesMatchingRule(0).size();
         } catch (IOException e) {
             LOG.error("Houston: {}", e.getMessage(), e);
             return null;

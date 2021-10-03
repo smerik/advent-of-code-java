@@ -5,6 +5,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -71,8 +72,11 @@ class SatelliteMessageDocumentTest {
     }
 
     @Test
-    void testCountMessagesMatchingRule() {
+    void testFindMessagesMatchingRule() {
         final SatelliteMessageDocument document2 = new SatelliteMessageDocument(DOCUMENT_2_LINES);
-        assertEquals(2, document2.countMessagesMatchingRule(0));
+        final Set<String> messagesMatchingRule = document2.findMessagesMatchingRule(0);
+        assertEquals(2, messagesMatchingRule.size());
+        assertTrue(messagesMatchingRule.contains("ababbb"));
+        assertTrue(messagesMatchingRule.contains("abbbab"));
     }
 }
