@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -33,57 +34,65 @@ public class SatelliteMessageRule {
      * @return <code>true</code> when matches; <code>false</code> otherwise
      */
     public boolean matches(final String message) {
-        return matches(message, 0) == message.length();
+        return matches(message, Set.of(0)).stream().anyMatch(index -> message.length() == index);
     }
 
     /**
-     * Checks if this rule matches given message starting from given message index.
+     * Checks if this rule matches given message starting from given message indices.
      * <p>
-     * When this rule matches the returned index will be higher than given message index.
-     * If the returned value is the same as given message index then there was no match at all.
+     * When there are matches the returned collection will contain the indices to be used as a starting point for the
+     * next check.
+     * If the returned collection is empty then there was no match at all.
      *
-     * @param message      the message to match
-     * @param messageIndex the message index to start matching from
-     * @return the index to continue matching from
+     * @param message        the message to match
+     * @param messageIndices the message indices to start matching from
+     * @return the indices to continue matching from
      */
-    private int matches(final String message, final int messageIndex) {
-        if (isCharacter()) {
-            return this.character == message.charAt(messageIndex) ? messageIndex + 1 : messageIndex;
-        }
-        for (final List<SatelliteMessageRule> subRuleList : subRuleLists) {
-            final int resultIndex = matchesSubRuleList(message, messageIndex, subRuleList);
-            // When the result index is higher than the message index the sub-rule list matched
-            if (resultIndex > messageIndex) {
-                return resultIndex;
+    private Set<Integer> matches(final String message, final Set<Integer> messageIndices) {
+        final Set<Integer> result = new HashSet<>();
+        for (final Integer messageIndex : messageIndices) {
+            if (messageIndex > message.length() - 1) {
+                // There is no need to process any further when the message index passed the message length
+                continue;
+            }
+            if (isCharacter() && this.character == message.charAt(messageIndex)) {
+                result.add(messageIndex + 1);
+                // No need for `continue;` here: for-loop deals with an empty `subRuleLists`
+            }
+            for (final List<SatelliteMessageRule> subRuleList : subRuleLists) {
+                // It is safe to use `addAll`: matchesSubRuleList will return an empty collection when there was no match
+                result.addAll(matchesSubRuleList(message, messageIndex, subRuleList));
             }
         }
-        // No match
-        return messageIndex;
+        return result;
     }
 
     /**
      * Checks if this rule has a matching sub-rule list starting from given message index.
      * <p>
-     * When there is a matching sub-rule list the returned index will be higher than given message index.
-     * If the returned value is the same as given message index then there was no match at all.
+     * When there is a matching sub-rule list the returned collection will contain the indices to be used as a starting
+     * point for the next check.
+     * If the returned collection is empty then there was no match at all.
      *
      * @param message      the message to match
      * @param messageIndex the message index to start matching from
      * @param subRuleList  the sub-rule list to match
-     * @return the index to continue matching from
+     * @return the indices to continue matching from
      */
-    private int matchesSubRuleList(final String message, final int messageIndex, final List<SatelliteMessageRule> subRuleList) {
-        int resultIndex = messageIndex;
+    private Set<Integer> matchesSubRuleList(final String message, final int messageIndex, final List<SatelliteMessageRule> subRuleList) {
+        Set<Integer> resultIndices = new HashSet<>();
+        resultIndices.add(messageIndex);
+
         for (final SatelliteMessageRule rule : subRuleList) {
-            int lastIndex = resultIndex;
-            resultIndex = rule.matches(message, lastIndex);
-            // check if index has moved since last call
-            if (resultIndex == lastIndex) {
-                // index has not moved so the sub-rule list will never match: return the message index parameter
-                return messageIndex;
+            final Set<Integer> lastIndices = resultIndices;
+            resultIndices = rule.matches(message, lastIndices);
+            // Check if the rule has any matches
+            if (resultIndices.isEmpty()) {
+                // The rule has no matches so the sub-rule list is not a match: stop looking for matches
+                break;
             }
         }
-        return resultIndex;
+        return resultIndices;
     }
 
     @Override

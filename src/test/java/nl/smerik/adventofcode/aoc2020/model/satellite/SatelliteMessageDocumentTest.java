@@ -34,6 +34,55 @@ class SatelliteMessageDocumentTest {
             "aaabbb",
             "aaaabbb");
 
+    static final List<String> DOCUMENT_3_LINES = List.of(
+            "42: 9 14 | 10 1",
+            "9: 14 27 | 1 26",
+            "10: 23 14 | 28 1",
+            "1: \"a\"",
+            "11: 42 31",
+            "5: 1 14 | 15 1",
+            "19: 14 1 | 14 14",
+            "12: 24 14 | 19 1",
+            "16: 15 1 | 14 14",
+            "31: 14 17 | 1 13",
+            "6: 14 14 | 1 14",
+            "2: 1 24 | 14 4",
+            "0: 8 11",
+            "13: 14 3 | 1 12",
+            "15: 1 | 14",
+            "17: 14 2 | 1 7",
+            "23: 25 1 | 22 14",
+            "28: 16 1",
+            "4: 1 1",
+            "20: 14 14 | 1 15",
+            "3: 5 14 | 16 1",
+            "27: 1 6 | 14 18",
+            "14: \"b\"",
+            "21: 14 1 | 1 14",
+            "25: 1 1 | 1 14",
+            "22: 14 14",
+            "8: 42",
+            "26: 14 22 | 1 20",
+            "18: 15 15",
+            "7: 14 5 | 1 21",
+            "24: 14 1",
+            "",
+            "abbbbbabbbaaaababbaabbbbabababbbabbbbbbabaaaa",
+            "bbabbbbaabaabba",
+            "babbbbaabbbbbabbbbbbaabaaabaaa",
+            "aaabbbbbbaaaabaababaabababbabaaabbababababaaa",
+            "bbbbbbbaaaabbbbaaabbabaaa",
+            "bbbababbbbaaaaaaaabbababaaababaabab",
+            "ababaaaaaabaaab",
+            "ababaaaaabbbaba",
+            "baabbaaaabbaaaababbaababb",
+            "abbbbabbbbaaaababbbbbbaaaababb",
+            "aaaaabbaabaaaaababaa",
+            "aaaabbaaaabbaaa",
+            "aaaabbaabbaaaaaaabbbabbbaaabbaabaaa",
+            "babaaabbbaaabaababbaabababaaab",
+            "aabbbbbaabbbaaaaaabbbbbababaaaaabbaaabba");
+
     @Test
     void testInitializeDocument() {
         final SatelliteMessageDocument document1 = new SatelliteMessageDocument(DOCUMENT_1_LINES);
@@ -43,6 +92,10 @@ class SatelliteMessageDocumentTest {
         final SatelliteMessageDocument document2 = new SatelliteMessageDocument(DOCUMENT_2_LINES);
         assertEquals(6, document2.getMessageRulesByRuleId().size());
         assertEquals(5, document2.getMessages().size());
+
+        final SatelliteMessageDocument document3 = new SatelliteMessageDocument(DOCUMENT_3_LINES);
+        assertEquals(31, document3.getMessageRulesByRuleId().size());
+        assertEquals(15, document3.getMessages().size());
 
         final SatelliteMessageRule rule0 = document2.getMessageRulesByRuleId().get(0);
         assertEquals('\0', rule0.getCharacter());
@@ -78,5 +131,37 @@ class SatelliteMessageDocumentTest {
         assertEquals(2, messagesMatchingRule.size());
         assertTrue(messagesMatchingRule.contains("ababbb"));
         assertTrue(messagesMatchingRule.contains("abbbab"));
+    }
+
+    @Test
+    void testFindMessagesMatchingRuleWithoutUpdatingRules() {
+        final SatelliteMessageDocument document3 = new SatelliteMessageDocument(DOCUMENT_3_LINES);
+        final Set<String> messagesMatchingRule = document3.findMessagesMatchingRule(0);
+        assertEquals(3, messagesMatchingRule.size());
+        assertTrue(messagesMatchingRule.contains("bbabbbbaabaabba"));
+        assertTrue(messagesMatchingRule.contains("ababaaaaaabaaab"));
+        assertTrue(messagesMatchingRule.contains("ababaaaaabbbaba"));
+    }
+
+    @Test
+    void testFindMessagesMatchingRuleAfterUpdatingRules() {
+        final SatelliteMessageDocument document3 = new SatelliteMessageDocument(DOCUMENT_3_LINES);
+        document3.getMessageRulesByRuleId().get(8).addSubRuleList(createSubRuleListOf(document3, 42, 8));
+        document3.getMessageRulesByRuleId().get(11).addSubRuleList(createSubRuleListOf(document3, 42, 11, 31));
+
+        final Set<String> messagesMatchingRule = document3.findMessagesMatchingRule(0);
+        assertEquals(12, messagesMatchingRule.size());
+        assertTrue(messagesMatchingRule.contains("bbabbbbaabaabba"));
+        assertTrue(messagesMatchingRule.contains("babbbbaabbbbbabbbbbbaabaaabaaa"));
+        assertTrue(messagesMatchingRule.contains("aaabbbbbbaaaabaababaabababbabaaabbababababaaa"));
+        assertTrue(messagesMatchingRule.contains("bbbbbbbaaaabbbbaaabbabaaa"));
+        assertTrue(messagesMatchingRule.contains("bbbababbbbaaaaaaaabbababaaababaabab"));
+        assertTrue(messagesMatchingRule.contains("ababaaaaaabaaab"));
+        assertTrue(messagesMatchingRule.contains("ababaaaaabbbaba"));
+        assertTrue(messagesMatchingRule.contains("baabbaaaabbaaaababbaababb"));
+        assertTrue(messagesMatchingRule.contains("abbbbabbbbaaaababbbbbbaaaababb"));
+        assertTrue(messagesMatchingRule.contains("aaaaabbaabaaaaababaa"));
+        assertTrue(messagesMatchingRule.contains("aaaabbaabbaaaaaaabbbabbbaaabbaabaaa"));
+        assertTrue(messagesMatchingRule.contains("aabbbbbaabbbaaaaaabbbbbababaaaaabbaaabba"));
     }
 }
