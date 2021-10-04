@@ -12,19 +12,11 @@ import java.util.Set;
 public class SatelliteMessageRule {
 
     @EqualsAndHashCode.Include
-    private int id;
+    private final int id;
+
+    private final Set<List<SatelliteMessageRule>> subRuleLists = new HashSet<>();
 
     private char character = '\0';
-    private Set<List<SatelliteMessageRule>> subRuleLists = new HashSet<>();
-
-    /**
-     * Constructs a {@link SatelliteMessageRule}.
-     *
-     * @param id the rule ID
-     */
-    public SatelliteMessageRule(final Integer id) {
-        this.id = id;
-    }
 
     public boolean isCharacter() {
         return character != '\0';
