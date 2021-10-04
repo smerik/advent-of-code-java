@@ -93,4 +93,23 @@ public class SatelliteMessageRule {
         }
         return resultIndex;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder builder = new StringBuilder(getId() + ":");
+        if (isCharacter()) {
+            builder.append(' ').append(character);
+        } else {
+            final Iterator<List<SatelliteMessageRule>> subRuleListsIterator = getSubRuleLists().iterator();
+            while (subRuleListsIterator.hasNext()) {
+                for (final SatelliteMessageRule rule : subRuleListsIterator.next()) {
+                    builder.append(' ').append(rule.getId());
+                }
+                if (subRuleListsIterator.hasNext()) {
+                    builder.append(" |");
+                }
+            }
+        }
+        return builder.toString();
+    }
 }
