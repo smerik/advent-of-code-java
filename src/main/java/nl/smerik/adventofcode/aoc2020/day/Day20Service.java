@@ -31,4 +31,16 @@ public class Day20Service {
             return null;
         }
     }
+
+    @SneakyThrows
+    public Integer getSolutionPart2() {
+        final Path path = Paths.get(resource.getURI());
+        try (Stream<String> stringStream = Files.lines(path)) {
+            final Jigsaw jigsaw = new Jigsaw(stringStream.toList());
+            return jigsaw.calculateWaterRoughness();
+        } catch (IOException e) {
+            LOG.error("Houston: {}", e.getMessage(), e);
+            return null;
+        }
+    }
 }

@@ -5,6 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.awt.Point;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -24,7 +26,9 @@ public class Jigsaw {
         this.tiles = parseLines(lines);
         linkAdjacentTiles(tiles);
         arrangeAdjacentTiles(tiles);
-        LOG.info("{}{}", System.lineSeparator(), buildArrangedImageWithSpacedBorders());
+        LOG.info("{}{}", System.lineSeparator(), buildArrangedImage(true));
+        LOG.info("{}", System.lineSeparator());
+        LOG.info("{}{}", System.lineSeparator(), buildArrangedImage(false));
     }
 
     private Set<Tile> parseLines(final List<String> lines) {
@@ -76,25 +80,90 @@ public class Jigsaw {
      *
      * @return the arranged image
      */
-    public String buildArrangedImageWithSpacedBorders() {
+    public String buildArrangedImage(final boolean withSpacedBorders) {
         final Map<Point, Tile> tilesMappedByIdentity = tiles.stream().filter(Tile::isArranged).collect(Collectors.toMap(Tile::getPosition, Function.identity()));
         final int minX = tilesMappedByIdentity.keySet().stream().min(Comparator.comparing(Point::getX)).orElseThrow().x;
         final int maxX = tilesMappedByIdentity.keySet().stream().max(Comparator.comparing(Point::getX)).orElseThrow().x;
         final int minY = tilesMappedByIdentity.keySet().stream().min(Comparator.comparing(Point::getY)).orElseThrow().y;
         final int maxY = tilesMappedByIdentity.keySet().stream().max(Comparator.comparing(Point::getY)).orElseThrow().y;
-        final int numberOfTileRows = 10;
+        final int numberOfTileRows = withSpacedBorders ? 10 : 9;
+        final int tileRowFirstIndex = withSpacedBorders ? 0 : 1;
+        final int tileColumnFirstIndex = withSpacedBorders ? 0 : 1;
+        final int tileColumnLastIndex = withSpacedBorders ? 10 : 9;
 
         final StringBuilder builder = new StringBuilder();
         for (int y = maxY; y >= minY; y--) {
-            for (int tileRowIndex = 0; tileRowIndex < numberOfTileRows; tileRowIndex++) {
+            for (int tileRowIndex = tileRowFirstIndex; tileRowIndex < numberOfTileRows; tileRowIndex++) {
                 for (int x = minX; x <= maxX; x++) {
                     final Tile tile = tilesMappedByIdentity.get(new Point(x, y));
-                    builder.append(tile.getContent()[tileRowIndex]).append(' ');
+                    builder.append(Arrays.copyOfRange(tile.getContent()[tileRowIndex], tileColumnFirstIndex, tileColumnLastIndex));
+                    if (withSpacedBorders  && x < maxX) {
+                        builder.append(' ');
+                    }
                 }
                 builder.append(System.lineSeparator());
             }
-            builder.append(System.lineSeparator());
+            if (withSpacedBorders) {
+                builder.append(System.lineSeparator());
+            }
         }
         return builder.append(System.lineSeparator()).toString();
+    }
+
+    public int calculateWaterRoughness() {
+        final Set<Point> seaMonstersCoordinates = findSeaMonstersCoordinatesInSea().stream()
+                                                                              .flatMap(Collection::stream)
+                                                                              .collect(Collectors.toSet());
+        final Set<Point> hashLocationsInSea = findHashCoordinatesInSea();
+        hashLocationsInSea.removeAll(seaMonstersCoordinates);
+        return hashLocationsInSea.size();
+    }
+
+    public Set<Set<Point>> findSeaMonstersCoordinatesInSea() {
+        final Set<Set<Point>> result = new HashSet<>(new HashSet<>());
+        final SeaMonster monster = new SeaMonster();
+        for (int i = 0; i < 8; i++) {
+            result.addAll(findSeaMonstersCoordinatesInSea(monster));
+            // Try all rotations first before flipping the monster horizontally
+            if (i == 3) {
+                monster.flipHorizontally();
+            } else {
+                monster.rotateCW();
+            }
+        }
+        return result;
+    }
+
+    private Set<Set<Point>> findSeaMonstersCoordinatesInSea(final SeaMonster monster) {
+        final Set<Set<Point>> result = new HashSet<>(new HashSet<>());
+
+        final Set<Point> hashCoordinates = findHashCoordinatesInSea();
+        final int minX = hashCoordinates.stream().min(Comparator.comparing(Point::getX)).orElseThrow().x;
+        final int maxX = hashCoordinates.stream().max(Comparator.comparing(Point::getX)).orElseThrow().x;
+        final int minY = hashCoordinates.stream().min(Comparator.comparing(Point::getY)).orElseThrow().y;
+        final int maxY = hashCoordinates.stream().max(Comparator.comparing(Point::getY)).orElseThrow().y;
+
+        for (int y = minY; y < maxY; y++) {
+            for (int x = minX; x < maxX; x++) {
+                final Set<Point> monsterCoordinates = monster.translate(x, y);
+                if (hashCoordinates.containsAll(monsterCoordinates)) {
+                    result.add(monsterCoordinates);
+                }
+            }
+        }
+        return result;
+    }
+
+    private Set<Point> findHashCoordinatesInSea() {
+        final Set<Point> result = new HashSet<>();
+        final String[] lines = buildArrangedImage(false).split(System.lineSeparator());
+        for (int y = 0; y < lines.length; y++) {
+            int x = 0;
+            while ((x = lines[y].indexOf('#', x)) != -1) {
+                result.add(new Point(x, y));
+                x++;
+            }
+        }
+        return result;
     }
 }

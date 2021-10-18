@@ -36,4 +36,20 @@ class JigsawTest {
     void testMultiplyCornerTileIDs() {
         assertEquals(20899048083289L, jigsawExample01.multiplyCornerTileIDs());
     }
+
+    @Test
+    void testBuildArrangedImage() {
+        assertEquals(1028, jigsawExample01.buildArrangedImage(true).length());
+        assertEquals(626, jigsawExample01.buildArrangedImage(false).length());
+    }
+
+    @Test
+    void testFindSeaMonsters() {
+        assertEquals(2, jigsawExample01.findSeaMonstersCoordinatesInSea().size());
+    }
+
+    @Test
+    void testCalculateWaterRoughness() {
+        assertEquals(273, jigsawExample01.calculateWaterRoughness());
+    }
 }
