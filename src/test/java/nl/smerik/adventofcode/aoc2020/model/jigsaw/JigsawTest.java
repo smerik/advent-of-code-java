@@ -38,9 +38,17 @@ class JigsawTest {
     }
 
     @Test
-    void testBuildArrangedImage() {
-        assertEquals(1028, jigsawExample01.buildArrangedImage(true).length());
-        assertEquals(626, jigsawExample01.buildArrangedImage(false).length());
+    void testBuildArrangedImageWithSpacedBorders() {
+        final String image = jigsawExample01.buildArrangedImage(true);
+        assertEquals(60, image.chars().filter(ch -> ch == ' ').count());
+        assertEquals(448, image.chars().filter(ch -> ch == '#').count());
+    }
+
+    @Test
+    void testBuildArrangedImageWithoutSpacedBorders() {
+        final String image = jigsawExample01.buildArrangedImage(false);
+        assertEquals(0, image.chars().filter(ch -> ch == ' ').count());
+        assertEquals(303, image.chars().filter(ch -> ch == '#').count());
     }
 
     @Test
