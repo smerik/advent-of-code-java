@@ -28,21 +28,6 @@ class CombatGameTest {
     );
 
     @Test
-    void testConstructor() {
-        final CombatGame game = new CombatGame(EXAMPLE_01_STARTING_DECKS);
-        assertEquals(2, game.getPlayers().size());
-
-        final CombatPlayer player1 = game.getPlayers().stream().filter(p -> p.getId() == 1).findAny().orElseThrow();
-        assertEquals(5, player1.getDeck().size());
-        assertTrue(player1.getDeck().containsAll(List.of(9, 2, 6, 3, 1)));
-
-
-        final CombatPlayer player2 = game.getPlayers().stream().filter(p -> p.getId() == 2).findAny().orElseThrow();
-        assertEquals(5, player2.getDeck().size());
-        assertTrue(player2.getDeck().containsAll(List.of(5, 8, 4, 7, 10)));
-    }
-
-    @Test
     void testPlay() {
         final CombatGame game = new CombatGame(EXAMPLE_01_STARTING_DECKS);
         final CombatPlayer player1 = game.getPlayers().stream().filter(p -> p.getId() == 1).findAny().orElseThrow();

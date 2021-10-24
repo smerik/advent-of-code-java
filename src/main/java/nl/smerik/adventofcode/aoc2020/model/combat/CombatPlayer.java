@@ -5,9 +5,12 @@ import lombok.EqualsAndHashCode;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Queue;
+import java.util.Set;
 
 @Slf4j
 @Data
@@ -18,10 +21,21 @@ public class CombatPlayer {
     final int id;
 
     private final Queue<Integer> deck;
+    private final Set<List<Integer>> previousDeckStates;
 
     public CombatPlayer(final int id) {
         this.id = id;
-        deck = new ArrayDeque<>();
+        this.deck = new ArrayDeque<>();
+        this.previousDeckStates = new HashSet<>();
+    }
+
+    public CombatPlayer(final CombatPlayer player, final int numberOfCardsToCopy) {
+        this(player.id);
+
+        final Queue<Integer> tempDeck = new ArrayDeque<>(player.deck);
+        for (int i = 0; i < numberOfCardsToCopy; i++) {
+            addCard(tempDeck.remove());
+        }
     }
 
     /**
@@ -43,13 +57,23 @@ public class CombatPlayer {
     }
 
     /**
+     * Checks if the current card order in the deck has happened before.
+     *
+     * @return <code>true</code> if happened before; <code>false</code> otherwise
+     */
+    public boolean isDeckInSameOrderAsBefore() {
+        return previousDeckStates.contains(new ArrayList<>(deck));
+    }
+
+    /**
      * Draws the top card of the deck.
      *
      * @return the top card
      */
     public int drawCard() {
+        previousDeckStates.add(new ArrayList<>(deck));
         final Integer cardValue = deck.remove();
-        LOG.debug("Player {} plays: {}", id, cardValue);
+        LOG.trace("Player {} plays: {}", id, cardValue);
         return cardValue;
     }
 

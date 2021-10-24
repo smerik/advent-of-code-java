@@ -2,46 +2,19 @@ package nl.smerik.adventofcode.aoc2020.model.combat;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 import java.util.function.Function;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Data
 public class CombatGame {
 
-    private static final Pattern PLAYER_LINE_PATTERN = Pattern.compile("Player (?<playerId>\\d+):");
-
-    private final Set<CombatPlayer> players = new HashSet<>();
+    private final Set<CombatPlayer> players;
 
     public CombatGame(final List<String> lines) {
-        parse(lines);
-    }
-
-    private void parse(final List<String> lines) {
-        boolean parsePlayer = true;
-        CombatPlayer player = new CombatPlayer(-1);
-        for (final String line : lines) {
-            if (parsePlayer) {
-                final Matcher matcher = PLAYER_LINE_PATTERN.matcher(line);
-                if (!matcher.find()) {
-                    throw new IllegalArgumentException("Given line is not a player line: '" + line + "'");
-                }
-                player = new CombatPlayer(Integer.parseInt(matcher.group("playerId")));
-                players.add(player);
-                parsePlayer = false;
-                continue;
-            }
-            if (StringUtils.isBlank(line)) {
-                parsePlayer = true;
-                continue;
-            }
-            player.addCard(Integer.parseInt(line));
-        }
+        players = CombatParser.parse(lines);
     }
 
     /**
@@ -55,8 +28,8 @@ public class CombatGame {
         while (players.stream().noneMatch(CombatPlayer::deckIsEmpty)) {
             round++;
             LOG.debug("-- Round {} --", round);
-            if (LOG.isDebugEnabled()) {
-                players.forEach(player -> LOG.debug("Player {}'s deck: {}", player.getId(), player.getDeck()));
+            if (LOG.isTraceEnabled()) {
+                players.forEach(player -> LOG.trace("Player {}'s deck: {}", player.getId(), player.getDeck()));
             }
             winningPlayer = play();
         }
@@ -76,7 +49,7 @@ public class CombatGame {
      * @return the winning player
      */
     public CombatPlayer play() {
-        final Map<Integer, CombatPlayer> playersMappedByTakenCard  = players.stream().collect(Collectors.toMap(CombatPlayer::drawCard, Function.identity()));
+        final Map<Integer, CombatPlayer> playersMappedByTakenCard = players.stream().collect(Collectors.toMap(CombatPlayer::drawCard, Function.identity()));
         final List<Integer> sortedCards = playersMappedByTakenCard.keySet().stream().sorted(Comparator.reverseOrder()).toList();
         final CombatPlayer winner = playersMappedByTakenCard.get(sortedCards.get(0));
         LOG.debug("Player {} wins the round!", winner.id);
