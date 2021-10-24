@@ -31,4 +31,21 @@ class AllergenAssessmentTest {
         final AllergenAssessment assessment = new AllergenAssessment(example01Part01);
         assertEquals(5L, assessment.countIngredientsNotPossiblyContainingAllergens());
     }
+
+    @Test
+    void testDetermineIngredientContainingAllergen() {
+        final AllergenAssessment assessment = new AllergenAssessment(example01Part01);
+        final Map<String, String> ingredientByAllergen = Map.of(
+                "dairy", "mxmxvkd",
+                "soy", "fvjkl",
+                "fish", "sqjhc"
+        );
+        assertEquals(ingredientByAllergen, assessment.determineIngredientContainingAllergen());
+    }
+
+    @Test
+    void testProduceCanonicalDangerousIngredientList() {
+        final AllergenAssessment assessment = new AllergenAssessment(example01Part01);
+        assertEquals("mxmxvkd,sqjhc,fvjkl", assessment.produceCanonicalDangerousIngredientList());
+    }
 }

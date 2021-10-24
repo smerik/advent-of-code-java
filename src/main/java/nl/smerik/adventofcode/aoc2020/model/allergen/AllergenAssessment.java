@@ -1,10 +1,12 @@
 package nl.smerik.adventofcode.aoc2020.model.allergen;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 /**
@@ -58,5 +60,47 @@ public class AllergenAssessment {
                     .flatMap(Set::stream)
                     .filter(ingredient -> !possibleAllergens.contains(ingredient))
                     .count();
+    }
+
+    /**
+     * Figures out which ingredient contains which allergen.
+     *
+     * @return ingredient mapped by allergen
+     */
+    public Map<String, String> determineIngredientContainingAllergen() {
+        final Map<String, Set<String>> possibleIngredientMatchesPerAllergen = findPossibleIngredientMatchesPerAllergen();
+        final Map<String, String> result = possibleIngredientMatchesPerAllergen.entrySet()
+                .stream()
+                .filter(e -> e.getValue().size() == 1)
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        e -> new ArrayList<>(e.getValue()).get(0)
+                ));
+        while (result.size() != possibleIngredientMatchesPerAllergen.size()) {
+            for (final Map.Entry<String, Set<String>> entry : possibleIngredientMatchesPerAllergen.entrySet()) {
+                for (final Map.Entry<String, String> resultEntry : result.entrySet()) {
+                    if (!resultEntry.getKey().equals(entry.getKey())
+                            && entry.getValue().remove(resultEntry.getValue())
+                            && entry.getValue().size() == 1) {
+                        result.put(entry.getKey(), entry.getValue().stream().findAny().orElseThrow());
+                        break;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Produces the canonical dangerous ingredient list.
+     * <p>
+     * This is a list of ingredients arranged alphabetically by their allergen
+     * and separated by commas without any spaces.
+     *
+     * @return the canonical dangerous ingredient list
+     */
+    public String produceCanonicalDangerousIngredientList() {
+        // A TreeMap uses the natural ordering of its keys.
+        return String.join(",", new TreeMap<>(determineIngredientContainingAllergen()).values());
     }
 }

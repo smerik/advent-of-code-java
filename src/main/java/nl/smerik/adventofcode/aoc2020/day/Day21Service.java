@@ -31,4 +31,16 @@ public class Day21Service {
             return null;
         }
     }
+
+    @SneakyThrows
+    public String getSolutionPart2() {
+        final Path path = Paths.get(resource.getURI());
+        try (Stream<String> stringStream = Files.lines(path)) {
+            final AllergenAssessment assessment = new AllergenAssessment(stringStream.toList());
+            return assessment.produceCanonicalDangerousIngredientList();
+        } catch (IOException e) {
+            LOG.error("Houston: {}", e.getMessage(), e);
+            return null;
+        }
+    }
 }
