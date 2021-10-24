@@ -1,7 +1,5 @@
 package nl.smerik.adventofcode.aoc2020.model.allergen;
 
-import lombok.extern.slf4j.Slf4j;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -12,7 +10,6 @@ import java.util.stream.Collectors;
 /**
  * The Day 21 Allergen Assessment model.
  */
-@Slf4j
 public class AllergenAssessment {
 
     private final Set<Food> foods;
@@ -40,8 +37,7 @@ public class AllergenAssessment {
         for (final Food food : foods) {
             for (final String allergen : food.getAllergens()) {
                 final Set<String> ingredients = result.computeIfAbsent(allergen, k -> new HashSet<>(food.getIngredients()));
-                final boolean changed = ingredients.retainAll(food.getIngredients());
-                LOG.info("Allergen '{}' part of ingredients '{}' changed? {}", allergen, ingredients, changed);
+                ingredients.retainAll(food.getIngredients());
             }
         }
         return result;
