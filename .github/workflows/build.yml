@@ -13,6 +13,6 @@ jobs:
         with:
           cache: maven
           distribution: 'temurin'
-          java-version: '16'
+          java-version: '17'
       - name: build-maven
         run: mvn --batch-mode --update-snapshots verify
