@@ -9,15 +9,19 @@ import org.springframework.stereotype.Service;
 @Service
 public class Day23Service {
 
-    final CrabCups crabCups;
-
-    public Day23Service() {
-        this.crabCups = new CrabCups("123487596");
-    }
+    private static final String CUP_LABELING = "123487596";
 
     @SneakyThrows
     public String getSolutionPart1() {
-        this.crabCups.simulate(100);
-        return this.crabCups.getCupLabeling();
+        final CrabCups crabCups = new CrabCups(CUP_LABELING, CUP_LABELING.length());
+        crabCups.simulate(100);
+        return crabCups.getCupLabeling();
+    }
+
+    @SneakyThrows
+    public long getSolutionPart2() {
+        final CrabCups crabCups = new CrabCups(CUP_LABELING, 1000000);
+        crabCups.simulate(10000000);
+        return crabCups.multiplyCupsWithStars();
     }
 }
