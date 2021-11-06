@@ -32,4 +32,17 @@ public class Day24Service {
             return null;
         }
     }
+
+    @SneakyThrows
+    public Long getSolutionPart2() {
+        final Path path = Paths.get(resource.getURI());
+        try (Stream<String> stringStream = Files.lines(path)) {
+            final LobbyLayout lobby = new LobbyLayout(stringStream.toList());
+            lobby.flipTiles(100);
+            return lobby.countTilesWithColorUp(TileColor.BLACK);
+        } catch (IOException e) {
+            LOG.error("Houston: {}", e.getMessage(), e);
+            return null;
+        }
+    }
 }

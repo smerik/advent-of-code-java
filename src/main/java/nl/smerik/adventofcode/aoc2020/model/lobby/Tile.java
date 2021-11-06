@@ -4,17 +4,23 @@ import lombok.Data;
 
 import java.awt.Point;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Data
 public class Tile {
 
     private final Point position;
     private int flipCount;
-    private TileColor color;
+    private TileColor color = TileColor.WHITE;
 
     public Tile() {
         this.position = new Point();
-        this.color = TileColor.WHITE;
+    }
+
+    public Tile(final Point point) {
+        this.position = point;
     }
 
     /**
@@ -48,5 +54,28 @@ public class Tile {
     public void flip() {
         this.flipCount++;
         this.color = this.color == TileColor.WHITE ? TileColor.BLACK : TileColor.WHITE;
+    }
+
+    public Set<Point> getNeighboursPositions() {
+        // TODO: quick 'n dirty implementation should be refactored
+        final Point east = new Point(this.position);
+        east.translate(2, 0);
+
+        final Point southeast = new Point(this.position);
+        southeast.translate(1, 1);
+
+        final Point southwest = new Point(this.position);
+        southwest.translate(-1, 1);
+
+        final Point west = new Point(this.position);
+        west.translate(-2, 0);
+
+        final Point northwest = new Point(this.position);
+        northwest.translate(-1, -1);
+
+        final Point norteast = new Point(this.position);
+        norteast.translate(1, -1);
+
+        return Stream.of(east, southeast, southwest, west, northwest, norteast).collect(Collectors.toSet());
     }
 }

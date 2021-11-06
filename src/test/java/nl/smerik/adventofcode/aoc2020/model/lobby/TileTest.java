@@ -7,6 +7,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.awt.Point;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import static nl.smerik.adventofcode.aoc2020.model.lobby.HexagonalDirection.*;
@@ -47,5 +48,23 @@ class TileTest {
         tile.flip();
         assertEquals(2, tile.getFlipCount());
         assertEquals(TileColor.WHITE, tile.getColor());
+    }
+
+    @Test
+    void testGetNeighboursPositions() {
+        final Set<Point> expectedPositions = Set.of(
+                new Point(9,3),
+                new Point(8,2),
+                new Point(6,2),
+                new Point(5,3),
+                new Point(6,4),
+                new Point(8,4)
+        );
+
+        final Tile tile = new Tile();
+        tile.getPosition().move(7,3);
+        final Set<Point> neighboursPositions = tile.getNeighboursPositions();
+
+        assertEquals(expectedPositions, neighboursPositions);
     }
 }
