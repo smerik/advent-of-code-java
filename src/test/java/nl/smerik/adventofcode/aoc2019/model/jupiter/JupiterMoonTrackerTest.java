@@ -16,6 +16,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Disabled
 class JupiterMoonTrackerTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JupiterMoonTrackerTest.class);

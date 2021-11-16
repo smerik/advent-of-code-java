@@ -1,6 +1,7 @@
 package nl.smerik.adventofcode.aoc2019.model.asteroid;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -19,6 +20,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@Disabled
 class AsteroidBeltTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AsteroidBeltTest.class);
