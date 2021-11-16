@@ -12,15 +12,22 @@
     </parent>
 
     <groupId>nl.smerik.adventofcode</groupId>
-    <artifactId>aoc2020</artifactId>
+    <artifactId>aoc-java</artifactId>
     <version>2020.0.0-SNAPSHOT</version>
-    <name>Advent of Code - 2020</name>
-    <description>Advent of Code 2020 event implementation.</description>
+    <name>Advent of Code - Java</name>
+    <description>Advent of Code event solution implementation in Java.</description>
+
+    <packaging>pom</packaging>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
+
+    <modules>
+        <module>application</module>
+        <module>aoc-2020</module>
+    </modules>
 
     <dependencies>
         <dependency>
@@ -28,20 +35,12 @@
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-validation</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
 
+        <!-- Test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
