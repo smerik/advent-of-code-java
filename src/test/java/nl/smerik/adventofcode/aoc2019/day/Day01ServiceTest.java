@@ -7,13 +7,18 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-class Day17ServiceTest {
+class Day01ServiceTest {
 
     @Autowired
-    private Day17Service dayService;
+    private Day01Service dayService;
 
     @Test
     void getSolutionPart1() {
-        assertEquals(4044, dayService.getSolutionPart1());
+        assertEquals(3538016, dayService.getSolutionPart1());
+    }
+
+    @Test
+    void getSolutionPart2() {
+        assertEquals(5304147, dayService.getSolutionPart2());
     }
 }
