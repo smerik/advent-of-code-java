@@ -15,7 +15,7 @@
     <description>Advent of Code 2019 event implementation.</description>
 
     <properties>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
     </properties>
 
     <dependencies>
