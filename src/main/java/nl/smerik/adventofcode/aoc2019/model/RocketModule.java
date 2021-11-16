@@ -1,38 +1,30 @@
 package nl.smerik.adventofcode.aoc2019.model;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
 public class RocketModule {
 
-    private Long mass;
-    public static final BigDecimal DIVISOR = new BigDecimal("3");
-    public static final BigDecimal TWO = new BigDecimal("2");
+    public static final int DIVISOR = 3;
+    public static final int SUBTRAHEND = 2;
 
-    public RocketModule(final Long mass) {
+    private final Integer mass;
+
+    public RocketModule(final Integer mass) {
         this.mass = mass;
     }
 
-//    public Long getRequiredFuel() {
-//        return BigDecimal.valueOf(mass)
-//                .divide(DIVISOR, RoundingMode.FLOOR)
-//                .subtract(TWO)
-//                .longValue();
-//    }
-
-    public Long getRequiredFuel() {
-        return calculateFuel(BigDecimal.valueOf(mass)).longValue();
+    public Integer calculateRequiredFuel(final boolean includeAddedFuel) {
+        return calculateRequiredFuel(mass, includeAddedFuel);
     }
 
-    private BigDecimal calculateFuel(final BigDecimal m) {
-        // TODO: use Long instead of BigDecimal
-        BigDecimal result = m.divide(DIVISOR, RoundingMode.FLOOR).subtract(TWO);
-
-        if (result.signum() == 1) {
-            BigDecimal x = calculateFuel(result);
-            return result.add(x);
+    private Integer calculateRequiredFuel(final Integer mass, final boolean includeAddedFuel) {
+        final int result = Math.floorDiv(mass, DIVISOR) - SUBTRAHEND;
+        if (!includeAddedFuel) {
+            return result;
         }
-        return BigDecimal.ZERO;
+
+        if (Math.signum(result) == 1) {
+            return result + calculateRequiredFuel(result, true);
+        }
+        return 0;
     }
 
     @Override
