@@ -11,6 +11,7 @@
     </parent>
 
     <artifactId>aoc-2020</artifactId>
+    <name>Advent of Code - 2020</name>
 
     <dependencies>
         <dependency>
