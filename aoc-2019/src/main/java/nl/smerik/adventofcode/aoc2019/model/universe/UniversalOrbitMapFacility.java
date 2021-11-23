@@ -2,10 +2,8 @@ package nl.smerik.adventofcode.aoc2019.model.universe;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.CollectionUtils;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class UniversalOrbitMapFacility {
 

@@ -2,7 +2,6 @@ package nl.smerik.adventofcode.aoc2019.day;
 
 import nl.smerik.adventofcode.aoc2019.model.asteroid.AsteroidBelt;
 import nl.smerik.adventofcode.aoc2019.model.asteroid.AsteroidBeltMapParser;
-import nl.smerik.adventofcode.aoc2019.service.AsteroidBeltService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.awt.*;
 import java.io.IOException;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 @Service
