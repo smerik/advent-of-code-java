@@ -9,6 +9,10 @@ public class Velocity {
     public int y;
     public int z;
 
+    public Velocity() {
+        this(0, 0, 0);
+    }
+
     public Velocity(final int x, final int y, final int z) {
         this.x = x;
         this.y = y;

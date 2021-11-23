@@ -2,27 +2,47 @@ package nl.smerik.adventofcode.aoc2019.model.jupiter;
 
 import lombok.Getter;
 import lombok.ToString;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Getter
 @ToString
 public class Moon {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Moon.class);
+    private static final Pattern POSITION_PATTERN = Pattern.compile("<x=(?<x>-?\\d+), y=(?<y>-?\\d+), z=(?<z>-?\\d+)>");
 
-    private Position position;
-    private Velocity velocity;
+    private final Position position;
+    private final Velocity velocity;
 
     public Moon(final int x, final int y, final int z) {
         position = new Position(x, y, z);
-        velocity = new Velocity(0, 0, 0);
+        velocity = new Velocity();
     }
 
+    public Moon(final String position) {
+        this.position = parsePosition(position);
+        this.velocity = new Velocity();
+    }
+
+    private Position parsePosition(final String position) {
+        final Matcher matcher = POSITION_PATTERN.matcher(position);
+        if (!matcher.find()) {
+            throw new IllegalArgumentException("Unknown position line '" + position + "'");
+        }
+        final int x = Integer.parseInt(matcher.group("x"));
+        final int y = Integer.parseInt(matcher.group("y"));
+        final int z = Integer.parseInt(matcher.group("z"));
+        return new Position(x, y, z);
+    }
+
+    /**
+     * Applies gravity to given moon and this moon.
+     * On each axis (x, y, and z), the velocity of each moon changes by exactly +1 or -1 to pull the moons together.
+     *
+     * @param moon the moon to apply gravity to
+     */
     public void applyGravity(final Moon moon) {
-//        LOGGER.debug("Apply gravity between {} and {}...", this, moon);
         if (position.x > moon.position.x) {
             velocity.x--;
             moon.velocity.x++;
@@ -46,7 +66,6 @@ public class Moon {
             velocity.z++;
             moon.velocity.z--;
         }
-//        LOGGER.debug("Gravity applied between {} and {}.", this, moon);
     }
 
     public void applyVelocity() {
@@ -77,9 +96,5 @@ public class Moon {
      */
     public int getKineticEnergy() {
         return Math.abs(velocity.x) + Math.abs(velocity.y) + Math.abs(velocity.z);
-    }
-
-    public int hashState() {
-        return Objects.hash(this, position, velocity);
     }
 }
