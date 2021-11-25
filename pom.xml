@@ -30,6 +30,8 @@
 
     <modules>
         <module>application</module>
+        <module>base</module>
+        <!-- AOC event implementations -->
         <module>aoc-2019</module>
         <module>aoc-2020</module>
     </modules>

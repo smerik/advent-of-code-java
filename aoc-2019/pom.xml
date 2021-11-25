@@ -16,6 +16,12 @@
 
     <dependencies>
         <dependency>
+            <groupId>nl.smerik.adventofcode</groupId>
+            <artifactId>base</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
         </dependency>
