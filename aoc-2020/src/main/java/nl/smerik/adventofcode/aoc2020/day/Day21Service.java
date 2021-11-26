@@ -1,19 +1,14 @@
 package nl.smerik.adventofcode.aoc2020.day;
 
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
 import nl.smerik.adventofcode.aoc2020.model.allergen.AllergenAssessment;
+import nl.smerik.adventofcode.io.PuzzleInputParser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.stream.Stream;
+import java.util.List;
 
-@Slf4j
 @Service
 public class Day21Service {
 
@@ -22,25 +17,15 @@ public class Day21Service {
 
     @SneakyThrows
     public Long getSolutionPart1() {
-        final Path path = Paths.get(resource.getURI());
-        try (Stream<String> stringStream = Files.lines(path)) {
-            final AllergenAssessment assessment = new AllergenAssessment(stringStream.toList());
-            return assessment.countIngredientsNotPossiblyContainingAllergens();
-        } catch (IOException e) {
-            LOG.error("Houston: {}", e.getMessage(), e);
-            return null;
-        }
+        return initAllegenAssessment().countIngredientsNotPossiblyContainingAllergens();
     }
 
-    @SneakyThrows
     public String getSolutionPart2() {
-        final Path path = Paths.get(resource.getURI());
-        try (Stream<String> stringStream = Files.lines(path)) {
-            final AllergenAssessment assessment = new AllergenAssessment(stringStream.toList());
-            return assessment.produceCanonicalDangerousIngredientList();
-        } catch (IOException e) {
-            LOG.error("Houston: {}", e.getMessage(), e);
-            return null;
-        }
+        return initAllegenAssessment().produceCanonicalDangerousIngredientList();
+    }
+
+    private AllergenAssessment initAllegenAssessment() {
+        final List<String> foodLines = PuzzleInputParser.parseToString(resource);
+        return new AllergenAssessment(foodLines);
     }
 }
