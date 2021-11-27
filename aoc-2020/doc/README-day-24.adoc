@@ -64,7 +64,7 @@ After all of the instructions have been followed, *how many tiles are left with 
 To begin, https://adventofcode.com/2020/day/24/input[get your puzzle input].
 
 
-== Part Two
+=== Part Two
 The tile floor in the lobby is meant to be a living art exhibit.
 Every day, the tiles are all flipped according to the following rules:
 
