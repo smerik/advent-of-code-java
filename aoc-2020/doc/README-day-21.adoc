@@ -1,4 +1,6 @@
 == Day 21: Allergen Assessment
+:uri-aoc-puzzle-input: https://adventofcode.com/2020/day/21/input
+
 You reach the train's last stop and the closest you can get to your vacation island without getting wet.
 There aren't even any boats here, but nothing can stop you now: you build a raft.
 You just need a few days' worth of food for your journey.
@@ -39,7 +41,7 @@ they all appear once each except `sbzzf`, which appears twice.
 Determine which ingredients cannot possibly contain any of the allergens in your list.
 *How many times do any of those ingredients appear?*
 
-To begin, https://adventofcode.com/2020/day/21/input[get your puzzle input].
+To begin, {uri-aoc-puzzle-input}[get your puzzle input].
 
 === Part Two
 Now that you've isolated the inert ingredients,

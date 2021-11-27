@@ -1,13 +1,15 @@
 == Day 25: Combo Breaker
+:uri-rfid: https://en.wikipedia.org/wiki/Radio-frequency_identification
+:uri-aoc-puzzle-input: https://adventofcode.com/2020/day/25/input
+:uri-soft-serve: https://en.wikipedia.org/wiki/Soft_serve
+
 You finally reach the check-in desk.
 Unfortunately, their registration systems are currently offline, and they cannot check you in.
 Noticing the look on your face, they quickly add that tech support is already on the way!
 They even created all the room keys this morning;
 you can take yours now and give them your room deposit once the registration system comes back online.
 
-The room key is a small
-https://en.wikipedia.org/wiki/Radio-frequency_identification[RFID]
-card.
+The room key is a small {uri-rfid}[RFID] card.
 Your room is on the 25th floor and the elevators are also temporarily out of service,
 so it takes what little energy you have left to even climb the stairs and navigate the halls.
 You finally reach the door to your room, swipe your card, and - *beep* - the light turns red.
@@ -73,7 +75,7 @@ produces the same encryption key: `*14897079*`.)
 
 *What encryption key is the handshake trying to establish?*
 
-To begin, https://adventofcode.com/2020/day/25/input[get your puzzle input].
+To begin, {uri-aoc-puzzle-input}[get your puzzle input].
 
 
 === Part Two
@@ -81,9 +83,8 @@ The light turns green and the door unlocks.
 As you collapse onto the bed in your room, your pager goes off!
 
 "It's an emergency!" the Elf calling you explains.
-"The
-https://en.wikipedia.org/wiki/Soft_serve[soft serve]
-machine in the cafeteria on sub-basement 7 just failed and you're the only one that knows how to fix it!
+"The {uri-soft-serve}[soft serve] machine in the cafeteria on sub-basement 7 just failed
+and you're the only one that knows how to fix it!
 We've already dispatched a reindeer to your location to pick you up."
 
 You hear the sound of hooves landing on your balcony.

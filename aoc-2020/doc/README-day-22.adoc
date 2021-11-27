@@ -1,6 +1,9 @@
 == Day 22: Crab Combat
+:uri-aoc-puzzle-input: https://adventofcode.com/2020/day/22/input
+:uri-aoc-day-22: https://adventofcode.com/2019/day/22
+
 It only takes a few hours of sailing the ocean on a raft for boredom to sink in.
-Fortunately, you brought a small deck of https://adventofcode.com/2019/day/22[space cards]!
+Fortunately, you brought a small deck of {uri-aoc-day-22}[space cards]!
 You'd like to play a game of *Combat*, and there's even an opponent available:
 a small crab that climbed aboard your raft before you left.
 
@@ -125,7 +128,7 @@ So, once the game ends, the winning player's score is `*306*`.
 Play the small crab in a game of Combat using the two decks you just dealt.
 *What is the winning player's score?*
 
-To begin, https://adventofcode.com/2020/day/22/input[get your puzzle input].
+To begin, {uri-aoc-puzzle-input}[get your puzzle input].
 
 
 === Part Two

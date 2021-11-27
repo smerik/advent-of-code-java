@@ -1,4 +1,5 @@
 == Day 20: Jurassic Jigsaw
+:uri-aoc-puzzle-input: https://adventofcode.com/2020/day/20/input
 
 The high-speed train leaves the forest and quickly carries you south.
 You can even see a desert in the distance!
@@ -185,7 +186,7 @@ you get `1951 * 3079 * 2971 * 1171` = `*20899048083289*`.
 Assemble the tiles into an image.
 *What do you get if you multiply together the IDs of the four corner tiles?*
 
-To begin, https://adventofcode.com/2020/day/21/input[get your puzzle input].
+To begin, {uri-aoc-puzzle-input}[get your puzzle input].
 
 === Part Two
 Now, you're ready to *check the image for sea monsters*.

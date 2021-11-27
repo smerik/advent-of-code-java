@@ -1,3 +1,7 @@
+:uri-eric-wastl: http://was.tl/
+:uri-twitter: https://twitter.com/ericwastl
+:uri-aoc-support-2020: https://adventofcode.com/2020/support
+
 You spend all [yellow]*fifty stars* to cover the room deposit!
 
 As you fix the soft serve machine, Santa offers you a ride in his sleigh; maybe the resort has a chimney you can use...
@@ -6,16 +10,13 @@ As you fix the soft serve machine, Santa offers you a ride in his sleigh; maybe 
 Congratulations!
 You've finished every puzzle in Advent of Code 2020!
 I hope you had as much fun solving them as I had making them for you.
-I'd love to hear about your adventure; you can get in touch with me via contact info on
-http://was.tl/[my website] or through
-https://twitter.com/ericwastl[Twitter].
+I'd love to hear about your adventure; you can get in touch with me via contact info on {uri-eric-wastl}[my website]
+or through {uri-twitter}[Twitter].
 
-If you'd like to see more things like this in the future, please consider
-https://adventofcode.com/2020/support[supporting]
+If you'd like to see more things like this in the future, please consider {uri-aoc-support-2020}[supporting]
 Advent of Code and sharing it with others.
 
-To hear about future projects, you can follow me on
-https://twitter.com/ericwastl[Twitter].
+To hear about future projects, you can follow me on {uri-twitter}[Twitter].
 
 I've highlighted the easter eggs in each puzzle, just in case you missed any.
 Hover your mouse over them, and the easter egg will appear.
