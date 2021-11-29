@@ -34,6 +34,7 @@
         <!-- AOC event implementations -->
         <module>aoc-2019</module>
         <module>aoc-2020</module>
+        <module>aoc-2021</module>
     </modules>
 
     <dependencies>
