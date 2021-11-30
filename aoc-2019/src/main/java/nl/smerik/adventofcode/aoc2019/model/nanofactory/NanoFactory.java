@@ -1,8 +1,6 @@
 package nl.smerik.adventofcode.aoc2019.model.nanofactory;
 
 import lombok.Getter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,8 +8,6 @@ import java.util.Set;
 
 @Getter
 public class NanoFactory {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(NanoFactory.class);
 
     private Map<String, Reaction> reactionRules;
 

@@ -1,7 +1,6 @@
 package nl.smerik.adventofcode.aoc2019.model.asteroid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.awt.*;
 import java.io.FileReader;
@@ -11,9 +10,9 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 public final class AsteroidBeltMapParser {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AsteroidBeltMapParser.class);
     public static final char ASTEROID_TOKEN = '#';
 
 
@@ -21,7 +20,7 @@ public final class AsteroidBeltMapParser {
     }
 
     public static AsteroidBelt parse(final Path path) throws IOException {
-        LOGGER.info("Parsing asteroids map '{}'...", path);
+        LOG.info("Parsing asteroids map '{}'...", path);
         final List<Point> asteroids = new ArrayList<>();
 
         final LineNumberReader reader = new LineNumberReader(new FileReader(path.toFile()));
@@ -30,7 +29,7 @@ public final class AsteroidBeltMapParser {
             parseLine(currentLine).forEach(integer -> asteroids.add(new Point(integer, reader.getLineNumber() - 1)));
         }
 
-        LOGGER.info("Finished parsing map containing {} asteroids.", asteroids.size());
+        LOG.info("Finished parsing map containing {} asteroids.", asteroids.size());
         return new AsteroidBelt(asteroids);
     }
 

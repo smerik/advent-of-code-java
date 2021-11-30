@@ -1,13 +1,12 @@
 package nl.smerik.adventofcode.aoc2019.model.asteroid;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.io.IOException;
@@ -21,9 +20,8 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Disabled
+@Slf4j
 class AsteroidBeltTest {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(AsteroidBeltTest.class);
 
     private static AsteroidBelt asteroidBeltExample00;
     private static AsteroidBelt asteroidBeltExample01;
@@ -88,11 +86,11 @@ class AsteroidBeltTest {
 
     @Test
     void testFindSolutionDay10Part01() {
-        LOGGER.info("Finding solution day 10 - part 1...");
+        LOG.info("Finding solution day 10 - part 1...");
         final Point result = asteroidBeltDay10.findBestLocationForNewMonitoringStation();
-        LOGGER.info("Found solution!");
-        LOGGER.info("Best location : {}", result);
-        LOGGER.info("Number        : {}", asteroidBeltDay10.getNumberOfDetectedAsteroids(result));
+        LOG.info("Found solution!");
+        LOG.info("Best location : {}", result);
+        LOG.info("Number        : {}", asteroidBeltDay10.getNumberOfDetectedAsteroids(result));
         //Best location : java.awt.Point[x=26,y=36]
         //Number        : 347
     }

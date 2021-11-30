@@ -1,18 +1,16 @@
 package nl.smerik.adventofcode.aoc2019.model.arcade;
 
 import lombok.Getter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.awt.Point;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Getter
 public class Screen {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(Screen.class);
 
     private final Map<Point, Tile> tiles;
 
@@ -37,7 +35,7 @@ public class Screen {
             }
             builder.append(System.lineSeparator());
         }
-        LOGGER.debug("\n{}", builder);
+        LOG.debug("\n{}", builder);
     }
 
     public Tile findAny(Tile.Type type) {

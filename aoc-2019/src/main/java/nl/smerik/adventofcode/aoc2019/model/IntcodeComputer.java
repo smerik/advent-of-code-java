@@ -1,8 +1,7 @@
 package nl.smerik.adventofcode.aoc2019.model;
 
 import lombok.Getter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,9 +15,8 @@ import java.util.stream.Collectors;
 /**
  * INTCODE interpreter.
  */
+@Slf4j
 public class IntcodeComputer {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(IntcodeComputer.class);
 
     private final Queue<Long> input;
 
@@ -181,10 +179,10 @@ public class IntcodeComputer {
 
         private void allocate(final int i) {
             if (i + 1 > program.length) {
-                LOGGER.trace("Index {} exceeds total allocated memory size of {}; Allocating extra memory...",
+                LOG.trace("Index {} exceeds total allocated memory size of {}; Allocating extra memory...",
                         i, program.length);
                 this.program = Arrays.copyOf(program, i + 1);
-                LOGGER.trace("New allocated memory size: {}", program.length);
+                LOG.trace("New allocated memory size: {}", program.length);
             }
         }
 
@@ -225,10 +223,10 @@ public class IntcodeComputer {
     public List<Long> run(final List<Long> input) {
         this.pausedExecution = false;
         this.input.addAll(input);
-        LOGGER.trace("Running input {} on {}", input, memory);
+        LOG.trace("Running input {} on {}", input, memory);
         while (instructionPointer <= memory.get().length && memory.get(instructionPointer) != Opcode.HALT.code && !this.pausedExecution) {
             instructionPointer = runInstruction();
-            LOGGER.trace("New instruction pointer location: {}", instructionPointer);
+            LOG.trace("New instruction pointer location: {}", instructionPointer);
         }
         final List<Long> result = new ArrayList<>(this.output);
         this.output.clear();
@@ -237,7 +235,7 @@ public class IntcodeComputer {
 
     private int runInstruction() {
         final Opcode instruction = Opcode.valueOfOpcode((int) memory.get(instructionPointer));
-        LOGGER.trace("Instruction:{}", instruction);
+        LOG.trace("Instruction:{}", instruction);
 
         switch (instruction) {
             case ADD:
@@ -282,9 +280,9 @@ public class IntcodeComputer {
     }
 
     private int input() {
-        LOGGER.trace("Input:{}", input);
+        LOG.trace("Input:{}", input);
         if (input.peek() == null) {
-            LOGGER.trace("Pausing computer. Output will be:{}", output);
+            LOG.trace("Pausing computer. Output will be:{}", output);
             this.pausedExecution = true;
             return instructionPointer;
         }
@@ -295,7 +293,7 @@ public class IntcodeComputer {
 
     private int output() {
         output.add(getParameterValue(1));
-        LOGGER.trace("Output:{}", output);
+        LOG.trace("Output:{}", output);
         return instructionPointer + 2;
     }
 
@@ -331,7 +329,7 @@ public class IntcodeComputer {
 
     private int adjustRelativeBase() {
         relativeBase += getParameterValue(1);
-        LOGGER.trace("Modified relativeBase:{}", relativeBase);
+        LOG.trace("Modified relativeBase:{}", relativeBase);
         return instructionPointer + 2;
     }
 
@@ -341,7 +339,7 @@ public class IntcodeComputer {
 
     private int getParameterPointer(final int nthParameter) {
         final ParameterMode mode = ParameterMode.valueOfParameterMode((int) memory.get(instructionPointer), nthParameter);
-        LOGGER.trace("Mode:{}", mode);
+        LOG.trace("Mode:{}", mode);
         switch (mode) {
             // Parameters that an instruction writes to will never be in immediate mode.
             case IMMEDIATE:

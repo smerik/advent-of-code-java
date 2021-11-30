@@ -1,15 +1,13 @@
 package nl.smerik.adventofcode.aoc2019.model.image;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+@Slf4j
 public class Image {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(Image.class);
 
     private static final int PIXEL_COLOR_BLACK = 0;
     private static final int PIXEL_COLOR_WHITE = 1;
@@ -61,7 +59,7 @@ public class Image {
         final ImageLayer layer = layers.stream()
                 .min(Comparator.comparingInt(value -> value.getTotalNumberOfDigitsWithValue(0)))
                 .get();
-        LOGGER.info("Layer with the least number of 0 digits: {}", layer);
+        LOG.info("Layer with the least number of 0 digits: {}", layer);
         return layer.getTotalNumberOfDigitsWithValue(1) * layer.getTotalNumberOfDigitsWithValue(2);
     }
 
@@ -73,7 +71,7 @@ public class Image {
             }
             sb.append("\n");
         }
-        LOGGER.info(sb.toString());
+        LOG.info(sb.toString());
         return sb.toString();
     }
 }

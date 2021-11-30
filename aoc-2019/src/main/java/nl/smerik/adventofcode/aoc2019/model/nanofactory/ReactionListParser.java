@@ -1,7 +1,6 @@
 package nl.smerik.adventofcode.aoc2019.model.nanofactory;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -13,15 +12,14 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Slf4j
 public final class ReactionListParser {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(ReactionListParser.class);
 
     private ReactionListParser() {
     }
 
     public static NanoFactory parse(final Path path) throws IOException {
-        LOGGER.info("Parsing reaction list '{}'...", path);
+        LOG.info("Parsing reaction list '{}'...", path);
         final Set<Reaction> reactionRules = new HashSet<>();
 
         final BufferedReader reader = new BufferedReader(new FileReader(path.toFile()));
@@ -30,7 +28,7 @@ public final class ReactionListParser {
             reactionRules.add(parseLine(currentLine));
         }
 
-        LOGGER.info("Finished reaction list containing {} rules.", reactionRules.size());
+        LOG.info("Finished reaction list containing {} rules.", reactionRules.size());
         return new NanoFactory(reactionRules);
     }
 

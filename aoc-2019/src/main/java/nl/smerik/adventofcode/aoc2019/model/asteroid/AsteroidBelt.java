@@ -1,7 +1,6 @@
 package nl.smerik.adventofcode.aoc2019.model.asteroid;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -10,9 +9,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class AsteroidBelt {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(AsteroidBelt.class);
 
     private final List<Point> asteroids;
 
@@ -62,7 +60,7 @@ public class AsteroidBelt {
     }
 
     public Point findBestLocationForNewMonitoringStation() {
-        LOGGER.info("findBestLocationForNewMonitoringStation()...");
+        LOG.info("findBestLocationForNewMonitoringStation()...");
         // TODO: optimize implementation
         return asteroids
                 .stream()

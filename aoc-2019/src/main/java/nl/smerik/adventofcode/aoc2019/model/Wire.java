@@ -1,8 +1,6 @@
 package nl.smerik.adventofcode.aoc2019.model;
 
 import lombok.Getter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -11,8 +9,6 @@ import java.util.List;
 
 @Getter
 public class Wire {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(Wire.class);
 
     private List<Point> coordinates;
 

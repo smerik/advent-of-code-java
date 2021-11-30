@@ -2,8 +2,6 @@ package nl.smerik.adventofcode.aoc2019.model.jupiter;
 
 import lombok.Getter;
 import org.apache.commons.math3.util.Pair;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -11,8 +9,6 @@ import static org.apache.commons.math3.util.ArithmeticUtils.lcm;
 
 @Getter
 public class JupiterMoonTracker {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(JupiterMoonTracker.class);
 
     private final List<Moon> moons;
 

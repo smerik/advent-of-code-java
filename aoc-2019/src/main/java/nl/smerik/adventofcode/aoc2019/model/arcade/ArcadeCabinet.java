@@ -1,17 +1,15 @@
 package nl.smerik.adventofcode.aoc2019.model.arcade;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import nl.smerik.adventofcode.aoc2019.model.IntcodeComputer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.awt.Point;
 import java.util.List;
 
+@Slf4j
 @Getter
 public class ArcadeCabinet {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(ArcadeCabinet.class);
 
     private static final Point SCORE_POINT = new Point(-1, 0);
 
@@ -74,7 +72,7 @@ public class ArcadeCabinet {
             final Long value = output.get(i + 2);
             if (point.equals(SCORE_POINT)) {
                 this.score = value;
-                LOGGER.debug("New score: {}", this.score);
+                LOG.debug("New score: {}", this.score);
                 continue;
             }
             final Tile.Type type = Tile.Type.valueOfTileTypeId(Math.toIntExact(value));

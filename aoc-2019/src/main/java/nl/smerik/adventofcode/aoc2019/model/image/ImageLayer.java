@@ -2,14 +2,12 @@ package nl.smerik.adventofcode.aoc2019.model.image;
 
 import lombok.Getter;
 import lombok.ToString;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Getter
 @ToString
 public class ImageLayer {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(ImageLayer.class);
 
     private int[][] image;
 
@@ -17,7 +15,7 @@ public class ImageLayer {
                       final int width,
                       final int height) {
 
-        LOGGER.info("Creating new image layer for '{}'...", data);
+        LOG.info("Creating new image layer for '{}'...", data);
         image = new int[height][width];
         final int[] pixelValues = data.chars().map(Character::getNumericValue).toArray();
 
@@ -31,7 +29,7 @@ public class ImageLayer {
                 y++;
             }
         }
-        LOGGER.info("Created: {}", this);
+        LOG.info("Created: {}", this);
     }
 
     public int getTotalNumberOfDigitsWithValue(final int digit) {

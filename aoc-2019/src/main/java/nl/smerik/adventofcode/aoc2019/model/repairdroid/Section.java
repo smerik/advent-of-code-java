@@ -1,21 +1,19 @@
 package nl.smerik.adventofcode.aoc2019.model.repairdroid;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.DefaultUndirectedGraph;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.awt.Point;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @Getter
 public class Section {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(Section.class);
 
     private final RepairDroid droid;
     private final Map<Point, Cell> area;
@@ -70,7 +68,7 @@ public class Section {
             }
             builder.append(System.lineSeparator());
         }
-        LOGGER.info("Area:{}", builder);
+        LOG.info("Area:{}", builder);
     }
 
     public Cell getOxygenCell() {

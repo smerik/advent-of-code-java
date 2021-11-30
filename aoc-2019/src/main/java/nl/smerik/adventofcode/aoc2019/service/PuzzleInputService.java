@@ -1,7 +1,6 @@
 package nl.smerik.adventofcode.aoc2019.service;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
@@ -11,10 +10,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
+@Slf4j
 @Service
 public class PuzzleInputService {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(PuzzleInputService.class);
 
     public long[] readIntcodeProgram(final Resource resource) {
         try {
@@ -27,7 +25,7 @@ public class PuzzleInputService {
                     .mapToLong(Long::parseLong)
                     .toArray();
         } catch (IOException e) {
-            LOGGER.error("Houston: {}", e.getMessage(), e);
+            LOG.error("Houston: {}", e.getMessage(), e);
         }
         return new long[0];
     }

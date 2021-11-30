@@ -1,17 +1,15 @@
 package nl.smerik.adventofcode.aoc2019.day;
 
+import lombok.extern.slf4j.Slf4j;
 import nl.smerik.adventofcode.aoc2019.model.IntcodeComputer;
 import nl.smerik.adventofcode.aoc2019.service.PuzzleInputService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 public class Day02Service {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(Day02Service.class);
 
     private final PuzzleInputService puzzleInputService;
 
@@ -23,7 +21,7 @@ public class Day02Service {
     }
 
     public long getSolutionPart1() {
-        LOGGER.info("getSolutionPart1");
+        LOG.info("getSolutionPart1");
         final long[] program = puzzleInputService.readIntcodeProgram(resource);
         program[1] = 12;
         program[2] = 2;

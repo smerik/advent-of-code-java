@@ -1,16 +1,14 @@
 package nl.smerik.adventofcode.aoc2019.model.repairdroid;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import nl.smerik.adventofcode.aoc2019.model.IntcodeComputer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.awt.Point;
 import java.util.List;
 
+@Slf4j
 public class RepairDroid {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(RepairDroid.class);
 
     private final IntcodeComputer intcodeComputer;
 
@@ -127,9 +125,9 @@ public class RepairDroid {
      */
     public Cell move(final Direction direction) {
         final Point point = determinePosition(direction);
-        LOGGER.debug("Going to move from {} to {}...", this.currentPosition, point);
+        LOG.debug("Going to move from {} to {}...", this.currentPosition, point);
         final List<Long> output = this.intcodeComputer.run(direction.code);
-        LOGGER.debug("Move result: {}", output);
+        LOG.debug("Move result: {}", output);
         if (output.isEmpty()) {
             throw new IllegalStateException("Unexpected output on move '" + direction
                     + "' at position " + currentPosition);
@@ -138,7 +136,7 @@ public class RepairDroid {
         if (response == MoveResponseType.MOVED || response == MoveResponseType.MOVED_AND_FOUND_OXYGEN) {
             this.currentPosition = point;
         }
-        LOGGER.debug("New position: {}", this.currentPosition);
+        LOG.debug("New position: {}", this.currentPosition);
         return new Cell(point, response.getType());
     }
 
@@ -149,7 +147,7 @@ public class RepairDroid {
     }
 
     private void setFacingDirection(final Direction direction) {
-        LOGGER.debug("Changing facing direction from {} to {}...", this.facingDirection, direction);
+        LOG.debug("Changing facing direction from {} to {}...", this.facingDirection, direction);
         this.facingDirection = direction;
     }
 }

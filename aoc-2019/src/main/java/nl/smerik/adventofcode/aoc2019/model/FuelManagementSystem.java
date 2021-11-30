@@ -1,15 +1,13 @@
 package nl.smerik.adventofcode.aoc2019.model;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.awt.*;
 import java.util.*;
 import java.util.List;
 
+@Slf4j
 public class FuelManagementSystem {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(FuelManagementSystem.class);
 
     private List<Wire> wires;
 
@@ -27,7 +25,7 @@ public class FuelManagementSystem {
 
         final Set<Point> result = new HashSet<>(wire1);
         result.retainAll(wire2);
-        LOGGER.debug("Intersections:{}", result);
+        LOG.debug("Intersections:{}", result);
         return result;
     }
 

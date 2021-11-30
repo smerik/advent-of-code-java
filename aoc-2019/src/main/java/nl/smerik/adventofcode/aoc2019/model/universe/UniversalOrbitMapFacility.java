@@ -1,13 +1,11 @@
 package nl.smerik.adventofcode.aoc2019.model.universe;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.*;
 
+@Slf4j
 public class UniversalOrbitMapFacility {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(UniversalOrbitMapFacility.class);
 
     private final Map<String, SpaceObject> space = new HashMap<>();
 
@@ -53,8 +51,8 @@ public class UniversalOrbitMapFacility {
         final List<String> toCOM1 = getOrbitalTransfersToCOM(fromObjectId);
         final List<String> toCOM2 = getOrbitalTransfersToCOM(toObjectId);
 
-        LOGGER.debug("toCOM1:{}", toCOM1);
-        LOGGER.debug("toCOM2:{}", toCOM2);
+        LOG.debug("toCOM1:{}", toCOM1);
+        LOG.debug("toCOM2:{}", toCOM2);
 
         final HashSet<String> toCOMSet1 = new HashSet<>(toCOM1);
         toCOMSet1.removeAll(toCOM2);
@@ -63,8 +61,8 @@ public class UniversalOrbitMapFacility {
         toCOMSet2.removeAll(toCOM1);
         toCOMSet2.remove(toObjectId);
 
-        LOGGER.debug("toCOMSet1:{}", toCOMSet1);
-        LOGGER.debug("toCOMSet2:{}", toCOMSet2);
+        LOG.debug("toCOMSet1:{}", toCOMSet1);
+        LOG.debug("toCOMSet2:{}", toCOMSet2);
 
         return toCOMSet1.size() + toCOMSet2.size();
     }
