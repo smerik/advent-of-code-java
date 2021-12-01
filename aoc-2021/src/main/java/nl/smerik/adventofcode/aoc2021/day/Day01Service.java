@@ -15,8 +15,15 @@ public class Day01Service {
     private Resource resource;
 
     public Integer getSolutionPart1() {
+        return initSonarSweep().countIncreasingDepthMeasurements();
+    }
+
+    public Integer getSolutionPart2() {
+        return initSonarSweep().countIncreasingDepthSlidingWindowMeasurements();
+    }
+
+    private SonarSweep initSonarSweep() {
         final List<Integer> measurements = PuzzleInputParser.parseToInt(resource);
-        final SonarSweep sonarSweep = new SonarSweep(measurements);
-        return sonarSweep.countIncreasingDepthMeasurements();
+        return new SonarSweep(measurements);
     }
 }
