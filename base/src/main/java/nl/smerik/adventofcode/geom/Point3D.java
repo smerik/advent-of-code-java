@@ -12,10 +12,20 @@ public class Point3D {
     private int y;
     private int z;
 
+    public Point3D() {
+        this(0, 0, 0);
+    }
+
     public Point3D(final int x, final int y, final int z) {
         this.x = x;
         this.y = y;
         this.z = z;
+    }
+
+    public void translate(final int dx, final int dy, final int dz) {
+        this.x += dx;
+        this.y += dy;
+        this.z += dz;
     }
 
     public Set<Point3D> getNeighbours() {
