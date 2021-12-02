@@ -3,7 +3,7 @@ package nl.smerik.adventofcode.aoc2020.model.conway;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
-import nl.smerik.adventofcode.aoc2020.model.geom.Point3D;
+import nl.smerik.adventofcode.geom.Point3D;
 
 @Getter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)

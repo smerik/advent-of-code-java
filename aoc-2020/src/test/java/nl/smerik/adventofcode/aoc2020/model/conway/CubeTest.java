@@ -1,6 +1,6 @@
 package nl.smerik.adventofcode.aoc2020.model.conway;
 
-import nl.smerik.adventofcode.aoc2020.model.geom.Point3D;
+import nl.smerik.adventofcode.geom.Point3D;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;

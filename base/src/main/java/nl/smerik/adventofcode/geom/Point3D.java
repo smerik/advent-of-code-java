@@ -1,4 +1,4 @@
-package nl.smerik.adventofcode.aoc2020.model.geom;
+package nl.smerik.adventofcode.geom;
 
 import lombok.Data;
 
