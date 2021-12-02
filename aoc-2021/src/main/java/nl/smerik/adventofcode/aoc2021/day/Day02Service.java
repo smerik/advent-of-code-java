@@ -18,6 +18,13 @@ public class Day02Service {
         final List<String> commands = PuzzleInputParser.parseToString(resource);
         final Submarine submarine = new Submarine();
         submarine.move(commands);
-        return submarine.calculateSolutionDay2Part1();
+        return submarine.calculateSolutionDay2();
+    }
+
+    public Integer getSolutionPart2() {
+        final List<String> commands = PuzzleInputParser.parseToString(resource);
+        final Submarine submarine = new Submarine();
+        submarine.moveByAim(commands);
+        return submarine.calculateSolutionDay2();
     }
 }
