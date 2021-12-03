@@ -18,4 +18,9 @@ public class Day03Service {
         final List<String> binaryNumbers = PuzzleInputParser.parseToString(resource);
         return new DiagnosticReport(binaryNumbers).calculatePowerConsumption();
     }
+
+    public Integer getSolutionPart2() {
+        final List<String> binaryNumbers = PuzzleInputParser.parseToString(resource);
+        return new DiagnosticReport(binaryNumbers).calculateLifeSupportRate();
+    }
 }

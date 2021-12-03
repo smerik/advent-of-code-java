@@ -62,4 +62,31 @@ class DiagnosticReportTest {
         final DiagnosticReport report = new DiagnosticReport(REPORT_EXAMPLE_PART_01);
         assertEquals(198, report.calculatePowerConsumption());
     }
+
+//    @Test
+//    void testMap() {
+//        final DiagnosticReport report = new DiagnosticReport(REPORT_EXAMPLE_PART_01);
+//        final Map<Integer, List<String>> result = report.filterBy(REPORT_EXAMPLE_PART_01, 0);
+//        assertEquals(List.of("00100", "01111", "00111", "00010", "01010"), result.get(0));
+//        assertEquals(List.of("11110", "10110", "10111", "10101", "11100", "10000", "11001"), result.get(1));
+//    }
+
+
+    @Test
+    void testDetermineOxygenGeneratorRate() {
+        final DiagnosticReport report = new DiagnosticReport(REPORT_EXAMPLE_PART_01);
+        assertEquals(23, report.determineOxygenGeneratorRate());
+    }
+
+    @Test
+    void testDetermineCO2ScrubbingRate() {
+        final DiagnosticReport report = new DiagnosticReport(REPORT_EXAMPLE_PART_01);
+        assertEquals(10, report.determineCO2ScrubbingRate());
+    }
+
+    @Test
+    void testCalculateLifeSupportRating() {
+        final DiagnosticReport report = new DiagnosticReport(REPORT_EXAMPLE_PART_01);
+        assertEquals(230, report.calculateLifeSupportRate());
+    }
 }
