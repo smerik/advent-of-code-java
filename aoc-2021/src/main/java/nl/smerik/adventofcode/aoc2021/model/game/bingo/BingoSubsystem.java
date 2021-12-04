@@ -19,8 +19,8 @@ public class BingoSubsystem {
         bingoCards = parseBingoCards(input);
     }
 
-    private Queue<Integer> parseRandomNumbers(final String s) {
-        return Arrays.stream(s.split(","))
+    private Queue<Integer> parseRandomNumbers(final String line) {
+        return Arrays.stream(line.split(","))
                 .mapToInt(Integer::valueOf)
                 .boxed()
                 .collect(Collectors.toCollection(ArrayDeque::new));
