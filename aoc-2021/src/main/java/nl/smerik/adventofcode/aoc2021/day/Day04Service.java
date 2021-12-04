@@ -19,4 +19,10 @@ public class Day04Service {
         final BingoSubsystem bingo = new BingoSubsystem(input);
         return bingo.playUntilBingo().calculateScore();
     }
+
+    public Integer getSolutionPart2() {
+        final List<String> input = PuzzleInputParser.parseToString(resource);
+        final BingoSubsystem bingo = new BingoSubsystem(input);
+        return bingo.findLastCompletedCard().calculateScore();
+    }
 }

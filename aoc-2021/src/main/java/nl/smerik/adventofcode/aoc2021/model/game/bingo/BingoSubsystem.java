@@ -45,21 +45,45 @@ public class BingoSubsystem {
     }
 
     /**
-     * Draws the random numbers until one of the card is completed.
+     * Draws the random numbers until one of the cards is completed.
      * The completed card will be returned.
      *
-     * @return the card that is completed
-     * @throws IllegalStateException when all random numbers have been drawn but no card is completed
+     * @return the first winning card
+     * @throws IllegalStateException when there is no completed card
      */
     public BingoCard playUntilBingo() {
-        while (!randomNumbers.isEmpty()) {
-            final Integer drawnNumber = randomNumbers.poll();
-            for (final BingoCard bingoCard : bingoCards) {
+        return play(true).get(0);
+    }
+
+    /**
+     * Draws the random numbers until all cards are completed.
+     *
+     * @return the last winning card
+     * @throws IllegalStateException when there is no completed card
+     */
+    public BingoCard findLastCompletedCard() {
+        final List<BingoCard> completedCards = play(false);
+        return completedCards.get(completedCards.size() - 1);
+    }
+
+    private List<BingoCard> play(final boolean stopAtFirstBingo) {
+        final List<BingoCard> completedCards = new ArrayList<>();
+        final Set<BingoCard> cardsToMark = new HashSet<>(bingoCards);
+        while (!randomNumbers.isEmpty() && !cardsToMark.isEmpty()) {
+            final int drawnNumber = randomNumbers.poll();
+            for (final BingoCard bingoCard : cardsToMark) {
                 if (bingoCard.markNumber(drawnNumber)) {
-                    return bingoCard;
+                    if (stopAtFirstBingo) {
+                        return Collections.singletonList(bingoCard);
+                    }
+                    completedCards.add(bingoCard);
                 }
             }
+            completedCards.forEach(cardsToMark::remove);
         }
-        throw new IllegalStateException("No completed card!");
+        if (completedCards.isEmpty()) {
+            throw new IllegalStateException("No completed card!");
+        }
+        return completedCards;
     }
 }

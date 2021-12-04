@@ -48,4 +48,13 @@ class BingoSubsystemTest {
         assertNotNull(card);
         assertEquals(4512, card.calculateScore());
     }
+
+    @Test
+    void testFindLastCompletedCard() {
+        final BingoSubsystem bingo = new BingoSubsystem(EXAMPLE_INPUT_PART_01);
+        final BingoCard card = bingo.findLastCompletedCard();
+        assertEquals(6, bingo.getRandomNumbers().peek());
+        assertNotNull(card);
+        assertEquals(1924, card.calculateScore());
+    }
 }
