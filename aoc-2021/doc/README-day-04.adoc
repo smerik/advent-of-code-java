@@ -84,7 +84,7 @@ To guarantee victory against the giant squid, figure out which board will win fi
 To begin, {uri-aoc-puzzle-input}[get your puzzle input].
 
 
-== Part Two
+=== Part Two
 On the other hand, it might be wise to try a different strategy: let the giant squid win.
 
 You aren't sure how many bingo boards a giant squid could play at once, so rather than waste time counting its arms,
