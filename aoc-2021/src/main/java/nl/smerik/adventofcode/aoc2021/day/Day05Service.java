@@ -16,6 +16,11 @@ public class Day05Service {
 
     public Long getSolutionPart1() {
         final List<String> input = PuzzleInputParser.parseToString(resource);
-        return new HydrothermalVent(input).countOverlappingPoints();
+        return new HydrothermalVent(input, false).countOverlappingPoints();
+    }
+
+    public Long getSolutionPart2() {
+        final List<String> input = PuzzleInputParser.parseToString(resource);
+        return new HydrothermalVent(input, true).countOverlappingPoints();
     }
 }
