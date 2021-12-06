@@ -1,20 +1,23 @@
 package nl.smerik.adventofcode.aoc2021.model.fish;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
+import lombok.Getter;
 
+import java.util.Arrays;
+import java.util.List;
+
+@Getter
 public class LanternfishSchool {
 
-    private final Set<Lanternfish> lanternfishes;
+    private final long[] lanternfishCountByTimer;
 
     public LanternfishSchool(final List<Integer> ages) {
-        lanternfishes = parseAges(ages);
+        lanternfishCountByTimer = parseAges(ages);
     }
 
-    private Set<Lanternfish> parseAges(final List<Integer> ages) {
-        return ages.stream().map(Lanternfish::new).collect(Collectors.toSet());
+    private long[] parseAges(final List<Integer> ages) {
+        final long[] result = new long[9];
+        ages.forEach(age -> result[age]++);
+        return result;
     }
 
     /**
@@ -25,14 +28,18 @@ public class LanternfishSchool {
      * @param days the amount of days to simulate
      * @return the total amount of fish
      */
-    public int simulate(final int days) {
+    public long simulate(final int days) {
         for (int i = 0; i < days; i++) {
-            final Set<Lanternfish> newBornFish = lanternfishes.stream()
-                    .map(Lanternfish::simulate)
-                    .flatMap(Optional::stream)
-                    .collect(Collectors.toSet());
-            lanternfishes.addAll(newBornFish);
+            final long fishCount = lanternfishCountByTimer[0];
+            //noinspection SuspiciousSystemArraycopy
+            System.arraycopy(lanternfishCountByTimer, 1, lanternfishCountByTimer, 0, 8);
+            lanternfishCountByTimer[6] += fishCount; // After another day, its internal timer would reset to 6,
+            lanternfishCountByTimer[8] = fishCount;  // and it would create a new lanternfish with an internal timer of 8.
         }
-        return lanternfishes.size();
+        return countTotalFishes();
+    }
+
+    public long countTotalFishes() {
+        return Arrays.stream(lanternfishCountByTimer).sum();
     }
 }

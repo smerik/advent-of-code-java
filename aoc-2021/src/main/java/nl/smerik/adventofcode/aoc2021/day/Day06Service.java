@@ -15,9 +15,17 @@ public class Day06Service {
     @Value("classpath:input/day-06.txt")
     private Resource resource;
 
-    public Integer getSolutionPart1() {
+    public Long getSolutionPart1() {
+        return initLanternfishSchool().simulate(80);
+    }
+
+    public Long getSolutionPart2() {
+        return initLanternfishSchool().simulate(256);
+    }
+
+    private LanternfishSchool initLanternfishSchool() {
         final List<String> input = PuzzleInputParser.parseToString(resource);
         final List<Integer> ages = Arrays.stream(input.get(0).split(",")).mapToInt(Integer::valueOf).boxed().toList();
-        return new LanternfishSchool(ages).simulate(80);
+        return new LanternfishSchool(ages);
     }
 }
