@@ -16,8 +16,16 @@ public class Day07Service {
     private Resource resource;
 
     public Integer getSolutionPart1() {
+        return initSubmarine().determineLowestFuel(true);
+    }
+
+    public Integer getSolutionPart2() {
+        return initSubmarine().determineLowestFuel(false);
+    }
+
+    private CrabSubmarine initSubmarine() {
         final List<String> input = PuzzleInputParser.parseToString(resource);
         final List<Integer> positions = Arrays.stream(input.get(0).split(",")).mapToInt(Integer::valueOf).boxed().toList();
-        return new CrabSubmarine(positions).determineLowestFuel();
+        return new CrabSubmarine(positions);
     }
 }
