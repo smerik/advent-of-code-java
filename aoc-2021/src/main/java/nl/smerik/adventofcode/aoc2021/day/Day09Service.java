@@ -19,4 +19,10 @@ public class Day09Service {
         final CaveMap caveMap = new CaveMap(input);
         return caveMap.sumRiskLevels();
     }
+
+    public Integer getSolutionPart2() {
+        final List<String> input = PuzzleInputParser.parseToString(resource);
+        final CaveMap caveMap = new CaveMap(input);
+        return caveMap.multiplyThreeLargestBasins();
+    }
 }

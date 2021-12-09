@@ -6,6 +6,7 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Getter
 public class CaveMap {
@@ -41,24 +42,73 @@ public class CaveMap {
 
     private boolean isLowPoint(final Point point) {
         final int lowestAdjacent = getAdjacentLocations(point).stream()
-                .map(heightByLocations::get)
-                .filter(Objects::nonNull)
-                .mapToInt(v -> v)
-                .min()
-                .orElseThrow();
+                                                              .mapToInt(heightByLocations::get)
+                                                              .min()
+                                                              .orElseThrow();
         return heightByLocations.get(point) < lowestAdjacent;
     }
 
     private Set<Point> getAdjacentLocations(final Point point) {
-        return Set.of(
-                new Point(point.x, point.y - 1),
-                new Point(point.x, point.y + 1),
-                new Point(point.x - 1, point.y),
-                new Point(point.x + 1, point.y)
-        );
+        return Stream.of(new Point(point.x, point.y - 1),
+                        new Point(point.x, point.y + 1),
+                        new Point(point.x - 1, point.y),
+                        new Point(point.x + 1, point.y))
+                     .filter(heightByLocations::containsKey)
+                     .collect(Collectors.toSet());
     }
 
     public int sumRiskLevels() {
         return findLowPoints().stream().mapToInt(heightByLocations::get).map(CaveMap::calculateRiskLevel).sum();
+    }
+
+    public Integer multiplyThreeLargestBasins() {
+        return determineThreeLargestBasins().stream().reduce(1, (a, b) -> a * b);
+    }
+
+    public List<Integer> determineThreeLargestBasins() {
+        return findLowPoints().stream().map(this::calculateBasinSize).sorted(Comparator.reverseOrder()).limit(3).toList();
+    }
+
+    public int calculateBasinSize(final Point lowPoint) {
+        return findBasinLocations(lowPoint).size();
+    }
+
+    // TODO: refactor because this code is really ugly
+    public Set<Point> findBasinLocations(final Point lowPoint) {
+        final Set<Point> result = new HashSet<>();
+        result.add(lowPoint);
+
+        final Set<Point> checkedLocations = new HashSet<>();
+        checkedLocations.add(lowPoint);
+
+        final Set<Point> locationsToCheck = new HashSet<>(getAdjacentLocations(lowPoint));
+        while (!locationsToCheck.isEmpty()) {
+            final Set<Point> locationsFlowing = new HashSet<>();
+            for (final Point location : locationsToCheck) {
+                if (isLocationFlowingToLowPoint(location, lowPoint)) {
+                    locationsFlowing.add(location);
+                }
+                checkedLocations.add(location);
+            }
+            result.addAll(locationsFlowing);
+            locationsToCheck.clear();
+            for (final Point location : locationsFlowing) {
+                locationsToCheck.addAll(getAdjacentLocations(location));
+                locationsToCheck.removeAll(checkedLocations);
+            }
+        }
+        return result;
+    }
+
+    private boolean isLocationFlowingToLowPoint(final Point location, final Point lowPoint) {
+        final Integer locationHeight = heightByLocations.get(location);
+        if (locationHeight == null) {
+            return false;
+        }
+
+        if (locationHeight == 9) {
+            return false;
+        }
+        return locationHeight > heightByLocations.get(lowPoint);
     }
 }
