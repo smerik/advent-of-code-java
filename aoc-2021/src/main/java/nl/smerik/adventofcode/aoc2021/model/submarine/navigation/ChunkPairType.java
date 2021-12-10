@@ -8,14 +8,14 @@ import java.util.Map;
 @Getter
 public enum ChunkPairType {
 
-    ROUND_OPEN('(', false, 0),
-    ROUND_CLOSE(')', true, 3),
-    SQUARE_OPEN('[', false, 0),
-    SQUARE_CLOSE(']', true, 57),
-    CURLY_OPEN('{', false, 0),
-    CURLY_CLOSE('}', true, 1197),
-    ANGLE_OPEN('<', false, 0),
-    ANGLE_CLOSE('>', true, 25137);
+    ROUND_OPEN('(', false, 0, 0),
+    ROUND_CLOSE(')', true, 3, 1),
+    SQUARE_OPEN('[', false, 0, 0),
+    SQUARE_CLOSE(']', true, 57, 2),
+    CURLY_OPEN('{', false, 0, 0),
+    CURLY_CLOSE('}', true, 1197, 3),
+    ANGLE_OPEN('<', false, 0, 0),
+    ANGLE_CLOSE('>', true, 25137, 4);
 
     private static final Map<ChunkPairType, ChunkPairType> matchesWithType = new EnumMap<>(ChunkPairType.class);
     static {
@@ -31,12 +31,14 @@ public enum ChunkPairType {
 
     private final char bracket;
     private final boolean closingCharacter;
-    private final int points;
+    private final int syntaxPoints;
+    private final int completionPoints;
 
-    ChunkPairType(final char bracket, final boolean closingCharacter, final int points) {
+    ChunkPairType(final char bracket, final boolean closingCharacter, final int syntaxPoints, final int completionPoints) {
         this.bracket = bracket;
         this.closingCharacter = closingCharacter;
-        this.points = points;
+        this.syntaxPoints = syntaxPoints;
+        this.completionPoints = completionPoints;
     }
 
     public static ChunkPairType valueOfBracket(final char bracket) {
@@ -49,6 +51,10 @@ public enum ChunkPairType {
     }
 
     public boolean matchesWith(final ChunkPairType type) {
-        return matchesWithType.get(this) == type;
+        return getMatchingBracketType() == type;
+    }
+
+    public ChunkPairType getMatchingBracketType() {
+        return matchesWithType.get(this);
     }
 }

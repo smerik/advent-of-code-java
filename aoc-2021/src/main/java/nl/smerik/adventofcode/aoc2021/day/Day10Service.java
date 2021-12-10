@@ -18,4 +18,9 @@ public class Day10Service {
         final List<String> input = PuzzleInputParser.parseToString(resource);
         return NavigationSubsystemUtil.calculateTotalSyntaxErrorScore(input);
     }
+
+    public Long getSolutionPart2() {
+        final List<String> input = PuzzleInputParser.parseToString(resource);
+        return NavigationSubsystemUtil.determineMedianOfCompletionScores(input);
+    }
 }
