@@ -1,5 +1,6 @@
 package nl.smerik.adventofcode.aoc2021.model.octopus;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -286,5 +287,11 @@ class DumboOctopusCavernTest {
     void testTotalFlashCount(final List<String> measurements, final int steps, final int expectedFlashCount) {
         final DumboOctopusCavern cavern = new DumboOctopusCavern(measurements);
         assertEquals(expectedFlashCount, cavern.simulateSteps(steps));
+    }
+
+    @Test
+    void testFindFirstStepAllOctopusesFlashSimultaneously() {
+        final DumboOctopusCavern cavern = new DumboOctopusCavern(EXAMPLE_02);
+        assertEquals(195, cavern.findFirstStepAllOctopusesFlashSimultaneously());
     }
 }

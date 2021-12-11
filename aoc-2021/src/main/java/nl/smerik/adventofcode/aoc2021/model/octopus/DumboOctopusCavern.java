@@ -84,4 +84,13 @@ public class DumboOctopusCavern {
                 new Point(point.x + 1, point.y + 1)
         ).collect(Collectors.toSet());
     }
+
+    public int findFirstStepAllOctopusesFlashSimultaneously() {
+        int step = 0;
+        while (octopusesByLocation.values().stream().anyMatch(octopus -> octopus.getEnergyLevel() != 0)) {
+            step++;
+            simulate(step);
+        }
+        return step;
+    }
 }

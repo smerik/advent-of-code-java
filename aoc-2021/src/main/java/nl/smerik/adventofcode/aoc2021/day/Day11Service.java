@@ -15,8 +15,15 @@ public class Day11Service {
     private Resource resource;
 
     public Integer getSolutionPart1() {
+        return initCavern().simulateSteps(100);
+    }
+
+    public Integer getSolutionPart2() {
+        return initCavern().findFirstStepAllOctopusesFlashSimultaneously();
+    }
+
+    private DumboOctopusCavern initCavern() {
         final List<String> lines = PuzzleInputParser.parseToString(resource);
-        final DumboOctopusCavern cavern = new DumboOctopusCavern(lines);
-        return cavern.simulateSteps(100);
+        return new DumboOctopusCavern(lines);
     }
 }
