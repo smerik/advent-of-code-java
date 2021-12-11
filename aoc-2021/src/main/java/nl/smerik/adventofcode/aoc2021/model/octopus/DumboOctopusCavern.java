@@ -37,7 +37,7 @@ public class DumboOctopusCavern {
 
     /**
      * Simulates the energy level increments for given amounts of steps
-     * and returns the total flashes that occured.
+     * and returns the total flashes that occurred.
      *
      * @param steps the amount of steps to simulate
      * @return the total flash count
