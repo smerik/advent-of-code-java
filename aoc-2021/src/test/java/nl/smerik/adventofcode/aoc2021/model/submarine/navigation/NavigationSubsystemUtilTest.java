@@ -64,7 +64,7 @@ class NavigationSubsystemUtilTest {
 
     @Test
     void testCalculateCompletionScores() {
-        assertEquals(List.of(288957, 5566, 1480781, 995444, 294), NavigationSubsystemUtil.calculateCompletionScores(SUBSYSTEM_EXAMPLE_01));
+        assertEquals(List.of(288957L, 5566L, 1480781L, 995444L, 294L), NavigationSubsystemUtil.calculateCompletionScores(SUBSYSTEM_EXAMPLE_01));
     }
 
     private static Stream<Arguments> calculateCompletionScore() {
