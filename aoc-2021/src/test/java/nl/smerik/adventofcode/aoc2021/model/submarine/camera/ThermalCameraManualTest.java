@@ -77,4 +77,22 @@ class ThermalCameraManualTest {
         final ThermalCameraManual manual = new ThermalCameraManual(EXAMPLE_01);
         assertEquals(18L, manual.countDots());
     }
+
+    @Test
+    void testRenderPaper() {
+        final String expectedResult =
+                // @formatter:off
+                "#####" + System.lineSeparator() +
+                "#...#" + System.lineSeparator() +
+                "#...#" + System.lineSeparator() +
+                "#...#" + System.lineSeparator() +
+                "#####" + System.lineSeparator() +
+                "....." + System.lineSeparator() +
+                "....." + System.lineSeparator();
+                // @formatter:on
+        final ThermalCameraManual manual = new ThermalCameraManual(EXAMPLE_01);
+        manual.foldByInstructions(0);
+
+        assertEquals(expectedResult, manual.renderPaper());
+    }
 }

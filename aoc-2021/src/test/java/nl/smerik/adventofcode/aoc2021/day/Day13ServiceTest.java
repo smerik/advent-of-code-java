@@ -16,4 +16,19 @@ class Day13ServiceTest {
     void getSolutionPart1() {
         assertEquals(807, dayService.getSolutionPart1());
     }
+
+    @Test
+    void getSolutionPart2() {
+        final String expectedResult =
+                // @formatter:off
+                "#.....##..#..#.####..##..#..#.####...##." + System.lineSeparator() +
+                "#....#..#.#..#.#....#..#.#..#.#.......#." + System.lineSeparator() +
+                "#....#....####.###..#....#..#.###.....#." + System.lineSeparator() +
+                "#....#.##.#..#.#....#.##.#..#.#.......#." + System.lineSeparator() +
+                "#....#..#.#..#.#....#..#.#..#.#....#..#." + System.lineSeparator() +
+                "####..###.#..#.####..###..##..####..##.." + System.lineSeparator();
+                // @formatter:on
+        // Expected result should read: LGHEGUEJ
+        assertEquals(expectedResult, dayService.getSolutionPart2());
+    }
 }

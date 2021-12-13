@@ -145,4 +145,19 @@ public class ThermalCameraManual {
         }
         return result;
     }
+
+    public String renderPaper() {
+        final StringBuilder builder = new StringBuilder();
+        for (final char[] line : this.transparentPaper) {
+            for (final char character : line) {
+                if (character == DOT_CHARACTER) {
+                    builder.append(character);
+                } else {
+                    builder.append('.');
+                }
+            }
+            builder.append(System.lineSeparator());
+        }
+        return builder.toString();
+    }
 }

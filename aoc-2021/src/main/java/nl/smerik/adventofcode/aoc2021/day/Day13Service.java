@@ -20,4 +20,11 @@ public class Day13Service {
         manual.foldByInstructions(1);
         return manual.countDots();
     }
+
+    public String getSolutionPart2() {
+        final List<String> lines = PuzzleInputParser.parseToString(resource);
+        final ThermalCameraManual manual = new ThermalCameraManual(lines);
+        manual.foldByInstructions(0);
+        return manual.renderPaper();
+    }
 }
