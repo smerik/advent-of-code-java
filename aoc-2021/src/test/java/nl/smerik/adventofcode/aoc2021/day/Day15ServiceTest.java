@@ -15,4 +15,9 @@ class Day15ServiceTest {
     void getSolutionPart1() {
         Assertions.assertEquals(458, dayService.getSolutionPart1());
     }
+
+    @Test
+    void getSolutionPart2() {
+        Assertions.assertEquals(2800, dayService.getSolutionPart2());
+    }
 }

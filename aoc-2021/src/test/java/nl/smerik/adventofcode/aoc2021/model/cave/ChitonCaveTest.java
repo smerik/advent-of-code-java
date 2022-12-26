@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ChitonCaveTest {
 
-    private static final List<String> RISK_MAP_EXAMPLE_01 = List.of(
+    private static final List<String> RISK_TILE_EXAMPLE_01 = List.of(
             "1163751742",
             "1381373672",
             "2136511328",
@@ -40,7 +40,7 @@ class ChitonCaveTest {
     @Test
     void findPathWithLowestTotalRisk() {
         // Given
-        final ChitonCave map = new ChitonCave(RISK_MAP_EXAMPLE_01);
+        final ChitonCave map = new ChitonCave(RISK_TILE_EXAMPLE_01);
         // When
         final List<Point> pathWithLowestTotalRisk = map.findPathWithLowestTotalRisk();
         // Then
@@ -49,7 +49,14 @@ class ChitonCaveTest {
 
     @Test
     void calculateTotalRisk() {
-        final ChitonCave map = new ChitonCave(RISK_MAP_EXAMPLE_01);
+        final ChitonCave map = new ChitonCave(RISK_TILE_EXAMPLE_01);
         assertEquals(40, map.calculateTotalRisk());
+    }
+
+    @Test
+    void calculateTotalRiskUsingTileDimensionMultiplier() {
+        final ChitonCave cave = new ChitonCave(RISK_TILE_EXAMPLE_01, 5);
+        // then
+        assertEquals(315, cave.calculateTotalRisk());
     }
 }

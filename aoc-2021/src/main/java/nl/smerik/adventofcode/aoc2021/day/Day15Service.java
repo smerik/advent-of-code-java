@@ -19,4 +19,10 @@ public class Day15Service {
         final ChitonCave cave = new ChitonCave(lines);
         return cave.calculateTotalRisk();
     }
+
+    public Long getSolutionPart2() {
+        final List<String> lines = PuzzleInputParser.parseToString(resource);
+        final ChitonCave cave = new ChitonCave(lines, 5);
+        return cave.calculateTotalRisk();
+    }
 }
