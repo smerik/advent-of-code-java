@@ -16,11 +16,12 @@ public class Day01Service {
 
 
     public Integer getSolutionPart1() {
-        List<String> calibrationLines = PuzzleInputParser.parseToString(resource);
-        return CalibrationUtil.sumAllCalibrationValues(calibrationLines);
+        final List<String> calibrationLines = PuzzleInputParser.parseToString(resource);
+        return CalibrationUtil.sumAllCalibrationValues(calibrationLines, false);
     }
 
-    public Object getSolutionPart2() {
-        return null;
+    public Integer getSolutionPart2() {
+        final List<String> calibrationLines = PuzzleInputParser.parseToString(resource);
+        return CalibrationUtil.sumAllCalibrationValues(calibrationLines, true);
     }
 }
