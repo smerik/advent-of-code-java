@@ -65,4 +65,24 @@ public class CubeGame {
         }
         return true;
     }
+
+    public int calcPowerOfFewestNumberOfGames() {
+        return determineFewestNumberOfCubes().values().stream().reduce(1, (a, b) -> a * b);
+    }
+
+    public Map<String, Integer> determineFewestNumberOfCubes() {
+        final Map<String, Integer> result = new HashMap<>();
+        for (Map<String, Integer> subset : subsets) {
+            for (Map.Entry<String, Integer> cubeColorCount : subset.entrySet()) {
+                if (!result.containsKey(cubeColorCount.getKey())) {
+                    result.put(cubeColorCount.getKey(), cubeColorCount.getValue());
+                    continue;
+                }
+                if (cubeColorCount.getValue() > result.get(cubeColorCount.getKey())) {
+                    result.put(cubeColorCount.getKey(), cubeColorCount.getValue());
+                }
+            }
+        }
+        return result;
+    }
 }

@@ -19,4 +19,8 @@ public class CubeGameAdministrator {
     public int calcSumOfIDsForPossibleGames(Map<String, Integer> gameCubeSet) {
         return games.stream().filter(game -> game.isGamePossible(gameCubeSet)).mapToInt(CubeGame::getId).sum();
     }
+
+    public int calcSumOfPowerOfFewestNumberOfGames() {
+        return games.stream().mapToInt(CubeGame::calcPowerOfFewestNumberOfGames).sum();
+    }
 }

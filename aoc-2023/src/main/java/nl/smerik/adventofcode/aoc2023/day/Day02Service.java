@@ -23,6 +23,8 @@ public class Day02Service {
     }
 
     public Integer getSolutionPart2() {
-        return null;
+        final List<String> gameLines = PuzzleInputParser.parseToString(resource);
+        final CubeGameAdministrator administrator = new CubeGameAdministrator(gameLines);
+        return administrator.calcSumOfPowerOfFewestNumberOfGames();
     }
 }
