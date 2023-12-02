@@ -9,13 +9,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class CalibrationUtilTest {
 
     private final List<String> example01Part01 = List.of(
+            // @formatter:off
             "1abc2",
             "pqr3stu8vwx",
             "a1b2c3d4e5f",
             "treb7uchet"
+            // @formatter:on
     );
 
     private final List<String> example02Part02 = List.of(
+            // @formatter:off
             "two1nine",
             "eightwothree",
             "abcone2threexyz",
@@ -23,6 +26,7 @@ class CalibrationUtilTest {
             "4nineeightseven2",
             "zoneight234",
             "7pqrstsixteen"
+            // @formatter:on
     );
 
     @Test
