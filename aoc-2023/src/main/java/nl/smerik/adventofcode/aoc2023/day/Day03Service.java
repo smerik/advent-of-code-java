@@ -11,16 +11,18 @@ import java.util.List;
 @Service
 public class Day03Service {
 
-    @Value("classpath:input/day-03.txt")
-    private Resource resource;
+    private final EngineSchematic schematic;
+
+    public Day03Service(@Value("classpath:input/day-03.txt") final Resource resource) {
+        final List<String> lines = PuzzleInputParser.parseToString(resource);
+        this.schematic = new EngineSchematic(lines);
+    }
 
     public Integer getSolutionPart1() {
-        final List<String> lines = PuzzleInputParser.parseToString(resource);
-        final EngineSchematic schematic = new EngineSchematic(lines);
         return schematic.sumPartNumbers();
     }
 
     public Integer getSolutionPart2() {
-        return null;
+        return schematic.sumGearRatios();
     }
 }

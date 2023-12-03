@@ -29,18 +29,23 @@ class EngineSchematicTest {
 
     @Test
     void testValidateNonPartNumbers() {
-        Set<Integer> numbers = schema.getSchemaNumbers().stream().filter(schemaNumber -> !schemaNumber.isEnginePart()).map(EngineSchematic.SchemaNumber::getNumber).collect(Collectors.toSet());
+        Set<Integer> numbers = schema.getSchemaNumbers().values().stream().filter(schemaNumber -> !schemaNumber.isEnginePart()).map(EngineSchematic.SchemaNumber::getNumber).collect(Collectors.toSet());
         assertEquals(Set.of(114, 58), numbers);
     }
 
     @Test
     void testValidatePartNumbers() {
-        Set<Integer> numbers = schema.getSchemaNumbers().stream().filter(EngineSchematic.SchemaNumber::isEnginePart).map(EngineSchematic.SchemaNumber::getNumber).collect(Collectors.toSet());
+        Set<Integer> numbers = schema.getSchemaNumbers().values().stream().filter(EngineSchematic.SchemaNumber::isEnginePart).map(EngineSchematic.SchemaNumber::getNumber).collect(Collectors.toSet());
         assertEquals(Set.of(467, 35, 633, 617, 592, 755, 664, 598), numbers);
     }
 
     @Test
     void testSumNumbers() {
         assertEquals(4361, schema.sumPartNumbers());
+    }
+
+    @Test
+    void testCalcGearRatio() {
+        assertEquals(467835, schema.sumGearRatios());
     }
 }
