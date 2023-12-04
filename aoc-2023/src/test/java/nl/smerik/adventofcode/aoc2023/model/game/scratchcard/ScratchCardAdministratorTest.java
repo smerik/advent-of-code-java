@@ -22,4 +22,10 @@ class ScratchCardAdministratorTest {
         final ScratchCardAdministrator administrator = new ScratchCardAdministrator(CARDS_EXAMPLE_01);
         assertEquals(13, administrator.sumPoints());
     }
+
+    @Test
+    void sumCards() {
+        final ScratchCardAdministrator administrator = new ScratchCardAdministrator(CARDS_EXAMPLE_01);
+        assertEquals(30, administrator.sumCards());
+    }
 }

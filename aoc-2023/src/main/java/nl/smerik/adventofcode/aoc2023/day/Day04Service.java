@@ -11,17 +11,18 @@ import java.util.List;
 @Service
 public class Day04Service {
 
-    @Value("classpath:input/day-04.txt")
-    private Resource resource;
+    private final ScratchCardAdministrator administrator;
+
+    public Day04Service(@Value("classpath:input/day-04.txt") final Resource resource) {
+        final List<String> lines = PuzzleInputParser.parseToString(resource);
+        administrator = new ScratchCardAdministrator(lines);
+    }
 
     public Integer getSolutionPart1() {
-        final List<String> lines = PuzzleInputParser.parseToString(resource);
-        final ScratchCardAdministrator administrator = new ScratchCardAdministrator(lines);
         return administrator.sumPoints();
     }
 
     public Integer getSolutionPart2() {
-        final List<String> lines = PuzzleInputParser.parseToString(resource);
-        return null;
+        return administrator.sumCards();
     }
 }
