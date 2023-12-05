@@ -3,11 +3,10 @@ package nl.smerik.adventofcode.aoc2023.model.almanac;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 public class AlmanacParser {
 
-    private static final Pattern MAP_DESCIRPTION_PATTERN = Pattern.compile("(?<source>\\w+)-to-(?<destination>\\w+) map:");
+    private static final Pattern MAP_DESCRIPTION_PATTERN = Pattern.compile("(?<source>\\w+)-to-(?<destination>\\w+) map:");
 
     private enum ParserState {
         SEEDS_TO_BE_PLANTED {
@@ -37,7 +36,7 @@ public class AlmanacParser {
     }
 
     public static Almanac parse(final List<String> lines) {
-        final Set<Long> seedsToBePlanted = new HashSet<>();
+        final List<Long> seedsToBePlanted = new ArrayList<>();
         final Map<AlmanacCategory, AlmanacMap> almanacMapByCategory = new EnumMap<>(AlmanacCategory.class);
 
         ParserState state = ParserState.SEEDS_TO_BE_PLANTED;
@@ -61,12 +60,12 @@ public class AlmanacParser {
         return new Almanac(seedsToBePlanted, almanacMapByCategory);
     }
 
-    private static Set<Long> parseSeedsToBePlanted(final String line) {
-        return Arrays.stream(line.substring("seeds: ".length()).split(" ")).map(Long::parseLong).collect(Collectors.toSet());
+    private static List<Long> parseSeedsToBePlanted(final String line) {
+        return Arrays.stream(line.substring("seeds: ".length()).split(" ")).map(Long::parseLong).toList();
     }
 
     private static AlmanacMap parseMapDescription(final String line) {
-        final Matcher matcher = MAP_DESCIRPTION_PATTERN.matcher(line);
+        final Matcher matcher = MAP_DESCRIPTION_PATTERN.matcher(line);
         if (!matcher.find()) {
             throw new IllegalArgumentException("Not a map description line '" + line + "'");
         }

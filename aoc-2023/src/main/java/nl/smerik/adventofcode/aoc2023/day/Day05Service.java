@@ -12,16 +12,18 @@ import java.util.List;
 @Service
 public class Day05Service {
 
-    @Value("classpath:input/day-05.txt")
-    private Resource resource;
+    private final Almanac parser;
+
+    public Day05Service(@Value("classpath:input/day-05.txt") final Resource resource) {
+        final List<String> lines = PuzzleInputParser.parseToString(resource);
+        parser = AlmanacParser.parse(lines);
+    }
 
     public Long getSolutionPart1() {
-        final List<String> lines = PuzzleInputParser.parseToString(resource);
-        final Almanac parser = AlmanacParser.parse(lines);
         return parser.findLowestLocationNumber();
     }
 
     public Long getSolutionPart2() {
-        return null;
+        return parser.findLowestLocationNumberForARangeOfSeeds();
     }
 }

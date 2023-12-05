@@ -1,25 +1,36 @@
 package nl.smerik.adventofcode.aoc2023.model.almanac;
 
+import nl.smerik.adventofcode.geom.Range;
+
 public class AlmanacRange {
 
-    private final long destinationRangeStart;
-    private final long sourceRangeStart;
-    private final long rangeLength;
+    private final Range<Long> destinationRange;
+    private final Range<Long> sourceRange;
 
-    public AlmanacRange(long destinationRangeStart, long sourceRangeStart, long rangeLength) {
-        this.destinationRangeStart = destinationRangeStart;
-        this.sourceRangeStart = sourceRangeStart;
-        this.rangeLength = rangeLength;
+    public AlmanacRange(final long destinationRangeStart, final long sourceRangeStart, final long rangeLength) {
+        this.destinationRange = new Range<>(destinationRangeStart, destinationRangeStart + rangeLength);
+        this.sourceRange = new Range<>(sourceRangeStart, sourceRangeStart + rangeLength);
     }
 
     public boolean containsSource(final long number) {
-        return number >= sourceRangeStart && number < sourceRangeStart + rangeLength;
+        return sourceRange.contains(number);
+    }
+
+    public boolean containsDestination(final long number) {
+        return destinationRange.contains(number);
     }
 
     public long mapSourceToDestination(final long number) {
         if (!containsSource(number)) {
-            throw new IllegalArgumentException("Number " + number + " not within range.");
+            throw new IllegalArgumentException("Number " + number + " not within " + sourceRange);
         }
-        return destinationRangeStart + number - sourceRangeStart;
+        return destinationRange.start() + number - sourceRange.start();
+    }
+
+    public long mapDestinationToSource(final long number) {
+        if (!containsDestination(number)) {
+            throw new IllegalArgumentException("Number " + number + " not within " + destinationRange);
+        }
+        return sourceRange.start() + number - destinationRange.start();
     }
 }

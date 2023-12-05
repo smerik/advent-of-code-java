@@ -25,4 +25,8 @@ public class AlmanacMap {
     public long mapSourceToDestination(long number) {
         return ranges.stream().filter(range -> range.containsSource(number)).findAny().map(range -> range.mapSourceToDestination(number)).orElse(number);
     }
+
+    public long mapDestinationToSource(long number) {
+        return ranges.stream().filter(range -> range.containsDestination(number)).findAny().map(range -> range.mapDestinationToSource(number)).orElse(number);
+    }
 }

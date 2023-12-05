@@ -8,7 +8,6 @@ import org.springframework.core.io.Resource;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static nl.smerik.adventofcode.aoc2023.model.almanac.AlmanacCategory.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,9 +23,9 @@ class AlmanacParserTest {
         final List<String> lines = PuzzleInputParser.parseToString(resource);
         final Almanac almanac = AlmanacParser.parse(lines);
         assertNotNull(almanac);
-        assertEquals(Set.of(79L, 14L, 55L, 13L), almanac.getSeedsToBePlanted());
+        assertEquals(List.of(79L, 14L, 55L, 13L), almanac.getSeedsToBePlanted());
 
-        final Map<AlmanacCategory, AlmanacMap> almanacMapByCategory = almanac.getAlmanacMapByCategory();
+        final Map<AlmanacCategory, AlmanacMap> almanacMapByCategory = almanac.getAlmanacMapBySourceCategory();
         assertEquals(2, almanacMapByCategory.get(SEED).getRanges().size());
         assertEquals(3, almanacMapByCategory.get(SOIL).getRanges().size());
         assertEquals(4, almanacMapByCategory.get(FERTILIZER).getRanges().size());

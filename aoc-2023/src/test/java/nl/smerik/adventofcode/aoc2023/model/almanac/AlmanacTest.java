@@ -1,16 +1,18 @@
 package nl.smerik.adventofcode.aoc2023.model.almanac;
 
+import nl.smerik.adventofcode.geom.Range;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static nl.smerik.adventofcode.aoc2023.model.almanac.AlmanacCategory.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class AlmanacTest {
 
@@ -18,7 +20,7 @@ class AlmanacTest {
 
     @BeforeAll
     static void beforeAll() {
-        final Set<Long> seedsToBePlanten = Set.of(79L, 14L, 55L, 13L);
+        final List<Long> seedsToBePlanten = List.of(79L, 14L, 55L, 13L);
 
         final Map<AlmanacCategory, AlmanacMap> almanacMapByCategory = new HashMap<>();
 
@@ -69,6 +71,11 @@ class AlmanacTest {
         assertEquals(35, almanac.findLowestLocationNumber());
     }
 
+    @Test
+    void testFindLowestLocationNumberForARangeOfSeeds() {
+        assertEquals(46, almanac.findLowestLocationNumberForARangeOfSeeds());
+    }
+
     @ParameterizedTest
     @CsvSource({
             "79, 82",
@@ -78,5 +85,24 @@ class AlmanacTest {
     })
     void testMapSeed(final long seedNumber, final long expectedResult) {
         assertEquals(expectedResult, almanac.mapSeed(seedNumber));
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "82, 79",
+            "43, 14",
+            "86, 55",
+            "35, 13"
+    })
+    void testMapLocation(final long locationNumber, final long expectedResult) {
+        assertEquals(expectedResult, almanac.mapLocation(locationNumber));
+    }
+
+    @Test
+    void testDetermineSeedsToBePlantedRanges() {
+        final List<Range<Long>> seedsToBePlantedRanges = almanac.determineSeedsToBePlantedRanges();
+        assertTrue(seedsToBePlantedRanges.contains(new Range<>(79L, 92L + 1)));
+        assertTrue(seedsToBePlantedRanges.contains(new Range<>(55L, 67L + 1)));
+        assertEquals(2, seedsToBePlantedRanges.size());
     }
 }
