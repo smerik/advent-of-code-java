@@ -16,8 +16,14 @@ public class RaceAdministrator {
 
     private final Set<Race> races;
 
-    public RaceAdministrator(final List<String> lines) {
-        races = parseLines(lines);
+    public RaceAdministrator(final List<String> lines, boolean ignoreSpacesBetweenNumbers) {
+        races = ignoreSpacesBetweenNumbers? parseLinesIgnoringSpaces(lines) : parseLines(lines);
+    }
+
+    private Set<Race> parseLinesIgnoringSpaces(List<String> lines) {
+        final long raceDuration = Long.parseLong(lines.get(0).substring("Time:".length()).replace(" ", ""));
+        final long recordDistance = Long.parseLong(lines.get(1).substring("Distance:".length()).replace(" ", ""));
+        return Set.of(new Race(raceDuration, recordDistance));
     }
 
     private Set<Race> parseLines(final List<String> lines) {
@@ -40,7 +46,7 @@ public class RaceAdministrator {
         return result;
     }
 
-    public int calcMarginOfError() {
+    public long calcMarginOfError() {
         return races.stream().map(Race::determineNumberOfWaysToWinRace).reduce(1, (a, b) -> a * b);
     }
 }

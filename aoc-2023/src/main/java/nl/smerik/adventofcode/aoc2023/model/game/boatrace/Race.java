@@ -5,10 +5,10 @@ import java.util.Map;
 
 public class Race {
 
-    private final int raceDuration;
-    private final int recordDistance;
+    private final long raceDuration;
+    private final long recordDistance;
 
-    public Race(final int raceDuration, final int recordDistance) {
+    public Race(final long raceDuration, final long recordDistance) {
         this.raceDuration = raceDuration;
         this.recordDistance = recordDistance;
     }
@@ -22,12 +22,12 @@ public class Race {
      *
      * @return distances mapped by button press duration
      */
-    public Map<Integer, Integer> determineWaysToWinRace() {
-        final Map<Integer, Integer> result = new HashMap<>();
-        for (int holdButtonDuration = 1; holdButtonDuration < raceDuration; holdButtonDuration++) {
-            int timeLeft = raceDuration - holdButtonDuration;
+    public Map<Long, Long> determineWaysToWinRace() {
+        final Map<Long, Long> result = new HashMap<>();
+        for (long holdButtonDuration = 1; holdButtonDuration < raceDuration; holdButtonDuration++) {
+            long timeLeft = raceDuration - holdButtonDuration;
 
-            final int distance = calcDistance(holdButtonDuration, timeLeft);
+            final long distance = calcDistance(holdButtonDuration, timeLeft);
             if (distance > recordDistance) {
                 result.put(holdButtonDuration, distance);
             }
@@ -38,7 +38,7 @@ public class Race {
         return result;
     }
 
-    private int calcDistance(final int holdButtonDuration, final int timeLeft) {
+    private long calcDistance(final long holdButtonDuration, final long timeLeft) {
         return holdButtonDuration * timeLeft;
     }
 }

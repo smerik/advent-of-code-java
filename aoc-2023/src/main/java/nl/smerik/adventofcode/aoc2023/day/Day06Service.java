@@ -11,18 +11,18 @@ import java.util.List;
 @Service
 public class Day06Service {
 
-    private final RaceAdministrator administrator;
+    @Value("classpath:input/day-06.txt")
+    private Resource resource;
 
-    public Day06Service(@Value("classpath:input/day-06.txt") final Resource resource) {
+    public long getSolutionPart1() {
         final List<String> lines = PuzzleInputParser.parseToString(resource);
-        administrator = new RaceAdministrator(lines);
-    }
-
-    public Integer getSolutionPart1() {
+        RaceAdministrator administrator = new RaceAdministrator(lines, false);
         return administrator.calcMarginOfError();
     }
 
-    public Integer getSolutionPart2() {
-        return null;
+    public long getSolutionPart2() {
+        final List<String> lines = PuzzleInputParser.parseToString(resource);
+        RaceAdministrator administrator = new RaceAdministrator(lines, true);
+        return administrator.calcMarginOfError();
     }
 }

@@ -15,9 +15,10 @@ class RaceTest {
     private static Stream<Arguments> determineNumberOfWaysToWinRaceSource() {
         // @formatter:off
         return Stream.of(
-                Arguments.of(4, 7,     9),
-                Arguments.of(8, 15,   40),
-                Arguments.of(9, 30,  200)
+                Arguments.of(    4,     7,       9),
+                Arguments.of(    8,    15,      40),
+                Arguments.of(    9,    30,     200),
+                Arguments.of(71503, 71530,  940200)
         );
         // @formatter:on
     }
@@ -32,13 +33,13 @@ class RaceTest {
     @Test
     void testDetermineWaysToWinRace() {
         final Race race = new Race(7, 9);
-        final Map<Integer, Integer> result = race.determineWaysToWinRace();
-        final Map<Integer, Integer> expectedResult = Map.of(
+        final Map<Long, Long> result = race.determineWaysToWinRace();
+        final Map<Long, Long> expectedResult = Map.of(
                 // @formatter:off
-                2, 10,
-                3, 12,
-                4, 12,
-                5, 10
+                2L, 10L,
+                3L, 12L,
+                4L, 12L,
+                5L, 10L
                 // @formatter:off
         );
         assertEquals(expectedResult, result);

@@ -14,19 +14,23 @@ class RaceAdministratorTest {
             "Distance:  9  40  200"
     );
     private static RaceAdministrator raceAdministrator;
+    private static RaceAdministrator raceAdministratorIgnoringWhitespaces;
 
     @BeforeAll
     static void beforeAll() {
-        raceAdministrator = new RaceAdministrator(INPUT_EXAMPLE);
+        raceAdministrator = new RaceAdministrator(INPUT_EXAMPLE, false);
+        raceAdministratorIgnoringWhitespaces = new RaceAdministrator(INPUT_EXAMPLE, true);
     }
 
     @Test
     void testGetRaces() {
         assertEquals(3, raceAdministrator.getRaces().size());
+        assertEquals(1, raceAdministratorIgnoringWhitespaces.getRaces().size());
     }
 
     @Test
     void testCalcMarginOfError() {
         assertEquals(288, raceAdministrator.calcMarginOfError());
+        assertEquals(71503, raceAdministratorIgnoringWhitespaces.calcMarginOfError());
     }
 }
