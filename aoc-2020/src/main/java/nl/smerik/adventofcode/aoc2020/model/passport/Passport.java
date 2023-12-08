@@ -1,9 +1,8 @@
 package nl.smerik.adventofcode.aoc2020.model.passport;
 
+import jakarta.validation.constraints.*;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
-
-import javax.validation.constraints.*;
 
 @Data
 public class Passport {

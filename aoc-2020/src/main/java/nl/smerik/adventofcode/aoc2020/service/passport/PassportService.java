@@ -1,11 +1,11 @@
 package nl.smerik.adventofcode.aoc2020.service.passport;
 
+import jakarta.validation.Validator;
 import nl.smerik.adventofcode.aoc2020.model.passport.Passport;
 import nl.smerik.adventofcode.aoc2020.model.passport.PassportFieldType;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import javax.validation.Validator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
