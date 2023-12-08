@@ -33,19 +33,30 @@ class HandTypeTest {
         return Stream.of(
                 // @formatter:off
                 // Five of a kind
-                Arguments.of(FIVE_OF_A_KIND , List.of(ACE, ACE  , ACE  , ACE  , ACE  )),
+                Arguments.of(FIVE_OF_A_KIND , List.of(ACE  , ACE  , ACE  , ACE  , ACE  )),
+                Arguments.of(FIVE_OF_A_KIND , List.of(JOKER, JOKER, JOKER, JOKER, JOKER)),
                 // Four of a kind
-                Arguments.of(FOUR_OF_A_KIND , List.of(ACE, ACE  , EIGHT, ACE  , ACE  )),
+                Arguments.of(FOUR_OF_A_KIND , List.of(ACE  , ACE  , EIGHT, ACE  , ACE  )),
+                Arguments.of(FOUR_OF_A_KIND , List.of(QUEEN, JOKER, JOKER, QUEEN, TWO  )),
+                Arguments.of(FOUR_OF_A_KIND , List.of(TEN  , FIVE , FIVE , JOKER, FIVE )),
+                Arguments.of(FOUR_OF_A_KIND , List.of(KING , TEN  , JOKER, JOKER, TEN  )),
+                Arguments.of(FOUR_OF_A_KIND , List.of(QUEEN, QUEEN, QUEEN, JOKER, ACE  )),
                 // Full house
-                Arguments.of(FULL_HOUSE     , List.of(TWO, THREE, THREE, THREE, TWO  )),
+                Arguments.of(FULL_HOUSE     , List.of(TWO  , THREE, THREE, THREE, TWO  )),
                 // Three of a kind
-                Arguments.of(THREE_OF_A_KIND, List.of(TEN, TEN  , TEN  , NINE , EIGHT)),
+                Arguments.of(THREE_OF_A_KIND, List.of(TEN  , TEN  , TEN  , NINE , EIGHT)),
+                Arguments.of(THREE_OF_A_KIND, List.of(TEN  , FIVE , FIVE , JACK , FIVE )),
+                Arguments.of(THREE_OF_A_KIND, List.of(QUEEN, QUEEN, QUEEN, JACK , ACE  )),
                 // Two pair
-                Arguments.of(TWO_PAIR       , List.of(TWO, THREE, FOUR , THREE, TWO  )),
+                Arguments.of(TWO_PAIR       , List.of(TWO  , THREE, FOUR , THREE, TWO  )),
+                Arguments.of(TWO_PAIR       , List.of(KING , KING , SIX  , SEVEN, SEVEN)),
+                Arguments.of(TWO_PAIR       , List.of(KING , TEN  , JACK , JACK , TEN  )),
+                Arguments.of(TWO_PAIR       , List.of(QUEEN, JACK , JACK,  QUEEN, TWO  )),
                 // One pair
-                Arguments.of(ONE_PAIR       , List.of(ACE, TWO  , THREE, ACE  , FOUR )),
+                Arguments.of(ONE_PAIR       , List.of(ACE  , TWO  , THREE, ACE  , FOUR )),
+                Arguments.of(ONE_PAIR       , List.of(THREE, TWO  , TEN, THREE  , KING )),
                 // High card
-                Arguments.of(HIGH_CARD      , List.of(TWO, THREE, FOUR , FIVE , SIX  ))
+                Arguments.of(HIGH_CARD      , List.of(TWO  , THREE, FOUR , FIVE , SIX  ))
                 // @formatter:on
         );
     }

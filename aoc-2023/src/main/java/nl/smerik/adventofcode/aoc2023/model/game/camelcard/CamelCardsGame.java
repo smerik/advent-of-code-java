@@ -10,12 +10,12 @@ public class CamelCardsGame {
 
     private final Map<Hand, Integer> bidsByHand;
 
-    public CamelCardsGame(final List<String> lines) {
-        bidsByHand = parseLines(lines);
+    public CamelCardsGame(final List<String> lines, boolean applyAdditionalRule) {
+        bidsByHand = parseLines(lines, applyAdditionalRule);
     }
 
-    private Map<Hand, Integer> parseLines(List<String> lines) {
-        return lines.stream().map(Hand::new).collect(Collectors.toMap(Function.identity(), Hand::getBid));
+    private Map<Hand, Integer> parseLines(final List<String> lines, final boolean applyAdditionalRule) {
+        return lines.stream().map(line -> new Hand(line, applyAdditionalRule)).collect(Collectors.toMap(Function.identity(), Hand::getBid));
     }
 
     public int determineTotalWinnings() {

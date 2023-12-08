@@ -11,15 +11,15 @@ public class Hand implements Comparable<Hand> {
     private final int bid;
     private final HandType type;
 
-    public Hand(final String line) {
+    public Hand(final String line, final boolean applyAdditionalRule) {
         final String[] split = line.split(" ");
-        this.cards = parseLabels(split[0]);
+        this.cards = parseLabels(split[0], applyAdditionalRule);
         this.bid = Integer.parseInt(split[1]);
         this.type = HandType.valueByCards(this.cards);
     }
 
-    private List<Card> parseLabels(final String labels) {
-        return labels.chars().mapToObj(label -> (char) label).map(Card::cardByLabel).toList();
+    private List<Card> parseLabels(final String labels, final boolean applyAdditionalRule) {
+        return labels.chars().mapToObj(label -> (char) label).map(label -> Card.cardByLabel(label, applyAdditionalRule)).toList();
     }
 
     @Override

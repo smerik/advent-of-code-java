@@ -17,7 +17,8 @@ public enum Card {
     FIVE('5'),
     FOUR('4'),
     THREE('3'),
-    TWO('2');
+    TWO('2'),
+    JOKER('J');
 
     private final char label;
 
@@ -25,7 +26,10 @@ public enum Card {
         this.label = label;
     }
 
-    public static Card cardByLabel(final char label) {
+    public static Card cardByLabel(final char label, final boolean applyAdditionalRule) {
+        if (applyAdditionalRule && label == 'J') {
+            return JOKER;
+        }
         for (final Card card : values()) {
             if (card.label == label) {
                 return card;

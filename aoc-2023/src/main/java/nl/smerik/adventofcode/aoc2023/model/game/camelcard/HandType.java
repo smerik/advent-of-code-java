@@ -54,6 +54,11 @@ public enum HandType {
 
     public static HandType valueByCards(final List<Card> cards) {
         final Map<Card, Long> countByCard = cards.stream().collect(Collectors.groupingBy(card -> card, Collectors.counting()));
+        if (countByCard.containsKey(Card.JOKER) && countByCard.get(Card.JOKER) != 5L) {
+            final long jokerCardCount = countByCard.remove(Card.JOKER);
+            final Map.Entry<Card, Long> entry = countByCard.entrySet().stream().max(Map.Entry.comparingByValue()).orElseThrow();
+            countByCard.put(entry.getKey(), entry.getValue() + jokerCardCount);
+        }
         final Collection<Long> counts = countByCard.values();
         if (counts.contains(5L)) {
             return FIVE_OF_A_KIND;

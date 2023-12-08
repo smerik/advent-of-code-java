@@ -16,11 +16,13 @@ public class Day07Service {
 
     public Integer getSolutionPart1() {
         final List<String> lines = PuzzleInputParser.parseToString(resource);
-        final CamelCardsGame game = new CamelCardsGame(lines);
+        final CamelCardsGame game = new CamelCardsGame(lines, false);
         return game.determineTotalWinnings();
     }
 
     public Integer getSolutionPart2() {
-        return null;
+        final List<String> lines = PuzzleInputParser.parseToString(resource);
+        final CamelCardsGame game = new CamelCardsGame(lines, true);
+        return game.determineTotalWinnings();
     }
 }

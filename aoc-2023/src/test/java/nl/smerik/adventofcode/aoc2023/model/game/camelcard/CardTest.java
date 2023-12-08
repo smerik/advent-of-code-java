@@ -11,23 +11,24 @@ class CardTest {
     @ParameterizedTest
     @CsvSource({
             // @formatter:off
-            "ACE  , A",
-            "KING , K",
-            "QUEEN, Q",
-            "JACK, J",
-            "TEN  , T",
-            "NINE , 9",
-            "EIGHT, 8",
-            "SEVEN, 7",
-            "SIX  , 6",
-            "FIVE , 5",
-            "FOUR , 4",
-            "THREE, 3",
-            "TWO  , 2"
+            "ACE  , A, false",
+            "KING , K, false",
+            "QUEEN, Q, false",
+            "JACK , J, false",
+            "JOKER, J, true",
+            "TEN  , T, false",
+            "NINE , 9, false",
+            "EIGHT, 8, false",
+            "SEVEN, 7, false",
+            "SIX  , 6, false",
+            "FIVE , 5, false",
+            "FOUR , 4, false",
+            "THREE, 3, false",
+            "TWO  , 2, false"
             // @formatter:on
     })
-    void testCardByLabel(final Card expectedCard, final char label) {
-        assertEquals(expectedCard, Card.cardByLabel(label));
+    void testCardByLabel(final Card expectedCard, final char label, final boolean applyAdditionalRule) {
+        assertEquals(expectedCard, Card.cardByLabel(label, applyAdditionalRule));
     }
 
     @ParameterizedTest
@@ -44,7 +45,8 @@ class CardTest {
             "SIX  , FIVE",
             "FIVE , FOUR",
             "FOUR , THREE",
-            "THREE, TWO"
+            "THREE, TWO",
+            "TWO  , JOKER"
             // @formatter:on
     })
     void testOrder(final Card card1, final Card card2) {
