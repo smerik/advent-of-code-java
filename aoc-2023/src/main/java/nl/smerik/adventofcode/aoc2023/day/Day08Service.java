@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
+import java.math.BigInteger;
 import java.util.List;
 
 @Service
@@ -20,7 +21,9 @@ public class Day08Service {
         return map.determineStepCountToReachEndpoint();
     }
 
-    public Integer getSolutionPart2() {
-        return null;
+    public BigInteger getSolutionPart2() {
+        final List<String> lines = PuzzleInputParser.parseToString(resource);
+        final HauntedWastelandMap map = new HauntedWastelandMap(lines);
+        return map.determineStepCountToReachEndpointAsAGhost();
     }
 }

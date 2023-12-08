@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigInteger;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -19,6 +21,6 @@ class Day08ServiceTest {
 
     @Test
     void getSolutionPart2() {
-        assertEquals(0, dayService.getSolutionPart2());
+        assertEquals(BigInteger.valueOf(10921547990923L), dayService.getSolutionPart2());
     }
 }

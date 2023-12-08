@@ -6,8 +6,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.List;
-import java.util.Map;
+import java.math.BigInteger;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static nl.smerik.adventofcode.aoc2023.model.map.hauntedwasteland.NodeDirection.LEFT;
@@ -37,6 +37,21 @@ class HauntedWastelandMapTest {
             "AAA = (BBB, BBB)",
             "BBB = (AAA, ZZZ)",
             "ZZZ = (ZZZ, ZZZ)"
+            // @formatter:on
+    );
+
+    private static final List<String> INPUT_EXAMPLE_03 = List.of(
+            // @formatter:off
+            "LR",
+            "",
+            "11A = (11B, XXX)",
+            "11B = (XXX, 11Z)",
+            "11Z = (11B, XXX)",
+            "22A = (22B, XXX)",
+            "22B = (22C, 22C)",
+            "22C = (22Z, 22Z)",
+            "22Z = (22B, 22B)",
+            "XXX = (XXX, XXX)"
             // @formatter:on
     );
 
@@ -85,5 +100,36 @@ class HauntedWastelandMapTest {
     @Test
     void testFollowInstructions() {
         assertEquals(List.of("AAA", "CCC", "ZZZ"), exampleMap.followInstructions());
+    }
+
+    @Test
+    void testDetermineStepCountToReachEndpointAsAGhost() {
+        final HauntedWastelandMap map = new HauntedWastelandMap(INPUT_EXAMPLE_03);
+        assertEquals(BigInteger.valueOf(6), map.determineStepCountToReachEndpointAsAGhost());
+    }
+
+    @Test
+    void testDetermineStartingNodesForGhost() {
+        final HauntedWastelandMap map = new HauntedWastelandMap(INPUT_EXAMPLE_03);
+        assertEquals(Set.of("11A", "22A"), map.determineStartNodesForGhost());
+    }
+
+    private static Stream<Arguments> isPossibleEndNodeSource() {
+        return Stream.of(
+                // @formatter:off
+                Arguments.of(false, "AAA"),
+                Arguments.of(false, "ZAA"),
+                Arguments.of(false, "ZZA"),
+                Arguments.of(true , "ZZZ"),
+                Arguments.of(true , "AZZ"),
+                Arguments.of(true , "AAZ")
+                // @formatter:on
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("isPossibleEndNodeSource")
+    void testIsPossibleEndNode(final boolean expectedResult, final String node) {
+        assertEquals(expectedResult, HauntedWastelandMap.isPossibleEndNode(node));
     }
 }
