@@ -21,4 +21,10 @@ class OasisReportTest {
         final OasisReport report = new OasisReport(EXAMPLE_HISTORY);
         assertEquals(114, report.sumPredictedHistory());
     }
+
+    @Test
+    void testSumPredictedBackwardHistory() {
+        final OasisReport report = new OasisReport(EXAMPLE_HISTORY);
+        assertEquals(2, report.sumPredictedBackwardHistory());
+    }
 }

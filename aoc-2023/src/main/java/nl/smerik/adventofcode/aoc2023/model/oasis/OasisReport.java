@@ -19,4 +19,8 @@ public class OasisReport {
     public int sumPredictedHistory() {
         return report.stream().map(OasisReading::predictNextValue).mapToInt(Integer::intValue).sum();
     }
+
+    public int sumPredictedBackwardHistory() {
+        return report.stream().map(OasisReading::predictFirstValue).mapToInt(Integer::intValue).sum();
+    }
 }

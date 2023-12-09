@@ -11,16 +11,18 @@ import java.util.List;
 @Service
 public class Day09Service {
 
-    @Value("classpath:input/day-09.txt")
-    private Resource resource;
+    private final OasisReport report;
+
+    public Day09Service(@Value("classpath:input/day-09.txt") final Resource resource) {
+        final List<String> lines = PuzzleInputParser.parseToString(resource);
+        report = new OasisReport(lines);
+    }
 
     public Integer getSolutionPart1() {
-        final List<String> lines = PuzzleInputParser.parseToString(resource);
-        final OasisReport report = new OasisReport(lines);
         return report.sumPredictedHistory();
     }
 
     public Integer getSolutionPart2() {
-        return null;
+        return report.sumPredictedBackwardHistory();
     }
 }

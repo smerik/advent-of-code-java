@@ -35,4 +35,24 @@ public class OasisReading {
         }
         return readings.get(readings.size() - 1) + createNextSequence(result);
     }
+
+    public int predictFirstValue() {
+        return createNextSequenceBackwards(readings);
+    }
+
+    private int createNextSequenceBackwards(final List<Integer> readings) {
+        if (readings.stream().allMatch(integer -> integer == 0) || readings.size() == 1) {
+            return readings.get(0);
+        }
+
+        final List<Integer> result = new ArrayList<>();
+        Integer previousReading = null;
+        for (final int reading : readings) {
+            if (previousReading != null) {
+                result.add(reading - previousReading);
+            }
+            previousReading = reading;
+        }
+        return readings.get(0) - createNextSequenceBackwards(result);
+    }
 }
