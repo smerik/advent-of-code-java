@@ -17,34 +17,36 @@ public class OasisReading {
     }
 
     public int predictNextValue() {
-        return createNextSequence(readings);
+        return predictNextValue(readings);
     }
 
-    private int createNextSequence(final List<Integer> readings) {
-        if (readings.stream().allMatch(integer -> integer == 0) || readings.size() == 1) {
-            return readings.get(readings.size() - 1);
+    private int predictNextValue(final List<Integer> readings) {
+        final int readingsLast = readings.get(readings.size() - 1);
+        if (isFinalSequence(readings)) {
+            return readingsLast;
         }
-
-        final List<Integer> result = new ArrayList<>();
-        Integer previousReading = null;
-        for (final int reading : readings) {
-            if (previousReading != null) {
-                result.add(reading - previousReading);
-            }
-            previousReading = reading;
-        }
-        return readings.get(readings.size() - 1) + createNextSequence(result);
+        final List<Integer> sequence = createNextSequence(readings);
+        return readingsLast + predictNextValue(sequence);
     }
 
     public int predictFirstValue() {
-        return createNextSequenceBackwards(readings);
+        return predictFirstValue(readings);
     }
 
-    private int createNextSequenceBackwards(final List<Integer> readings) {
-        if (readings.stream().allMatch(integer -> integer == 0) || readings.size() == 1) {
-            return readings.get(0);
+    private int predictFirstValue(final List<Integer> readings) {
+        final int readingsFirst = readings.get(0);
+        if (isFinalSequence(readings)) {
+            return readingsFirst;
         }
+        final List<Integer> sequence = createNextSequence(readings);
+        return readingsFirst - predictFirstValue(sequence);
+    }
 
+    private static boolean isFinalSequence(final List<Integer> readings) {
+        return readings.stream().allMatch(integer -> integer == 0) || readings.size() == 1;
+    }
+
+    private List<Integer> createNextSequence(final List<Integer> readings) {
         final List<Integer> result = new ArrayList<>();
         Integer previousReading = null;
         for (final int reading : readings) {
@@ -53,6 +55,6 @@ public class OasisReading {
             }
             previousReading = reading;
         }
-        return readings.get(0) - createNextSequenceBackwards(result);
+        return result;
     }
 }
