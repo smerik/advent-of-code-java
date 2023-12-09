@@ -1,3 +1,11 @@
+# Files that should not be part of the public repository due to copyright issues.
+# See:
+# * https://adventofcode.com/about#faq_copying
+# * https://www.reddit.com/r/adventofcode/wiki/faqs/copyright/inputs/
+aoc-*/doc/
+**/src/main/resources/input
+**/src/test/java/**/day/
+
 ## https://github.com/github/gitignore/blob/master/Java.gitignore
 # Compiled class file
 *.class
