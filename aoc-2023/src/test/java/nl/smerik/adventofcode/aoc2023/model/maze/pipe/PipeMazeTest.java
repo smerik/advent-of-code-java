@@ -1,5 +1,6 @@
 package nl.smerik.adventofcode.aoc2023.model.maze.pipe;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -51,17 +52,6 @@ class PipeMazeTest {
             // @formatter:on
     );
 
-    private static final List<String> INPUT_EXAMPLE_X = List.of(
-            // @formatter:off
-            ".....",
-            ".....",
-            "|....",
-            "S7...",
-            "LJ..."
-            // @formatter:on
-    );
-
-
     public static Stream<Arguments> determineStepCountFromStartToFarthestPointSource() {
         return Stream.of(
                 // @formatter:off
@@ -96,5 +86,33 @@ class PipeMazeTest {
     void testFindSingleGiantLoop(final int expectedLoopSize, final List<String> input) {
         final PipeMaze maze = new PipeMaze(input);
         assertEquals(expectedLoopSize, maze.findSingleGiantLoop().size());
+    }
+
+    @Test
+    void testRenderMaze() {
+        final String expectedResult =
+                // @formatter:off
+                "┐─┌┐─" + System.lineSeparator() +
+                "·┌┘│┐" + System.lineSeparator() +
+                "S┘└└┐" + System.lineSeparator() +
+                "│┌──┘" + System.lineSeparator() +
+                "└┘·└┘" + System.lineSeparator();
+                // @formatter:off
+        final PipeMaze maze = new PipeMaze(INPUT_EXAMPLE_02_EXTRA_NON_LOOP);
+        assertEquals(expectedResult, maze.render(false));
+    }
+
+    @Test
+    void testRenderMazeMarkedLoop() {
+        final String expectedResult =
+                // @formatter:off
+                "┐─╔╗─" + System.lineSeparator() +
+                "·╔╝║┐" + System.lineSeparator() +
+                "S╝└╚╗" + System.lineSeparator() +
+                "║╔══╝" + System.lineSeparator() +
+                "╚╝·└┘" + System.lineSeparator();
+                // @formatter:off
+        final PipeMaze maze = new PipeMaze(INPUT_EXAMPLE_02_EXTRA_NON_LOOP);
+        assertEquals(expectedResult, maze.render(true));
     }
 }

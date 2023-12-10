@@ -1,23 +1,30 @@
 package nl.smerik.adventofcode.aoc2023.model.maze.pipe;
 
+import lombok.Getter;
+
 import java.awt.*;
 import java.util.Set;
 
+@Getter
 public enum TileType {
 
-    PIPE_VERTICAL('|'),
-    PIPE_HORIZONTAL('-'),
-    PIPE_BEND_NORTH_EAST('L'),
-    PIPE_BEND_NORTH_WEST('J'),
-    PIPE_BEND_SOUTH_WEST('7'),
-    PIPE_BEND_SOUTH_EAST('F'),
-    GROUND('.'),
-    STARTING_POSITION('S');
+    PIPE_VERTICAL('|', '│', '║'),
+    PIPE_HORIZONTAL('-', '─', '═'),
+    PIPE_BEND_NORTH_EAST('L', '└', '╚'),
+    PIPE_BEND_NORTH_WEST('J', '┘', '╝'),
+    PIPE_BEND_SOUTH_WEST('7', '┐', '╗'),
+    PIPE_BEND_SOUTH_EAST('F', '┌', '╔'),
+    GROUND('.', '·', '·'),
+    STARTING_POSITION('S', 'S', 'S');
 
     private final char pipeTile;
+    private final char renderToken;
+    private final char renderLoopToken;
 
-    TileType(final char pipeTile) {
+    TileType(final char pipeTile, final char renderToken, char renderLoopToken) {
         this.pipeTile = pipeTile;
+        this.renderToken = renderToken;
+        this.renderLoopToken = renderLoopToken;
     }
 
     public Set<Point> getConnectablePoints(final Point point) {

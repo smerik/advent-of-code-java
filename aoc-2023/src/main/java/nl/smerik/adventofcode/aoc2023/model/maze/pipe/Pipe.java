@@ -25,4 +25,12 @@ public class Pipe {
     public Set<Point> getConnectablePoints() {
         return type.getConnectablePoints(point);
     }
+
+    public char getRenderToken() {
+        return type.getRenderToken();
+    }
+
+    public char getRenderLoopToken() {
+        return type.getRenderLoopToken();
+    }
 }
