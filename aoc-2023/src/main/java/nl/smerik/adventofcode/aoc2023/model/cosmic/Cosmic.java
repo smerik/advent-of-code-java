@@ -1,5 +1,7 @@
 package nl.smerik.adventofcode.aoc2023.model.cosmic;
 
+import lombok.Setter;
+
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -8,12 +10,19 @@ import java.util.stream.Collectors;
 public class Cosmic {
 
     public static final char GALAXY_TOKEN = '#';
-    public static final char EMPTY_SPACE_TOKEN = '.';
 
-    private char[][] universe;
+    private final char[][] universe;
+    private final List<Integer> emptyRows;
+    private final List<Integer> emptyColumns;
+
+    @Setter
+    private int expansionFactor;
 
     public Cosmic(final List<String> lines) {
         universe = parseLines(lines);
+        emptyRows = findEmptyRows();
+        emptyColumns = findEmptyColums();
+        expansionFactor = 1;
     }
 
     private char[][] parseLines(final List<String> lines) {
@@ -25,57 +34,6 @@ public class Cosmic {
             result[y] = lines.get(y).toCharArray();
         }
         return result;
-    }
-
-    public void expandUniverse() {
-        final List<Integer> emptyColumns = findEmptyColums();
-        final List<Integer> emptyRows = findEmptyRows();
-        expandUniverseColumns(emptyColumns);
-        expandUniverseRows(emptyRows);
-    }
-
-    private void expandUniverseColumns(final List<Integer> columns) {
-        if (columns.isEmpty()) {
-            return;
-        }
-        final int newWidth = universe[0].length + columns.size();
-        final char[][] result = new char[universe.length][newWidth];
-
-        int srcPos = 0;
-        int destPos = 0;
-        for (final int expandColumn : columns) {
-            int length = expandColumn - srcPos;
-            for (int y = 0; y < universe.length; y++) {
-                System.arraycopy(universe[y], srcPos, result[y], destPos, length);
-                result[y][destPos + length] = EMPTY_SPACE_TOKEN;
-            }
-            srcPos = expandColumn;
-            destPos = destPos + length + 1;
-        }
-        // Fill the remaining columns
-        int length = result[0].length - destPos;
-        for (int y = 0; y < universe.length; y++) {
-            System.arraycopy(universe[y], srcPos, result[y], destPos, length);
-        }
-        this.universe = result;
-    }
-
-    private void expandUniverseRows(final List<Integer> rows) {
-        if (rows.isEmpty()) {
-            return;
-        }
-        final int newHeight = universe.length + rows.size();
-        final char[][] result = new char[newHeight][universe[0].length];
-
-        int insertCount = 0;
-        for (int y = 0; y < universe.length; y++) {
-            if (rows.contains(y)) {
-                Arrays.fill(result[y + insertCount], EMPTY_SPACE_TOKEN);
-                insertCount++;
-            }
-            System.arraycopy(universe[y], 0, result[y + insertCount], 0, universe[y].length);
-        }
-        this.universe = result;
     }
 
     public List<Integer> findEmptyColums() {
@@ -108,8 +66,36 @@ public class Cosmic {
         return result;
     }
 
-    public int sumShortestPathBetweenAllGalaxyPairs() {
-        return findGalaxyPairs().stream().map(GalaxyPair::findShortestPathLength).mapToInt(Integer::intValue).sum();
+    public long sumShortestPathBetweenAllGalaxyPairs() {
+        return findGalaxyPairs().stream().map(this::findShortestPathLength).mapToLong(Long::valueOf).sum();
+    }
+
+    public long findShortestPathLength(final GalaxyPair pair) {
+        final int diffX = Math.abs(pair.galaxy2().x - pair.galaxy1().x);
+        final int diffY = Math.abs(pair.galaxy2().y - pair.galaxy1().y);
+        final long emptyRowsCount = countEmptyRowsBetween(pair);
+        final long emptyColumnsCount = countEmptyColumnsBetween(pair);
+        return diffX + diffY + (emptyRowsCount + emptyColumnsCount) * (expansionFactor - 1);
+    }
+
+    private int countEmptyColumnsBetween(final GalaxyPair pair) {
+        return countEmptySpaceBetween(emptyColumns, pair.galaxy1().x, pair.galaxy2().x);
+    }
+
+    private int countEmptyRowsBetween(final GalaxyPair pair) {
+        return countEmptySpaceBetween(emptyRows, pair.galaxy1().y, pair.galaxy2().y);
+    }
+
+    private int countEmptySpaceBetween(final List<Integer> emptyDigits, final int digit1, final int digit2) {
+        final int min = Math.min(digit1, digit2);
+        final int max = Math.max(digit1, digit2);
+        int result = 0;
+        for (final Integer digit : emptyDigits) {
+            if (digit > min && digit < max) {
+                result++;
+            }
+        }
+        return result;
     }
 
     public Set<GalaxyPair> findGalaxyPairs() {

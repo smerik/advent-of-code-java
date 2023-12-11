@@ -11,19 +11,20 @@ import java.util.List;
 @Service
 public class Day11Service {
 
-    private final List<String> lines;
+    private final Cosmic cosmic;
 
     public Day11Service(@Value("classpath:input/day-11.txt") final Resource resource) {
-        lines = PuzzleInputParser.parseToString(resource);
+        final List<String> lines = PuzzleInputParser.parseToString(resource);
+        cosmic = new Cosmic(lines);
     }
 
-    public Integer getSolutionPart1() {
-        final Cosmic cosmic = new Cosmic(lines);
-        cosmic.expandUniverse();
+    public Long getSolutionPart1() {
+        cosmic.setExpansionFactor(2);
         return cosmic.sumShortestPathBetweenAllGalaxyPairs();
     }
 
-    public Integer getSolutionPart2() {
-        return null;
+    public Long getSolutionPart2() {
+        cosmic.setExpansionFactor(1_000_000);
+        return cosmic.sumShortestPathBetweenAllGalaxyPairs();
     }
 }
