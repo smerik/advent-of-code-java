@@ -11,18 +11,19 @@ import java.util.List;
 @Service
 public class Day12Service {
 
-    private final HotSpringsMaintenance maintenance;
+    private final List<String> lines;
 
     public Day12Service(@Value("classpath:input/day-12.txt") final Resource resource) {
-        final List<String> lines = PuzzleInputParser.parseToString(resource);
-        maintenance = new HotSpringsMaintenance(lines);
+        lines = PuzzleInputParser.parseToString(resource);
     }
 
-    public Integer getSolutionPart1() {
+    public Long getSolutionPart1() {
+        final HotSpringsMaintenance maintenance = new HotSpringsMaintenance(lines, 1);
         return maintenance.sumPossibleArrangements();
     }
 
-    public Integer getSolutionPart2() {
-        return null;
+    public Long getSolutionPart2() {
+        final HotSpringsMaintenance maintenance = new HotSpringsMaintenance(lines, 5);
+        return maintenance.sumPossibleArrangements();
     }
 }

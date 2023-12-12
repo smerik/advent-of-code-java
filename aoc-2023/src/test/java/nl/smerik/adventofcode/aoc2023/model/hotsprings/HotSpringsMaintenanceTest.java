@@ -1,6 +1,7 @@
 package nl.smerik.adventofcode.aoc2023.model.hotsprings;
 
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import java.util.List;
 
@@ -19,9 +20,15 @@ class HotSpringsMaintenanceTest {
             // @formatter:on
     );
 
-    @Test
-    void sumPossibleArrangements() {
-        final HotSpringsMaintenance maintenance = new HotSpringsMaintenance(INPUT_EXAMPLE_01);
-        assertEquals(21, maintenance.sumPossibleArrangements());
+    @ParameterizedTest
+    @CsvSource({
+            // @formatter:off
+            "    21, 1",
+            "525152, 5"
+            // @formatter:on
+    })
+    void sumPossibleArrangements(final long expectedResult, final int copyCount) {
+        final HotSpringsMaintenance maintenance = new HotSpringsMaintenance(INPUT_EXAMPLE_01, copyCount);
+        assertEquals(expectedResult, maintenance.sumPossibleArrangements());
     }
 }

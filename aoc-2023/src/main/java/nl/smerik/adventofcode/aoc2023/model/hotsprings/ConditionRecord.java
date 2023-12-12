@@ -1,32 +1,53 @@
 package nl.smerik.adventofcode.aoc2023.model.hotsprings;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.stream.IntStream;
 
 public class ConditionRecord {
 
     private final List<ConditionType> conditions;
     private final List<Integer> groupSizes;
 
-    public ConditionRecord(final String line) {
+    private final Map<ArrangementIndex, Long> cache;
+
+    public ConditionRecord(final String line, final int copyCount) {
         final String[] split = line.split(" ");
-        this.conditions = parseRecord(split[0]);
-        this.groupSizes = parseCriteria(split[1]);
+        this.conditions = parseRecord(split[0], copyCount);
+        this.groupSizes = parseCriteria(split[1], copyCount);
+        this.cache = new HashMap<>();
     }
 
-    private List<ConditionType> parseRecord(final String conditionRecord) {
-        return conditionRecord.chars().mapToObj(c -> (char) c).map(ConditionType::valueOfConditionToken).toList();
+    private List<ConditionType> parseRecord(final String conditionRecord, final int copyCount) {
+        final List<ConditionType> conditionTokens = conditionRecord.chars().mapToObj(c -> (char) c).map(ConditionType::valueOfConditionToken).toList();
+        if (copyCount == 1) {
+            return conditionTokens;
+        }
+
+        final List<ConditionType> result = new ArrayList<>(conditionTokens);
+        for (int i = 1; i < copyCount; i++) {
+            result.add(ConditionType.UNKNOWN);
+            result.addAll(conditionTokens);
+        }
+        return result;
     }
 
-    private List<Integer> parseCriteria(final String criteria) {
-        return Arrays.stream(criteria.split(",")).map(Integer::valueOf).toList();
+    private List<Integer> parseCriteria(final String criteria, final int copyCount) {
+        return IntStream.range(0, copyCount)
+                .mapToObj(integer -> Arrays.stream(criteria.split(",")).map(Integer::valueOf))
+                .flatMap(integerStream -> integerStream)
+                .toList();
     }
 
-    public int countPossibleArrangements() {
+    public long countPossibleArrangements() {
         return findPossibleArrangements(0, 0, 0);
     }
 
-    private int findPossibleArrangements(final int conditionIndex, final int groupIndex, final int groupLengthBuildUpSoFar) {
+    private long findPossibleArrangements(final int conditionIndex, final int groupIndex, final int groupLengthBuildUpSoFar) {
+        final ArrangementIndex arrangementIndex = new ArrangementIndex(conditionIndex, groupIndex, groupLengthBuildUpSoFar);
+        if (cache.containsKey(arrangementIndex)) {
+            return cache.get(arrangementIndex);
+        }
+
         // Check if end of record condition has been reached.
         if (conditionIndex >= conditions.size()) {
             int groupsCount = groupSizes.size();
@@ -40,7 +61,7 @@ public class ConditionRecord {
             return groupIndex < groupsCount ? 0 : 1;
         }
 
-        int result = 0;
+        long result = 0;
         final ConditionType type = conditions.get(conditionIndex);
         switch (type) {
             case OPERATIONAL:
@@ -59,10 +80,11 @@ public class ConditionRecord {
             default:
                 throw new IllegalArgumentException("No support for type: " + type);
         }
+        cache.put(arrangementIndex, result);
         return result;
     }
 
-    private int processDamaged(final int conditionIndex, final int groupIndex, final int groupLengthBuildUpSoFar) {
+    private long processDamaged(final int conditionIndex, final int groupIndex, final int groupLengthBuildUpSoFar) {
         if (groupIndex >= groupSizes.size()) {
             // No additional criteria to match the damaged spring to: no possible arrangement.
             return 0;
@@ -77,7 +99,7 @@ public class ConditionRecord {
         return findPossibleArrangements(conditionIndex + 1, groupIndex, newGroupLength);
     }
 
-    private int processOperational(final int conditionIndex, final int groupIndex, final int groupLengthBuildUpSoFar) {
+    private long processOperational(final int conditionIndex, final int groupIndex, final int groupLengthBuildUpSoFar) {
         if (groupLengthBuildUpSoFar == 0 || groupIndex >= groupSizes.size()) {
             // No group found yet OR all groups have been matched: continue.
             return findPossibleArrangements(conditionIndex + 1, groupIndex, groupLengthBuildUpSoFar);
