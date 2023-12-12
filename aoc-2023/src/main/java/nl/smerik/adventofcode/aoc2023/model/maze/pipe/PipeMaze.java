@@ -6,7 +6,7 @@ import java.util.*;
 
 public class PipeMaze {
 
-    private final Map<Point, Pipe> pipesByPoint;
+    private final Map<Point, MazeTile> tilesByPoint;
 
     /**
      * DISCLAIMER: I tried to solve the maze using the JGraphT library.
@@ -15,11 +15,11 @@ public class PipeMaze {
      * @param lines the puzzle input
      */
     public PipeMaze(final List<String> lines) {
-        pipesByPoint = parseLines(lines);
+        tilesByPoint = parseLines(lines);
     }
 
-    private Map<Point, Pipe> parseLines(final List<String> lines) {
-        final Map<Point, Pipe> result = new HashMap<>();
+    private Map<Point, MazeTile> parseLines(final List<String> lines) {
+        final Map<Point, MazeTile> result = new HashMap<>();
         int y = lines.size();
         for (final String line : lines) {
             y--;
@@ -27,7 +27,7 @@ public class PipeMaze {
             for (int x = 0; x < tiles.length; x++) {
                 final TileType tileType = TileType.valueOfTile(tiles[x]);
                 final Point point = new Point(x, y);
-                result.put(point, new Pipe(point, tileType));
+                result.put(point, new MazeTile(point, tileType));
             }
         }
         return result;
@@ -51,18 +51,18 @@ public class PipeMaze {
         final Set<Point> result = new HashSet<>();
         final List<Point> singleGiantLoop = findSingleGiantLoop();
 
-        final int minX = this.pipesByPoint.keySet().stream().min(Comparator.comparing(Point::getX)).orElseThrow().x;
-        final int maxX = this.pipesByPoint.keySet().stream().max(Comparator.comparing(Point::getX)).orElseThrow().x;
-        final int minY = this.pipesByPoint.keySet().stream().min(Comparator.comparing(Point::getY)).orElseThrow().y;
-        final int maxY = this.pipesByPoint.keySet().stream().max(Comparator.comparing(Point::getY)).orElseThrow().y;
+        final int minX = this.tilesByPoint.keySet().stream().min(Comparator.comparing(Point::getX)).orElseThrow().x;
+        final int maxX = this.tilesByPoint.keySet().stream().max(Comparator.comparing(Point::getX)).orElseThrow().x;
+        final int minY = this.tilesByPoint.keySet().stream().min(Comparator.comparing(Point::getY)).orElseThrow().y;
+        final int maxY = this.tilesByPoint.keySet().stream().max(Comparator.comparing(Point::getY)).orElseThrow().y;
 
         for (int y = maxY; y >= minY; y--) {
             boolean isEnclosed = false;
             TileType lastEnclosingTile = null;
             for (int x = minX; x <= maxX; x++) {
-                final Pipe pipe = pipesByPoint.get(new Point(x, y));
-                if (singleGiantLoop.contains(pipe.getPoint())) {
-                    final TileType type = pipe.getType() == TileType.STARTING_POSITION ? determineTypeForStartingPosition(pipe): pipe.getType();
+                final MazeTile tile = tilesByPoint.get(new Point(x, y));
+                if (singleGiantLoop.contains(tile.point())) {
+                    final TileType type = tile.type() == TileType.STARTING_POSITION ? determineTypeForStartingPosition(tile): tile.type();
                     switch (type) {
                         case PIPE_VERTICAL -> {
                             isEnclosed = !isEnclosed;
@@ -86,7 +86,7 @@ public class PipeMaze {
                         }
                     }
                 } else if (isEnclosed) {
-                    result.add(pipe.getPoint());
+                    result.add(tile.point());
                 }
             }
         }
@@ -96,28 +96,28 @@ public class PipeMaze {
     /**
      * TODO: this can probable implemented a lot better
      *
-     * @param pipe the starting pipe
+     * @param tile the starting pipe
      * @return the pipe type that is below the starting position
      */
-    private TileType determineTypeForStartingPosition(final Pipe pipe) {
-        if (pipe.getType() != TileType.STARTING_POSITION) {
+    private TileType determineTypeForStartingPosition(final MazeTile tile) {
+        if (tile.type() != TileType.STARTING_POSITION) {
             throw new IllegalArgumentException("Tile should be of type " + TileType.STARTING_POSITION);
         }
-        final List<Point> connectingPipes = pipe.getConnectablePoints().stream().filter(pipesByPoint::containsKey).map(pipesByPoint::get).filter(x -> x.canConnectTo(pipe)).map(Pipe::getPoint).toList();
+        final List<Point> connectingPipes = tile.getConnectablePoints().stream().filter(tilesByPoint::containsKey).map(tilesByPoint::get).filter(x -> x.canConnectTo(tile)).map(MazeTile::point).toList();
         if (connectingPipes.size() != 2) {
             throw new IllegalStateException("STARTING_POSITION should only connect to 2 tiles instead of " + connectingPipes.size());
         }
         final Point point1 = connectingPipes.get(0);
         final Point point2 = connectingPipes.get(1);
 
-        if ((point1.x < pipe.getPoint().x && point2.x > pipe.getPoint().x) || (point2.x < pipe.getPoint().x && point1.x > pipe.getPoint().x)) { return TileType.PIPE_HORIZONTAL; }
-        if ((point1.y < pipe.getPoint().y && point2.y > pipe.getPoint().y) || (point2.y < pipe.getPoint().y && point1.y > pipe.getPoint().y)) { return TileType.PIPE_VERTICAL; }
+        if ((point1.x < tile.point().x && point2.x > tile.point().x) || (point2.x < tile.point().x && point1.x > tile.point().x)) { return TileType.PIPE_HORIZONTAL; }
+        if ((point1.y < tile.point().y && point2.y > tile.point().y) || (point2.y < tile.point().y && point1.y > tile.point().y)) { return TileType.PIPE_VERTICAL; }
 
-        if ((point1.x > pipe.getPoint().x && point2.y > pipe.getPoint().y) || (point2.x > pipe.getPoint().x && point1.y > pipe.getPoint().y)) { return TileType.PIPE_BEND_NORTH_EAST; }
-        if ((point1.x < pipe.getPoint().x && point2.y > pipe.getPoint().y) || (point2.x < pipe.getPoint().x && point1.y > pipe.getPoint().y)) { return TileType.PIPE_BEND_NORTH_WEST; }
+        if ((point1.x > tile.point().x && point2.y > tile.point().y) || (point2.x > tile.point().x && point1.y > tile.point().y)) { return TileType.PIPE_BEND_NORTH_EAST; }
+        if ((point1.x < tile.point().x && point2.y > tile.point().y) || (point2.x < tile.point().x && point1.y > tile.point().y)) { return TileType.PIPE_BEND_NORTH_WEST; }
 
-        if ((point1.x > pipe.getPoint().x && point2.y < pipe.getPoint().y) || (point2.x > pipe.getPoint().x && point1.y < pipe.getPoint().y)) { return TileType.PIPE_BEND_SOUTH_EAST; }
-        if ((point1.x < pipe.getPoint().x && point2.y < pipe.getPoint().y) || (point2.x < pipe.getPoint().x && point1.y < pipe.getPoint().y)) { return TileType.PIPE_BEND_SOUTH_WEST; }
+        if ((point1.x > tile.point().x && point2.y < tile.point().y) || (point2.x > tile.point().x && point1.y < tile.point().y)) { return TileType.PIPE_BEND_SOUTH_EAST; }
+        if ((point1.x < tile.point().x && point2.y < tile.point().y) || (point2.x < tile.point().x && point1.y < tile.point().y)) { return TileType.PIPE_BEND_SOUTH_WEST; }
 
         throw new IllegalStateException("This should not be possible");
     }
@@ -126,10 +126,10 @@ public class PipeMaze {
     public List<Point> findSingleGiantLoop() {
         final List<Point> path = new LinkedList<>();
         // Find start pipe and make it current
-        Pipe currentPipe = pipesByPoint.values().stream().filter(pipe1 -> pipe1.getType() == TileType.STARTING_POSITION).findAny().orElseThrow();
-        while (!path.contains(currentPipe.getPoint())) {
-            path.add(currentPipe.getPoint());
-            Optional<Pipe> nextPossiblePipe = currentPipe.getConnectablePoints().stream().filter(pipesByPoint::containsKey).map(pipesByPoint::get).filter(currentPipe::canConnectTo).filter(pipe -> !path.contains(pipe.getPoint())).findFirst();
+        MazeTile currentPipe = tilesByPoint.values().stream().filter(tile -> tile.type() == TileType.STARTING_POSITION).findAny().orElseThrow();
+        while (!path.contains(currentPipe.point())) {
+            path.add(currentPipe.point());
+            Optional<MazeTile> nextPossiblePipe = currentPipe.getConnectablePoints().stream().filter(tilesByPoint::containsKey).map(tilesByPoint::get).filter(currentPipe::canConnectTo).filter(tile -> !path.contains(tile.point())).findFirst();
             if (nextPossiblePipe.isEmpty()) {
                 break;
             }
@@ -143,20 +143,20 @@ public class PipeMaze {
         final Set<Point> enclosedPoints = loopPoints.isEmpty() ? Collections.emptySet() : findTilesEnclosedByLoop();
 
         final StringBuilder builder = new StringBuilder();
-        final int minX = this.pipesByPoint.keySet().stream().min(Comparator.comparing(Point::getX)).orElseThrow().x;
-        final int maxX = this.pipesByPoint.keySet().stream().max(Comparator.comparing(Point::getX)).orElseThrow().x;
-        final int minY = this.pipesByPoint.keySet().stream().min(Comparator.comparing(Point::getY)).orElseThrow().y;
-        final int maxY = this.pipesByPoint.keySet().stream().max(Comparator.comparing(Point::getY)).orElseThrow().y;
+        final int minX = this.tilesByPoint.keySet().stream().min(Comparator.comparing(Point::getX)).orElseThrow().x;
+        final int maxX = this.tilesByPoint.keySet().stream().max(Comparator.comparing(Point::getX)).orElseThrow().x;
+        final int minY = this.tilesByPoint.keySet().stream().min(Comparator.comparing(Point::getY)).orElseThrow().y;
+        final int maxY = this.tilesByPoint.keySet().stream().max(Comparator.comparing(Point::getY)).orElseThrow().y;
 
         for (int y = maxY; y >= minY; y--) {
             for (int x = minX; x <= maxX; x++) {
-                final Pipe pipe = pipesByPoint.get(new Point(x, y));
-                if (loopPoints.contains(pipe.getPoint())) {
-                    builder.append(pipe.getRenderLoopToken());
-                } else if (enclosedPoints.contains(pipe.getPoint())) {
+                final MazeTile tile = tilesByPoint.get(new Point(x, y));
+                if (loopPoints.contains(tile.point())) {
+                    builder.append(tile.getRenderLoopToken());
+                } else if (enclosedPoints.contains(tile.point())) {
                     builder.append(("I"));
                 } else {
-                    builder.append(pipe.getRenderToken());
+                    builder.append(tile.getRenderToken());
                 }
             }
             builder.append(System.lineSeparator());
