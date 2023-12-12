@@ -23,6 +23,6 @@ public class Day10Service {
     }
 
     public Integer getSolutionPart2() {
-        return null;
+        return maze.countTilesEnclosedByLoop();
     }
 }
