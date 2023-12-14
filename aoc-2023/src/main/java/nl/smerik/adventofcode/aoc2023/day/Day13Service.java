@@ -18,11 +18,12 @@ public class Day13Service {
     }
 
     public Integer getSolutionPart1() {
-        final ValleyOfMirrors valley = new ValleyOfMirrors(lines);
+        final ValleyOfMirrors valley = new ValleyOfMirrors(lines, false);
         return valley.sumAllPatternNotes();
     }
 
-    public Long getSolutionPart2() {
-        return null;
+    public Integer getSolutionPart2() {
+        final ValleyOfMirrors valley = new ValleyOfMirrors(lines, true);
+        return valley.sumAllPatternNotes();
     }
 }

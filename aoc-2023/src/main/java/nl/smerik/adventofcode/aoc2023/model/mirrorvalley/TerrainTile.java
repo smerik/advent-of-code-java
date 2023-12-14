@@ -4,10 +4,19 @@ import java.util.List;
 
 public class TerrainTile {
 
+    private static final char ASH_TOKEN = '.';
+    private static final char ROCK_TOKEN = '#';
+
     private final char[][] content;
 
-    public TerrainTile(final List<String> lines) {
+    private int verticalSmudgeToIgnore = 0;
+    private int horizontalSmudgeToIgnore = 0;
+
+    public TerrainTile(final List<String> lines, boolean fixSmudge) {
         this.content = parseLines(lines);
+        if (fixSmudge) {
+            fixSmudge();
+        }
     }
 
     private char[][] parseLines(final List<String> lines) {
@@ -16,6 +25,29 @@ public class TerrainTile {
             result[y] = lines.get(y).toCharArray();
         }
         return result;
+    }
+
+    private void fixSmudge() {
+        verticalSmudgeToIgnore = findVerticalReflectionIndex();
+        horizontalSmudgeToIgnore = findHorizontalReflectionIndex();
+        for (int y = 0; y < content.length; y++) {
+            for (int x = 0; x < content[0].length; x++) {
+                flipSmudge(x, y);
+                final int newVerticalReflectionIndex = findVerticalReflectionIndex();
+                if (newVerticalReflectionIndex > 0) {
+                    return;
+                }
+                final int newHorizontalReflectionIndex = findHorizontalReflectionIndex();
+                if (newHorizontalReflectionIndex > 0) {
+                    return;
+                }
+                flipSmudge(x, y);
+            }
+        }
+    }
+
+    public void flipSmudge(final int x, final int y) {
+        content[y][x] = content[y][x] == ROCK_TOKEN ? ASH_TOKEN : ROCK_TOKEN;
     }
 
     public int sumPatternNotes() {
@@ -32,7 +64,7 @@ public class TerrainTile {
     }
 
     private boolean isVerticalReflection(final int x) {
-        if (x < 1 || x >= content[0].length) {
+        if (x < 1 || x == verticalSmudgeToIgnore || x >= content[0].length) {
             return false;
         }
 
@@ -68,7 +100,7 @@ public class TerrainTile {
     }
 
     private boolean isHorizontalReflection(final int y) {
-        if (y < 1 || y >= content.length) {
+        if (y < 1 || y == horizontalSmudgeToIgnore || y >= content.length) {
             return false;
         }
 

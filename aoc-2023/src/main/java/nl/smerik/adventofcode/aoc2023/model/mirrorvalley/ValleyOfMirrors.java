@@ -7,17 +7,17 @@ public class ValleyOfMirrors {
 
     private final List<TerrainTile> tiles;
 
-    public ValleyOfMirrors(final List<String> lines) {
-        tiles = parseLines(lines);
+    public ValleyOfMirrors(final List<String> lines, final boolean fixSmudge) {
+        tiles = parseLines(lines, fixSmudge);
     }
 
-    private List<TerrainTile> parseLines(List<String> lines) {
+    private List<TerrainTile> parseLines(List<String> lines, final boolean fixSmudge) {
         final List<TerrainTile> result = new ArrayList<>();
         List<String> tileLines = new ArrayList<>();
         for (final String line : lines) {
             if (line.isEmpty()) {
                 if (!tileLines.isEmpty()) {
-                    result.add(new TerrainTile(tileLines));
+                    result.add(new TerrainTile(tileLines, fixSmudge));
                 }
                 tileLines = new ArrayList<>();
             } else {
