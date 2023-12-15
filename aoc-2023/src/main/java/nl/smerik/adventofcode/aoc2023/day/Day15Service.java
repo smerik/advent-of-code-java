@@ -1,5 +1,6 @@
 package nl.smerik.adventofcode.aoc2023.day;
 
+import nl.smerik.adventofcode.aoc2023.model.lenslibrary.ArrangementProcessor;
 import nl.smerik.adventofcode.aoc2023.model.lenslibrary.InitializationProcessor;
 import nl.smerik.adventofcode.io.PuzzleInputParser;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +24,7 @@ public class Day15Service {
     }
 
     public Integer getSolutionPart2() {
-        return null;
+        final ArrangementProcessor processor = new ArrangementProcessor(lines.get(0));
+        return processor.sumFocusingPower();
     }
 }
