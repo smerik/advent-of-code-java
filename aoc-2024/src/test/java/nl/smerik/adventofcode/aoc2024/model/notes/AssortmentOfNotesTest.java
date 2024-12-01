@@ -17,18 +17,16 @@ class AssortmentOfNotesTest {
             "3   3"
     );
 
+    final AssortmentOfNotes assortmentOfNotes = new AssortmentOfNotes(EXAMPLE_01);
+
     @Test
     void testCalculateTotalDistance() {
-        // Given
-        final AssortmentOfNotes assortmentOfNotes = new AssortmentOfNotes(EXAMPLE_01);
         // When & Then
         assertEquals(11, assortmentOfNotes.calculateTotalDistance());
     }
 
     @Test
     void testDetermineDistances() {
-        // Given
-        final AssortmentOfNotes assortmentOfNotes = new AssortmentOfNotes(EXAMPLE_01);
         // When
         final List<Integer> result = assortmentOfNotes.determineDistances();
         // Then
@@ -38,5 +36,11 @@ class AssortmentOfNotesTest {
         assertEquals(1, result.get(3));
         assertEquals(2, result.get(4));
         assertEquals(5, result.get(5));
+    }
+
+    @Test
+    void testCalculateTotalSimilarityScore() {
+        // When & Then
+        assertEquals(31, assortmentOfNotes.calculateTotalSimilarityScore());
     }
 }

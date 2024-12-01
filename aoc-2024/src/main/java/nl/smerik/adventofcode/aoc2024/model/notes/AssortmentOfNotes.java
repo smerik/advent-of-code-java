@@ -32,4 +32,13 @@ public class AssortmentOfNotes {
         }
         return result;
     }
+
+    public Long calculateTotalSimilarityScore() {
+        long result = 0;
+        for (Integer number : listOne) {
+            long count = listTwo.stream().filter(n -> n.equals(number)).count();
+            result += number * count;
+        }
+        return result;
+    }
 }

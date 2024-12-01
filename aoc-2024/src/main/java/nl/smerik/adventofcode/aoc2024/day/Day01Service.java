@@ -11,12 +11,18 @@ import java.util.List;
 @Service
 public class Day01Service {
 
-    @Value("classpath:input/day-01.txt")
-    private Resource resource;
+    final AssortmentOfNotes notes;
+
+    public Day01Service(@Value("classpath:input/day-01.txt") Resource resource) {
+        final List<String> lines = PuzzleInputParser.parseToString(resource);
+        notes = new AssortmentOfNotes(lines);
+    }
 
     public Integer getSolutionPart1() {
-        final List<String> lines = PuzzleInputParser.parseToString(resource);
-        final AssortmentOfNotes notes = new AssortmentOfNotes(lines);
         return notes.calculateTotalDistance();
+    }
+
+    public Long getSolutionPart2() {
+        return notes.calculateTotalSimilarityScore();
     }
 }
