@@ -1,27 +1,34 @@
 package nl.smerik.adventofcode.aoc2024.model.report;
 
 import nl.smerik.adventofcode.io.PuzzleInputParser;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.Resource;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @SpringBootTest
 class RedNosedReportTest {
 
-    @Value("classpath:input/day-02/example-01.txt")
-    private Resource resource;
+    private final RedNosedReport report;
 
-    @Test
-    void countSafeReports() {
-        // Given
+    public RedNosedReportTest(@Value("classpath:input/day-02/example-01.txt") Resource resource) {
         final List<String> lines = PuzzleInputParser.parseToString(resource);
-        // When
-        final RedNosedReport report = new RedNosedReport(lines);
-        // Then
-        Assertions.assertEquals(2, report.countSafeReports());
+        report = new RedNosedReport(lines);
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            // @formatter:off
+            "2, false",
+            "4, true "
+            // @formatter:on
+    })
+    void countSafeReports(final int expectedResult, final boolean applyProblemDampener) {
+        assertEquals(expectedResult, report.countSafeReports(applyProblemDampener));
     }
 }

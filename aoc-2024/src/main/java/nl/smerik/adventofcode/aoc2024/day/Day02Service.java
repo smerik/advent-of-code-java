@@ -19,6 +19,10 @@ public class Day02Service {
     }
 
     public Long getSolutionPart1() {
-        return report.countSafeReports();
+        return report.countSafeReports(false);
+    }
+
+    public Long getSolutionPart2() {
+        return report.countSafeReports(true);
     }
 }

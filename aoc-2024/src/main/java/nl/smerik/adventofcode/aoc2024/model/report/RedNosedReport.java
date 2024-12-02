@@ -25,7 +25,7 @@ public class RedNosedReport {
         return Arrays.stream(line.split(" ")).map(Integer::valueOf).toList();
     }
 
-    public long countSafeReports() {
-        return reports.stream().filter(RedNosedReportUtil::isReportSafe).count();
+    public long countSafeReports(boolean applyProblemDampener) {
+        return reports.stream().filter(levels -> RedNosedReportUtil.isReportSafe(levels, applyProblemDampener)).count();
     }
 }

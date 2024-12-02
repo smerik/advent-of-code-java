@@ -1,5 +1,6 @@
 package nl.smerik.adventofcode.aoc2024.model.report;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public final class RedNosedReportUtil {
@@ -8,7 +9,22 @@ public final class RedNosedReportUtil {
         throw new java.lang.UnsupportedOperationException("This is a utility class and cannot be instantiated");
     }
 
-    public static boolean isReportSafe(final List<Integer> levels) {
+    public static boolean isReportSafe(final List<Integer> levels, boolean applyProblemDampener) {
+        boolean result = isReportSafe(levels);
+        if (applyProblemDampener && !result) {
+            for (int i = 0; i < levels.size(); i++) {
+                final List<Integer> reducedLevels = new ArrayList<>(levels);
+                //noinspection SuspiciousListRemoveInLoop
+                reducedLevels.remove(i);
+                if (isReportSafe(reducedLevels)) {
+                    return true;
+                }
+            }
+        }
+        return result;
+    }
+
+    private static boolean isReportSafe(final List<Integer> levels) {
         int lastSignum = 0;
         for (int i = 0; i < levels.size() - 1; i++) {
             int currentLevel = levels.get(i);
