@@ -21,4 +21,8 @@ public class Day04Service {
     public int getSolutionPart1() {
         return wordSearch.countWord("XMAS");
     }
+
+    public int getSolutionPart2() {
+        return wordSearch.countXMasShape();
+    }
 }

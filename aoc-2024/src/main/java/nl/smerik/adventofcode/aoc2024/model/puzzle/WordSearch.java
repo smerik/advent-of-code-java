@@ -118,4 +118,28 @@ public class WordSearch {
     private String reverseLine(final String line) {
         return new StringBuilder(line).reverse().toString();
     }
+
+    public int countXMasShape() {
+        final String word = "MAS";
+        int result = 0;
+        for (int x = 1; x < grid.length - 1; x++) {
+            for (int y = 1; y < grid[x].length - 1; y++) {
+                if (grid[y][x] != 'A') {
+                    continue;
+                }
+
+                final char[] wordTopLeftToBottomRight = {grid[y - 1][x - 1], grid[y][x], grid[y + 1][x + 1]};
+                if (countWordInLine(word, new String(wordTopLeftToBottomRight)) == 0) {
+                    continue;
+                }
+
+                final char[] wordTopRightToBottomLeft = {grid[y - 1][x + 1], grid[y][x], grid[y + 1][x - 1]};
+                if (countWordInLine(word, new String(wordTopRightToBottomLeft)) == 0) {
+                    continue;
+                }
+                result++;
+            }
+        }
+        return result;
+    }
 }
