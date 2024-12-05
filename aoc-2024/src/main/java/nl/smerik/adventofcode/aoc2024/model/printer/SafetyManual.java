@@ -1,6 +1,7 @@
 package nl.smerik.adventofcode.aoc2024.model.printer;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 public class SafetyManual {
 
@@ -72,7 +73,7 @@ public class SafetyManual {
     }
 
     public List<List<Integer>> findIncorrectlyOrderedUpdates() {
-        return this.pagesPerUpdate.stream().filter(pagesToUpdate -> !isUpdateInTheRightOrder(pagesToUpdate)).toList();
+        return this.pagesPerUpdate.stream().filter(Predicate.not(this::isUpdateInTheRightOrder)).toList();
     }
 
     public boolean isUpdateInTheRightOrder(final List<Integer> pagesToUpdate) {
