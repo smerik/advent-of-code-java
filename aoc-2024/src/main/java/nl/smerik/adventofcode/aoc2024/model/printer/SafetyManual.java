@@ -41,15 +41,38 @@ public class SafetyManual {
     }
 
     public long sumMiddlePagesOfCorrectlyOrderedUpdates() {
-        return findMiddlePagesOfCorrectlyOrderedUpdates().stream().mapToInt(pageNumber -> pageNumber).sum();
+        return findCorrectlyOrderedUpdates().stream().map(this::findMiddlePage).mapToInt(pageNumber -> pageNumber).sum();
     }
 
-    public List<Integer> findMiddlePagesOfCorrectlyOrderedUpdates() {
-        return findCorrectlyOrderedUpdates().stream().map(updates -> updates.get(updates.size() / 2)).toList();
+    public long sumMiddlePagesOfFixedIncorrectlyOrderedUpdates() {
+        return findIncorrectlyOrderedUpdates().stream()
+                .map(this::fixIncorrectlyOrderedUpdate)
+                .map(this::findMiddlePage)
+                .mapToInt(pageNumber -> pageNumber)
+                .sum();
+    }
+
+    public Integer findMiddlePage(final List<Integer> pages) {
+        return pages.get(pages.size() / 2);
+    }
+
+    public List<Integer> fixIncorrectlyOrderedUpdate(final List<Integer> pages) {
+        return pages.stream().sorted((page1, page2) -> {
+            if (pagesToBePrintedAfterPage.getOrDefault(page1, Collections.emptySet()).contains(page2)) {
+                return -1;
+            } else if (pagesToBePrintedAfterPage.getOrDefault(page2, Collections.emptySet()).contains(page1)) {
+                return 1;
+            }
+            return 0;
+        }).toList();
     }
 
     public List<List<Integer>> findCorrectlyOrderedUpdates() {
         return this.pagesPerUpdate.stream().filter(this::isUpdateInTheRightOrder).toList();
+    }
+
+    public List<List<Integer>> findIncorrectlyOrderedUpdates() {
+        return this.pagesPerUpdate.stream().filter(pagesToUpdate -> !isUpdateInTheRightOrder(pagesToUpdate)).toList();
     }
 
     public boolean isUpdateInTheRightOrder(final List<Integer> pagesToUpdate) {

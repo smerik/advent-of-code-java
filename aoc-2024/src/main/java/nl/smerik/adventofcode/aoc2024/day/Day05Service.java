@@ -21,4 +21,8 @@ public class Day05Service {
     public long getSolutionPart1() {
         return manual.sumMiddlePagesOfCorrectlyOrderedUpdates();
     }
+
+    public long getSolutionPart2() {
+        return manual.sumMiddlePagesOfFixedIncorrectlyOrderedUpdates();
+    }
 }

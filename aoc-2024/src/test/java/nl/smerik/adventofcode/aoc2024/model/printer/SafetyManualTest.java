@@ -30,9 +30,42 @@ class SafetyManualTest {
     }
 
     @Test
-    void testFindMiddlePagesOfCorrectlyOrderedUpdates() {
-        assertEquals(List.of(61, 53, 29), manual.findMiddlePagesOfCorrectlyOrderedUpdates());
+    void testSumMiddlePagesOfFixedIncorrectlyOrderedUpdates() {
+        assertEquals(123, manual.sumMiddlePagesOfFixedIncorrectlyOrderedUpdates());
     }
+
+
+    private static Stream<Arguments> provideSourceForFindMiddlePage() {
+        return Stream.of(
+                Arguments.of(61, List.of(75, 47, 61, 53, 29)),
+                Arguments.of(53, List.of(97, 61, 53, 29, 13)),
+                Arguments.of(29, List.of(75, 29, 13))
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideSourceForFindMiddlePage")
+    void testFindMiddlePage(final int expectedResult, final List<Integer> pages) {
+        assertEquals(expectedResult, manual.findMiddlePage(pages));
+    }
+
+
+    private static Stream<Arguments> provideSourceForFixIncorrectlyOrderedUpdate() {
+        return Stream.of(
+                //@formatter:off
+                Arguments.of(List.of(97, 75, 47, 61, 53), List.of(75, 97, 47, 61, 53)),
+                Arguments.of(List.of(61, 29, 13        ), List.of(61, 13, 29)        ),
+                Arguments.of(List.of(97, 75, 47, 29, 13), List.of(97, 13, 75, 29, 47))
+                //@formatter:on
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideSourceForFixIncorrectlyOrderedUpdate")
+    void testFixIncorrectlyOrderedUpdate(final List<Integer> expectedOrder, final List<Integer> pages) {
+        assertEquals(expectedOrder, manual.fixIncorrectlyOrderedUpdate(pages));
+    }
+
 
     @Test
     void testFindCorrectlyOrderedUpdates() {
@@ -42,6 +75,17 @@ class SafetyManualTest {
         final List<List<Integer>> expectedUpdates = List.of(firstUpdate, secondUpdate, thirdUpdate);
         assertEquals(expectedUpdates, manual.findCorrectlyOrderedUpdates());
     }
+
+
+    @Test
+    void testFindIncorrectlyOrderedUpdates() {
+        final List<Integer> fourthUpdate = List.of(75, 97, 47, 61, 53);
+        final List<Integer> fifthUpdate = List.of(61, 13, 29);
+        final List<Integer> lastUpdate = List.of(97, 13, 75, 29, 47);
+        final List<List<Integer>> expectedUpdates = List.of(fourthUpdate, fifthUpdate, lastUpdate);
+        assertEquals(expectedUpdates, manual.findIncorrectlyOrderedUpdates());
+    }
+
 
     private static Stream<Arguments> provideSourceForIsUpdateInTheRightOrder() {
         return Stream.of(
