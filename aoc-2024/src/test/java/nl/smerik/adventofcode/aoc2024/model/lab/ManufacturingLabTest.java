@@ -11,18 +11,22 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-class GuardTest {
+class ManufacturingLabTest {
 
-    private final Guard guard;
+    private final ManufacturingLab lab;
 
-    public GuardTest(@Value("classpath:input/day-06/example-01.txt") Resource example01Resource) {
+    public ManufacturingLabTest(@Value("classpath:input/day-06/example-01.txt") Resource example01Resource) {
         final List<String> lines = PuzzleInputParser.parseToString(example01Resource);
-        guard = new Guard(lines);
-
+        lab = new ManufacturingLab(lines);
     }
 
     @Test
     void testCountDistinctPositionsVisited() {
-        assertEquals(41, guard.countDistinctPositionsVisited());
+        assertEquals(41, lab.countDistinctPositionsVisited());
+    }
+
+    @Test
+    void testCountLoopPositions() {
+        assertEquals(6, lab.countLoopPositions());
     }
 }

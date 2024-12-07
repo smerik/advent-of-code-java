@@ -10,6 +10,7 @@ public class Guard {
 
     private final char[][] grid;
     private final List<Point> visitedLocations;
+    private final Map<Direction, Set<Point>> visitedLocationsByDirection;
     private Point currentLocation;
     private Direction facingDirection;
 
@@ -38,36 +39,22 @@ public class Guard {
         }
     }
 
-    public Guard(final List<String> lines) {
-        this.grid = parseLines(lines);
+    public Guard(final char[][] grid, final Point startLocation) {
+        this.grid = grid;
         this.visitedLocations = new ArrayList<>();
-        this.currentLocation = findCurrentPosition();
+        this.visitedLocationsByDirection = new EnumMap<>(Direction.class);
+        this.currentLocation = startLocation;
         this.facingDirection = Direction.NORTH;
         moveUntilLeavingMap();
-    }
-
-    private char[][] parseLines(final List<String> lines) {
-        final char[][] result = new char[lines.size()][lines.get(0).length()];
-        for (int row = 0; row < lines.size(); row++) {
-            result[row] = lines.get(row).toCharArray();
-        }
-        return result;
-    }
-
-    private Point findCurrentPosition() {
-        for (int row = 0; row < grid.length; row++) {
-            for (int col = 0; col < grid[row].length; col++) {
-                if (grid[row][col] == '^') {
-                    return new Point(col, row);
-                }
-            }
-        }
-        throw new IllegalStateException("Guard not found!");
     }
 
     public void moveUntilLeavingMap() {
         while (isLocationInsideMap(this.currentLocation)) {
             this.visitedLocations.add(currentLocation);
+            if (!this.visitedLocationsByDirection.computeIfAbsent(this.facingDirection, collection -> new HashSet<>())
+                    .add(currentLocation)) {
+                throw new IllegalStateException("Loop detected!");
+            }
             this.currentLocation = move();
         }
     }
