@@ -23,9 +23,9 @@ public class BridgeCalibration {
         return new Equation(testValue, numbers);
     }
 
-    public Long calculateTotalCalibrationResult() {
+    public Long calculateTotalCalibrationResult(final boolean applyConcatenationOperator) {
         return this.equations.stream()
-                .filter(Equation::isEquationTrue)
+                .filter(equation -> equation.isEquationTrue(applyConcatenationOperator))
                 .mapToLong(Equation::getTestValue)
                 .sum();
     }

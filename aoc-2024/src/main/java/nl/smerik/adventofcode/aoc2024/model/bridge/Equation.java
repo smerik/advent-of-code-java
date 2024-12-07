@@ -17,30 +17,33 @@ public class Equation {
         this.numbersCount = numbers.size();
     }
 
-    public boolean isEquationTrue() {
-        return evaluate(numbers.get(0), 1);
+    public boolean isEquationTrue(final boolean applyConcatenationOperator) {
+        return evaluate(numbers.get(0), 1, applyConcatenationOperator);
     }
 
-    public boolean evaluate(final long number, final int index) {
+    private boolean evaluate(final long number, final int index, boolean applyConcatenationOperator) {
         if (index >= numbersCount) {
             return number == testValue;
         }
         if (number > testValue) {
             return false;
         }
-        if (sum(number, index)) {
-            return true;
-        }
-        return multiply(number, index);
+        return sum(number, index, applyConcatenationOperator) || multiply(number, index, applyConcatenationOperator)
+                || (applyConcatenationOperator && concatenate(number, index));
     }
 
-    private boolean sum(final long number, final int index) {
+    private boolean sum(final long number, final int index, final boolean applyConcatenationOperator) {
         long result = number + numbers.get(index);
-        return evaluate(result, index + 1);
+        return evaluate(result, index + 1, applyConcatenationOperator);
     }
 
-    private boolean multiply(final long number, final int index) {
+    private boolean multiply(final long number, final int index, final boolean applyConcatenationOperator) {
         long result = number * numbers.get(index);
-        return evaluate(result, index + 1);
+        return evaluate(result, index + 1, applyConcatenationOperator);
+    }
+
+    private boolean concatenate(final long number, final int index) {
+        long result = Long.parseLong("" + number + numbers.get(index));
+        return evaluate(result, index + 1, true);
     }
 }

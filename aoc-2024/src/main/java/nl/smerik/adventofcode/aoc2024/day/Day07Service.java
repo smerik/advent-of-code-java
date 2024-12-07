@@ -19,6 +19,10 @@ public class Day07Service {
     }
 
     public long getSolutionPart1() {
-        return calibration.calculateTotalCalibrationResult();
+        return calibration.calculateTotalCalibrationResult(false);
+    }
+
+    public long getSolutionPart2() {
+        return calibration.calculateTotalCalibrationResult(true);
     }
 }
