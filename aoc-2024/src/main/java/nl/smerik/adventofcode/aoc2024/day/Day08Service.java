@@ -19,6 +19,10 @@ public class Day08Service {
     }
 
     public int getSolutionPart1() {
-        return antennasMap.countUniqueAntinodeLocations();
+        return antennasMap.countUniqueAntinodeLocations(false);
+    }
+
+    public int getSolutionPart2() {
+        return antennasMap.countUniqueAntinodeLocations(true);
     }
 }
