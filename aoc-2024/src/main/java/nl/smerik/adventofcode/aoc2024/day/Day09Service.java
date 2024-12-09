@@ -9,15 +9,21 @@ import org.springframework.stereotype.Service;
 @Service
 public class Day09Service {
 
-    private final Disk disk;
+    private final String line;
 
     public Day09Service(@Value("classpath:input/day-09.txt") Resource resource) {
-        final String line = PuzzleInputParser.parseToString(resource).get(0);
-        disk = new Disk(line);
+        line = PuzzleInputParser.parseToString(resource).get(0);
     }
 
     public long getSolutionPart1() {
-        disk.defragment();
+        final Disk disk = new Disk(line);
+        disk.defragmentIndividualBlocks();
+        return disk.calculateChecksum();
+    }
+
+    public long getSolutionPart2() {
+        final Disk disk = new Disk(line);
+        disk.defragmentWholeFiles();
         return disk.calculateChecksum();
     }
 }

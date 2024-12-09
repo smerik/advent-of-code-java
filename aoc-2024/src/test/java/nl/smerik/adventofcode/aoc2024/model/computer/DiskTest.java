@@ -27,7 +27,7 @@ class DiskTest {
     }
 
 
-    private static Stream<Arguments> provideSourceForDefragment() {
+    private static Stream<Arguments> provideSourceForDefragmentIndividualBlocks() {
         return Stream.of(
           Arguments.of("022111222......", "12345"),
           Arguments.of("0099811188827773336446555566..............", "2333133121414131402")
@@ -35,21 +35,39 @@ class DiskTest {
     }
 
     @ParameterizedTest
-    @MethodSource("provideSourceForDefragment")
-    void testDefragment(final String expectedResult, final String line) {
+    @MethodSource("provideSourceForDefragmentIndividualBlocks")
+    void testDefragmentIndividualBlocks(final String expectedResult, final String line) {
         final Disk disk = new Disk(line);
-        disk.defragment();
+        disk.defragmentIndividualBlocks();
         assertEquals(expectedResult, disk.toString());
     }
 
     @Test
-    void testCalculateChecksum() {
+    void testDefragmentWholeFiles() {
+        final Disk disk = new Disk("2333133121414131402");
+        disk.defragmentWholeFiles();
+        assertEquals("00992111777.44.333....5555.6666.....8888..", disk.toString());
+    }
+
+    @Test
+    void testCalculateChecksumAfterDefragmentIndividualBlocks() {
         // Given
         final String line = "2333133121414131402";
         final Disk disk = new Disk(line);
         // When
-        disk.defragment();
+        disk.defragmentIndividualBlocks();
         // Then
         assertEquals(1928, disk.calculateChecksum());
+    }
+
+    @Test
+    void testCalculateChecksumAfterDefragmentWholeFiles() {
+        // Given
+        final String line = "2333133121414131402";
+        final Disk disk = new Disk(line);
+        // When
+        disk.defragmentWholeFiles();
+        // Then
+        assertEquals(2858, disk.calculateChecksum());
     }
 }
