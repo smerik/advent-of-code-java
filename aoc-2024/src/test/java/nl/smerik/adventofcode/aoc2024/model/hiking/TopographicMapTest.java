@@ -58,4 +58,35 @@ class TopographicMapTest {
         final TopographicMap map = new TopographicMap(lines);
         assertEquals(expectedResult, map.calculateTrailheadsScore(startPosition));
     }
+
+
+    @Test
+    void testSumTrailheadsRating() {
+        final List<String> linesExample02 = PuzzleInputParser.parseToString(example02Resource);
+        final TopographicMap mapExample02 = new TopographicMap(linesExample02);
+        assertEquals(81, mapExample02.sumTrailheadsRating());
+    }
+
+
+    private static Stream<Arguments> provideSourceForCalculateTrailheadsRating() {
+        return Stream.of(
+                Arguments.of(20, new Point(2, 0)),
+                Arguments.of(24, new Point(4, 0)),
+                Arguments.of(10, new Point(4, 2)),
+                Arguments.of( 4, new Point(6, 4)),
+                Arguments.of( 1, new Point(2, 5)),
+                Arguments.of( 4, new Point(5, 5)),
+                Arguments.of( 5, new Point(0, 6)),
+                Arguments.of( 8, new Point(6, 6)),
+                Arguments.of( 5, new Point(1, 7))
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideSourceForCalculateTrailheadsRating")
+    void testCalculateTrailheadsRating(final int expectedResult, final Point startPosition) {
+        final List<String> lines = PuzzleInputParser.parseToString(example02Resource);
+        final TopographicMap map = new TopographicMap(lines);
+        assertEquals(expectedResult, map.calculateTrailheadsRating(startPosition));
+    }
 }

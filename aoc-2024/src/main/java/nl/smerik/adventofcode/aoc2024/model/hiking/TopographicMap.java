@@ -3,10 +3,8 @@ package nl.smerik.adventofcode.aoc2024.model.hiking;
 import lombok.Getter;
 
 import java.awt.*;
-import java.util.Collections;
-import java.util.HashSet;
+import java.util.*;
 import java.util.List;
-import java.util.Set;
 
 public class TopographicMap {
 
@@ -37,17 +35,34 @@ public class TopographicMap {
         }
         return result;
     }
+
     public int calculateTrailheadsScore(final Point startPosition) {
-        return findUniqueTrailheads(startPosition).size();
+        return new HashSet<>(findTrailheadsPerTrail(startPosition)).size();
     }
 
-    public Set<Point> findUniqueTrailheads(final Point startPosition) {
+    public int sumTrailheadsRating() {
+        int result = 0;
+        for (int row = 0; row < heightMap.length; row++) {
+            for (int col = 0; col < heightMap[0].length; col++) {
+                if (heightMap[row][col] == 0) {
+                    result += calculateTrailheadsRating(new Point(col, row));
+                }
+            }
+        }
+        return result;
+    }
+
+    public int calculateTrailheadsRating(final Point startPosition) {
+        return findTrailheadsPerTrail(startPosition).size();
+    }
+
+    public List<Point> findTrailheadsPerTrail(final Point startPosition) {
         int currentHeight = heightMap[startPosition.y][startPosition.x];
         if (currentHeight == MAX_HEIGHT) {
-            return Collections.singleton(startPosition);
+            return Collections.singletonList(startPosition);
         }
 
-        final Set<Point> result = new HashSet<>();
+        final List<Point> result = new ArrayList<>();
         for (final Direction direction : Direction.values()) {
             final Point nextPosition = new Point(startPosition);
             nextPosition.translate(direction.moveX, direction.moveY);
@@ -55,7 +70,7 @@ public class TopographicMap {
                 continue;
             }
             if (heightMap[nextPosition.y][nextPosition.x] == currentHeight + 1) {
-                result.addAll(findUniqueTrailheads(nextPosition));
+                result.addAll(findTrailheadsPerTrail(nextPosition));
             }
         }
         return result;

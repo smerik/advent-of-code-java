@@ -21,4 +21,8 @@ public class Day10Service {
     public int getSolutionPart1() {
         return map.sumTrailheadsScore();
     }
+
+    public int getSolutionPart2() {
+        return map.sumTrailheadsRating();
+    }
 }
