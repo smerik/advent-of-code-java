@@ -17,9 +17,15 @@ public class Day11Service {
         lines = PuzzleInputParser.parseToString(resource);
     }
 
-    public int getSolutionPart1() {
+    public long getSolutionPart1() {
         final PlutonianPebbles pebbles = new PlutonianPebbles(lines);
         pebbles.blink(25);
+        return pebbles.countStones();
+    }
+
+    public long getSolutionPart2() {
+        final PlutonianPebbles pebbles = new PlutonianPebbles(lines);
+        pebbles.blink(75);
         return pebbles.countStones();
     }
 }
