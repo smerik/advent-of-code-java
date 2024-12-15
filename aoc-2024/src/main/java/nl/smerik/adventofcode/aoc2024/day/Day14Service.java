@@ -11,15 +11,23 @@ import java.util.List;
 @Service
 public class Day14Service {
 
-    private final Bathroom bathroom;
+    private static final int WIDTH = 101;
+    private static final int HEIGHT = 103;
+
+    private final List<String> lines;
 
     public Day14Service(@Value("classpath:input/day-14.txt") Resource resource) {
-        final List<String> lines = PuzzleInputParser.parseToString(resource);
-        bathroom = new Bathroom(101, 103, lines);
+        this.lines = PuzzleInputParser.parseToString(resource);
     }
 
     public int getSolutionPart1() {
+        final Bathroom bathroom = new Bathroom(WIDTH, HEIGHT, lines);
         bathroom.move(100);
         return bathroom.calculateSafetyFactor();
+    }
+
+    public int getSolutionPart2() {
+        final Bathroom bathroom = new Bathroom(WIDTH, HEIGHT, lines);
+        return bathroom.determineSecondsToFindEasterEgg();
     }
 }
