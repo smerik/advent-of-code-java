@@ -18,7 +18,13 @@ public class Day15Service {
     }
 
     public int getSolutionPart1() {
-        final Warehouse warehouse = new Warehouse(lines);
+        final Warehouse warehouse = new Warehouse(lines, false);
+        warehouse.moveRobot();
+        return warehouse.sumGPSCoordinates();
+    }
+
+    public int getSolutionPart2() {
+        final Warehouse warehouse = new Warehouse(lines, true);
         warehouse.moveRobot();
         return warehouse.sumGPSCoordinates();
     }

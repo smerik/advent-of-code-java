@@ -3,6 +3,8 @@ package nl.smerik.adventofcode.aoc2024.model.warehouse;
 public enum CellType {
 
     BOX('O'),
+    BOX_LEFT('['),
+    BOX_RIGHT(']'),
     EMPTY('.'),
     ROBOT('@'),
     WALL('#');
@@ -20,6 +22,10 @@ public enum CellType {
             }
         }
         throw new IllegalArgumentException("Unknown token " + token);
+    }
+
+    public boolean isBox() {
+        return this == BOX || this == BOX_LEFT || this == BOX_RIGHT;
     }
 
     @Override

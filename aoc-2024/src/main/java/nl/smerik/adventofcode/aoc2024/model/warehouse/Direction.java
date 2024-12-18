@@ -28,4 +28,8 @@ public enum Direction {
         }
         throw new IllegalArgumentException("Unknown token " + token);
     }
+
+    public boolean movesVertically() {
+        return this == UP || this == DOWN;
+    }
 }
