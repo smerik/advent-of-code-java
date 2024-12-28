@@ -4,6 +4,7 @@ import java.awt.*;
 import java.util.List;
 import java.util.Queue;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ReindeerMaze {
 
@@ -11,9 +12,13 @@ public class ReindeerMaze {
     private static final int COST_ROTATE = 1000;
 
     private final TileType[][] maze;
+    private final Point startPoint;
+    private final Point endPoint;
 
     public ReindeerMaze(final List<String> lines) {
         maze = parseLines(lines);
+        startPoint = findFirstTile(TileType.START);
+        endPoint = findFirstTile(TileType.END);
     }
 
     private TileType[][] parseLines(final List<String> lines) {
@@ -26,131 +31,84 @@ public class ReindeerMaze {
         return result;
     }
 
-    public int findLowestScore() {
-        final Point startPoint = findFirstTile(TileType.START);
-        final Node startNode = new Node(startPoint, Direction.EAST, 0, 0, null);
-
-        final Point endPoint = findFirstTile(TileType.END);
-        final Node endNode = new Node(endPoint, null, 0, 0, null);
-        final List<Node> path = findShortestPath(startNode, endNode);
-        if (path.isEmpty()) {
-            throw new IllegalStateException("No path found!");
-        }
-        return path.get(path.size() - 1).getG();
-    }
-
     private Point findFirstTile(final TileType type) {
         for (int row = 0; row < maze.length; row++) {
             for (int col = 0; col < maze[0].length; col++) {
                 if (maze[row][col] == type) {
                     return new Point(col, row);
-
                 }
             }
         }
         throw new IllegalStateException("Tile type " + type + " not found!");
     }
 
+    public int findLowestScore() {
+        return findShortestPaths().stream().findFirst().orElseThrow().cost();
+    }
+
+    public int countBestPathTiles() {
+        return findShortestPaths().stream().map(Node::path).flatMap(List::stream).collect(Collectors.toSet()).size();
+    }
+
     /**
-     * Finds the shortest path between two nodes using the A* search algorithm.
-     * <p>
-     * <code>f(n) = g(n) + h(n)</code>: Sum of the costs of the path from the start node to the current node <code>n</code>
-     * AND the estimated cost from the current node <code>n</code> to the target node
-     * <code>g(n)</code>: cost of the path from the start node to the current node n
-     * <code>h(n)</code>: estimated cost from the current node to the destination (target node)
-     *
-     * @param start the start location
-     * @param end   the end location
+     * Finds the shortest path(s) between two nodes using the Dijkstra algorithm.
      */
-    private List<Node> findShortestPath(final Node start, final Node end) {
-        final Queue<Node> open = new PriorityQueue<>(Comparator.comparingInt(Node::calcF));
-        open.add(start);
+    private Set<Node> findShortestPaths() {
+        final Set<Node> results = new HashSet<>();
 
-        // visited
-        final Set<String> closed = new HashSet<>();
+        final Queue<Node> frontier = new PriorityQueue<>(Comparator.comparingInt(Node::cost));
+        final Node startNode = new Node(startPoint, Direction.EAST, Collections.emptyList(), 0);
+        frontier.add(startNode);
 
-        while (!open.isEmpty()) {
-            final Node current = open.poll();
-            if (current.getPoint().equals(end.getPoint())) {
-                return reconstructPath(current);
-            }
-            closed.add(encodeState(current));
+        final Map<String, Integer> visitedCostByPointAndDirection = new HashMap<>();
+        int best = Integer.MAX_VALUE;
 
-            for (final Node neighbour : getNeighbours(current)) {
-                if (closed.contains(encodeState(neighbour))) {
+        while (!frontier.isEmpty()) {
+            final Node current = frontier.poll();
+            final int currentCost = current.cost();
+            String key = encodeState(current);
+            if (visitedCostByPointAndDirection.containsKey(key)) {
+                if (currentCost > visitedCostByPointAndDirection.get(key)) {
                     continue;
                 }
-
-                int tentativeG = current.getG() + calcCosts(current, neighbour);
-                // Add neighbour to open set if it has a lower cost or is new
-                if (!open.contains(neighbour) || tentativeG < neighbour.getG()) {
-                    neighbour.setG(tentativeG);
-                    neighbour.setH(heuristic(neighbour, end));
-                    neighbour.setParent(current);
-
-                    if (!open.contains(neighbour)) {
-                        open.add(neighbour);
-                    }
-                }
+            } else {
+                visitedCostByPointAndDirection.put(key, currentCost);
             }
+
+            if (current.point().equals(endPoint) && currentCost <= best) {
+                results.add(current);
+                best = currentCost;
+            }
+
+            frontier.addAll(getNeighbours(current));
         }
-        return Collections.emptyList();
+        return results;
     }
 
     private String encodeState(final Node node) {
-        return node.getPoint().x + "," + node.getPoint().y + "," + node.getDirection();
-    }
-
-    private List<Node> reconstructPath(final Node node) {
-        final List<Node> result = new ArrayList<>();
-        Node currentNode = node;
-        while (currentNode != null) {
-            result.add(currentNode);
-            currentNode = currentNode.getParent();
-        }
-        Collections.reverse(result);
-        return result;
+        return node.point().x + "," + node.point().y + "," + node.direction();
     }
 
     private List<Node> getNeighbours(final Node node) {
         final List<Node> result = new ArrayList<>();
 
         // Move forward in the current direction
-        final Direction direction = node.getDirection();
-        final Point forwardLocation = new Point(node.getPoint());
+        final Direction direction = node.direction();
+        final Point forwardLocation = new Point(node.point());
         forwardLocation.translate(direction.getDx(), direction.getDy());
         if (isValid(forwardLocation)) {
-            result.add(new Node(forwardLocation, direction, 0, 0, null));
+            result.add(new Node(forwardLocation, direction, node.path(), node.cost() + COST_MOVE));
         }
 
         // Rotate clockwise and counterclockwise
-        result.add(new Node(node.getPoint(), direction.rotateCounterclockwise(), 0, 0, null));
-        result.add(new Node(node.getPoint(), direction.rotateClockwise(), 0, 0, null));
+        final int rotateCost = node.cost() + COST_ROTATE;
+        result.add(new Node(node.point(), direction.rotateCounterclockwise(), node.path(), rotateCost));
+        result.add(new Node(node.point(), direction.rotateClockwise(), node.path(), rotateCost));
 
         return result;
     }
 
     private boolean isValid(final Point point) {
         return point.y >= 0 && point.y < maze.length && point.x >= 0 && point.x < maze[0].length && maze[point.y][point.x] != TileType.WALL;
-    }
-
-
-    private int calcCosts(final Node current, final Node neighbour) {
-        return current.getPoint().equals(neighbour.getPoint()) ? COST_ROTATE : COST_MOVE;
-    }
-
-    private int heuristic(final Node current, final Node end) {
-        return Math.abs(current.getPoint().x - end.getPoint().x) + Math.abs(current.getPoint().y - end.getPoint().y);
-    }
-
-    public String render() {
-        final StringBuilder sb = new StringBuilder();
-        for (final TileType[] row : maze) {
-            for (int col = 0; col < maze[0].length; col++) {
-                sb.append(row[col]);
-            }
-            sb.append(System.lineSeparator());
-        }
-        return sb.toString();
     }
 }

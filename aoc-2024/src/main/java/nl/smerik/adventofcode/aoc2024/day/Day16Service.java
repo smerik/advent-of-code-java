@@ -11,14 +11,18 @@ import java.util.List;
 @Service
 public class Day16Service {
 
-    private final List<String> lines;
+    private final ReindeerMaze maze;
 
     public Day16Service(@Value("classpath:input/day-16.txt") Resource resource) {
-        this.lines = PuzzleInputParser.parseToString(resource);
+        final List<String> lines = PuzzleInputParser.parseToString(resource);
+        maze = new ReindeerMaze(lines);
     }
 
     public int getSolutionPart1() {
-        final ReindeerMaze maze = new ReindeerMaze(lines);
         return maze.findLowestScore();
+    }
+
+    public int getSolutionPart2() {
+        return maze.countBestPathTiles();
     }
 }
