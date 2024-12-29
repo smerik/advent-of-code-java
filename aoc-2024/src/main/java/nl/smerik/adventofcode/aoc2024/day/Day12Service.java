@@ -21,4 +21,8 @@ public class Day12Service {
     public int getSolutionPart1() {
         return garden.calculateTotalFencingPrice();
     }
+
+    public int getSolutionPart2() {
+        return garden.calculateTotalFencingPriceOnDiscount();
+    }
 }
