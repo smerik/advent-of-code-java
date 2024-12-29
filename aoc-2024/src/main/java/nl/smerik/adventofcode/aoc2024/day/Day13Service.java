@@ -11,14 +11,19 @@ import java.util.List;
 @Service
 public class Day13Service {
 
-    private final Arcade arcade;
+    private final List<String> lines;
 
     public Day13Service(@Value("classpath:input/day-13.txt") Resource resource) {
-        final List<String> lines = PuzzleInputParser.parseToString(resource);
-        arcade = new Arcade(lines);
+        lines = PuzzleInputParser.parseToString(resource);
     }
 
-    public int getSolutionPart1() {
+    public long getSolutionPart1() {
+        final Arcade arcade = new Arcade(lines, false);
+        return arcade.determineMinTokensToWinAllPossiblePrizes();
+    }
+
+    public long getSolutionPart2() {
+        final Arcade arcade = new Arcade(lines, true);
         return arcade.determineMinTokensToWinAllPossiblePrizes();
     }
 }
