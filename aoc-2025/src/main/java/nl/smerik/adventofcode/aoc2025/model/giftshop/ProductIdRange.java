@@ -14,11 +14,38 @@ public class ProductIdRange {
         this.max = Long.parseLong(split[1]);
     }
 
-    public List<Long> findInvalidIds() {
-        return LongStream.rangeClosed(this.min, this.max).filter(this::isInvalid).boxed().toList();
+    public List<Long> findInvalidIds(final boolean shouldHaveMultipleRepeats) {
+        return LongStream.rangeClosed(this.min, this.max).filter(id -> isInvalid(id, shouldHaveMultipleRepeats)).boxed().toList();
     }
 
-    private boolean isInvalid(final long id) {
+    public static boolean isInvalid(final long id, final boolean shouldHaveMultipleRepeats) {
+        return shouldHaveMultipleRepeats ? isInvalidWhenContainingMultipleRepeats(id) : isInvalidWhenContainingSingleRepeat(id);
+    }
+
+    private static boolean isInvalidWhenContainingMultipleRepeats(final long id) {
+        final String idString = String.valueOf(id);
+        final int maxLength = idString.length() / 2;
+        for (int currentLength = 1; currentLength <= maxLength; currentLength++) {
+            if (idString.length() % currentLength != 0) {
+                continue;
+            }
+            String currentSequence = idString.substring(0, currentLength);
+            String nextSequence = "";
+            for (int i = currentLength; i + currentLength <= idString.length(); i = i + currentLength) {
+                nextSequence = idString.substring(i, i + currentLength);
+                if (!nextSequence.equals(currentSequence)) {
+                    break;
+                }
+                currentSequence = nextSequence;
+            }
+            if (nextSequence.equals(currentSequence)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean isInvalidWhenContainingSingleRepeat(final long id) {
         final int digits = (int) Math.log10(id) + 1;
         if (digits % 2 != 0) {
             return false;

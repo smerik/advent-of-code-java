@@ -6,19 +6,20 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class Day02Service {
 
-    private final List<String> lines;
+    private final Database database;
 
     public Day02Service(@Value("classpath:input/day-02.txt") Resource resource) {
-        this.lines = PuzzleInputParser.parseToString(resource);
+        this.database = new Database(PuzzleInputParser.parseToString(resource).get(0));
     }
 
     public Long getSolutionPart1() {
-        final Database database = new Database(lines.get(0));
-        return database.sumInvalidIds();
+        return database.sumInvalidIds(false);
+    }
+
+    public Long getSolutionPart2() {
+        return database.sumInvalidIds(true);
     }
 }

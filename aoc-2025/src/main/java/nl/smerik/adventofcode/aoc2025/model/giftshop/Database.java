@@ -15,7 +15,11 @@ public class Database {
         return Arrays.stream(line.split(",")).map(ProductIdRange::new).toList();
     }
 
-    public long sumInvalidIds() {
-        return productIdRanges.stream().map(ProductIdRange::findInvalidIds).flatMap(List::stream).mapToLong(Long::longValue).sum();
+    public long sumInvalidIds(final boolean shouldHaveMultipleRepeats) {
+        return productIdRanges.stream()
+                .map(productIdRange -> productIdRange.findInvalidIds(shouldHaveMultipleRepeats))
+                .flatMap(List::stream)
+                .mapToLong(Long::longValue)
+                .sum();
     }
 }
