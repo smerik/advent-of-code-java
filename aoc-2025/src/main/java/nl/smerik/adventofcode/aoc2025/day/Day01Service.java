@@ -21,4 +21,9 @@ public class Day01Service {
         final Safe safe = new Safe(lines);
         return safe.determinePassword();
     }
+
+    public Integer getSolutionPart2() {
+        final Safe safe = new Safe(lines);
+        return safe.determinePasswordBy0x434C49434B();
+    }
 }

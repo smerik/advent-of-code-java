@@ -24,4 +24,13 @@ class SafeTest {
         // When & Then
         assertEquals(3, safe.determinePassword());
     }
+
+    @Test
+    void determinePasswordBy0x434C49434B() {
+        // Given
+        final List<String> lines = PuzzleInputParser.parseToString(example01Resource);
+        final Safe safe = new Safe(lines);
+        // When & Then
+        assertEquals(6, safe.determinePasswordBy0x434C49434B());
+    }
 }

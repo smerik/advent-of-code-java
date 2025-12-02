@@ -29,12 +29,17 @@ public class Safe {
     }
 
     public int determinePassword() {
-        for (Rotation rotation : rotations) {
+        for (final Rotation rotation : rotations) {
             int pointsAt = dial.rotate(rotation);
             if (pointsAt == 0) {
                 pointsAtZeroCount++;
             }
         }
         return pointsAtZeroCount;
+    }
+
+    public int determinePasswordBy0x434C49434B() {
+        rotations.forEach(dial::rotate);
+        return dial.getPointedAtZeroCount();
     }
 }
