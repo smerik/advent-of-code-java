@@ -2,24 +2,34 @@ package nl.smerik.adventofcode.aoc2025.model.lobby;
 
 public class BatteryBank {
 
-    private final int[] batteries;
+    private final int[] batteryRatings;
 
     public BatteryBank(final String line) {
-        this.batteries = line.chars().map(Character::getNumericValue).toArray();
+        this.batteryRatings = line.chars().map(Character::getNumericValue).toArray();
     }
 
-    public int findLargestJoltage() {
-        int batteryOne = 0;
-        int batteryTwo = 0;
-        for (int i = 0; i < batteries.length; i++) {
-            if (batteries[i] > batteryTwo) {
-                batteryTwo = batteries[i];
+    public long findLargestJoltage(final int batteryCountToTurnOn) {
+        final int batteryCount = batteryRatings.length;
+        final int[] result = new int[batteryCount];
+        int batteryCountToRemove = batteryCount - batteryCountToTurnOn;
+        int i = 0;
+        for (final int rating : batteryRatings) {
+            // Override smaller digits with greater digits when applicable
+            while (batteryCountToRemove > 0 && i > 0 && result[i - 1] < rating) {
+                i--;
+                batteryCountToRemove--;
             }
-            if (batteries[i] > batteryOne && i + 1 < batteries.length) {
-                batteryOne = batteries[i];
-                batteryTwo = 0;
-            }
+            result[i] = rating;
+            i++;
         }
-        return Integer.parseInt("" + batteryOne + batteryTwo);
+        return concatArray(result, batteryCountToTurnOn);
+    }
+
+    private long concatArray(final int[] batteryRatings, final int batteryCountToTurnOn) {
+        long result = 0L;
+        for (int i = 0; i < batteryCountToTurnOn; i++) {
+            result = result * 10 + batteryRatings[i];
+        }
+        return result;
     }
 }

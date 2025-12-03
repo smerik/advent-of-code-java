@@ -14,7 +14,7 @@ public class EmergencyPower {
         return lines.stream().map(BatteryBank::new).toList();
     }
 
-    public int calcTotalOutputJoltage() {
-        return this.banks.stream().mapToInt(BatteryBank::findLargestJoltage).sum();
+    public long calcTotalOutputJoltage(final int batteryCountToTurnOn) {
+        return this.banks.stream().mapToLong(bank -> bank.findLargestJoltage(batteryCountToTurnOn)).sum();
     }
 }

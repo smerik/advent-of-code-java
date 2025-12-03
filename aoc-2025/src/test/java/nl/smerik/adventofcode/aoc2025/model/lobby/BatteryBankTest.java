@@ -10,23 +10,29 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class BatteryBankTest {
 
-    public static Stream<Arguments> example01() {
+    public static Stream<Arguments> example() {
         return Stream.of(
                 // @formatter:off
-                Arguments.of("987654321111111", 98),
-                Arguments.of("811111111111119", 89),
-                Arguments.of("234234234234278", 78),
-                Arguments.of("818181911112111", 92)
+                // Part 1
+                Arguments.of("987654321111111",  2,           98L),
+                Arguments.of("811111111111119",  2,           89L),
+                Arguments.of("234234234234278",  2,           78L),
+                Arguments.of("818181911112111",  2,           92L),
+                // Part 2
+                Arguments.of("987654321111111", 12, 987654321111L),
+                Arguments.of("811111111111119", 12, 811111111119L),
+                Arguments.of("234234234234278", 12, 434234234278L),
+                Arguments.of("818181911112111", 12, 888911112111L)
                 // @formatter:on
         );
     }
 
     @ParameterizedTest
-    @MethodSource("example01")
-    void testFindLargestJoltage(final String line, final int expected) {
+    @MethodSource("example")
+    void testFindLargestJoltage(final String line, final int batteryCountToTurnOn, final long expected) {
         // Given
         BatteryBank bank = new BatteryBank(line);
         // When & Then
-        assertEquals(expected, bank.findLargestJoltage());
+        assertEquals(expected, bank.findLargestJoltage(batteryCountToTurnOn));
     }
 }

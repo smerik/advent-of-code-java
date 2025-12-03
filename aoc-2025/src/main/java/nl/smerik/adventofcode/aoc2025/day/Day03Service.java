@@ -18,7 +18,11 @@ public class Day03Service {
         power = new EmergencyPower(lines);
     }
 
-    public int getSolutionPart1() {
-        return power.calcTotalOutputJoltage();
+    public long getSolutionPart1() {
+        return power.calcTotalOutputJoltage(2);
+    }
+
+    public long getSolutionPart2() {
+        return power.calcTotalOutputJoltage(12);
     }
 }
